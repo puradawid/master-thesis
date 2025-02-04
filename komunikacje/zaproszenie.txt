@@ -1,0 +1,21 @@
+Hej Koleżanki i Koledzy!
+
+W ramach mojej pracy badawczej poszukuję 10 programistów Java chętnych na wykonanie live coding-u. Nie mogę zdradzić dokładnego celu eksperymentu, ale ogólnie chodzi o wiarygodne sprawdzenie czy kod może być znacząco gorzej lub lepiej zaprojektowany.
+
+Eksperyment nie jest pokrywany przez Sii, jest nieodpłatny, dlatego staram się jak najbardziej zmaksymalizować treść w jak najkrótszym dla Was czasie.
+
+Waszym zadaniem będzie wykonanie dwóch krótkich zadań na projekcie, który Wam prześlę. Nie będą to długie czy niejasne zadania, a całość projektu obwarowana jest unit testami. Projekt jest w Gradle, nie posiada żadnego frameworka poza JUnit, więc setup będzie szybki i przyjemny.
+
+Całość nie powinna zająć więecj niż 30 min. Zanonimizowane wyniki eksperymentu zostaną upublicznione - wtedy też dowiecie się, o co w ogóle chodziło :).
+
+Live-coding będzie nagrywany w celach dalszej analizy. Nie potrzebuję video z kamerki, jedynie dźwięk i screenshare samego IDE.
+
+Wymagania:
+* Przynajmniej 2 lata (niekoniecznie ciągłe) doświadczenia w Java 8+
+* Podstawowa znajomość JUnit (nie będziemy pisać testów, tylko je uruchamiać)
+
+Przygotuj przed:
+
+* Sprawdź czy znasz mechanizm refleksji (w zasadzie tylko metody Class:getMethods() i Method:invoke())
+
+ Nie musisz mieć przygotowanego Gradle, ale upewnij się, czy Twoje IDE jest w stanie pobrać i uruchomić unit testy, przykładowy projekt Gradle: https://github.com/andyjduncan/gradle-example

@@ -1,9 +1,114 @@
+\section{Przedmiot badań}
 
+Przedmiotem badań jest obciążenie kognitywne programisty podczas wprowadzania zmian w istniejącym kodzie programu
+napisanego w języku Java.
+Obciążenie kognitywne w tym badaniu mierzone jest pośrednio poprzez czas wymagany na zrozumienie i modyfikacje kodu.
 
-Wymienię najważniejsze elementy metody:
+W szczególności badanie koncentruje się na tym, czy i w jakim stopniu wysoki poziom sprzężenia utrudnia modyfikację
+kodu.
+
+Celem badawczym jest określenie wpływu stopnia sprzężenia istniejących klas na czas wymagany do wprowadzenia zmian w
+kodzie przez programistę.
+
+Następny podrozdział formułuje hipotezę badawczą, którą eksperyment ma za zadanie zweryfikować.
+
+\section{Hipoteza badawcza}
+
+Hipoteza badawcza zakłada, że jeśli klasa jest powiązana z inną klasą o znacząco różnym stopniu sprzężenia, to czas
+potrzebny na wprowadzenie zmian w obszarze tej relacji wykazuje statystycznie istotną różnicę.
+
+Weryfikacja tej hipotezy polega na zmierzeniu czasu wykonywania tego samego zadania przez programistów na dwóch
+wariantach tego samego programu.
+Jeden z nich będzie posiadał zmodyfikowany kod źródłowy tak, żeby zwiększyć stopień sprzężenia pomiędzy
+zaimplementowanymi wewnątrz klasami.
+Mierząc czas wykonania zadania, można zbadać statystycznie istotną różnicę w średnim czasie potrzebnym do
+wprowadzenia zmian.
+
+\section{Kod źródłowy do badania}
+
+Istotną częścią badania jest poprawna manipulacja zmienną niezależną --- współczynnikiem sprzężenia klas.
+Oba warianty programu rozwiązują ten sam problem, to znaczy, że są testowane przy użyciu tego samego zestawu
+testów jednostkowych.
+
+Ze względu na ograniczenia czasowe eksperyment nie mógł trwać dłużej niż godzinę dla każdego uczestnika.
+Wyzwaniem postawionym przed autorem pracy było utworzenie kodu źródłowego, który jest:
 
 \begin{itemize}
-    \item Pozyskanie oprogramowania
-    \item Modyfikacja kodu
-    \item
+    \item niewielki rozmiarem, zawiera nie więcej niż 10 klas, a żaden z plików klas nie jest dłuższy niż 100 linii kodu
+    \item zrozumiale napisany, nie wymaga dodatkowego wyjaśniania zaimplementowanych algorytmów czy wprowadzonych
+    abstrakcyjnych pojęć
+    \item na tyle skomplikowany, by zmodyfikować relację między klasami i nie naruszyć ogólnej struktury programu i
+    rozwiązywanego problemu
+    \item kompletnie weryfikowalny za pomocą przygotowanych testów jednostkowych
 \end{itemize}
+
+Kod źródłowy programu implementuje mechanizm magistrali wiadomości (ang. \textit{message bus}).
+Jest to kategoria problemu powszechnie znana wśród programistów Java, nie wymaga znajomości dziedziny spoza
+informatyki, a większość badanych od razu porównywała rozwiązywaną problematykę do programu \texttt{Kafka} — programu
+realizującego magistralę danych w złożonym środowisku rozproszonym.
+
+Tutaj powinienem przestawić diagram UML programu.
+
+Zadaniem programu \texttt{JavaBus} jest przesyłanie wiadomości do uprzednio zarejestrowanych odbiorców.
+Klasa \texttt{InMemoryBus} implementująca interfejs \texttt{Bus} jest głównym elementem programu.
+Umożliwia ona zarejestrowanie klas implementujących interfejs \texttt{Consumer}, których metoda \texttt{consume}
+zostanie wywołana w momencie wysłania obiektu implementującego klasę \texttt{Message} z odpowiadającym obiektem klasy
+\texttt{Topic}.
+
+
+\section{Opis eksperymentu}
+
+Eksperyment obejmuje trzy kolejne etapy:
+
+\begin{enumerate}
+    \item wprowadzenia, w którym prowadzący badanie przedstawia kod źródłowy programu i problem, który rozwiązuje
+    \item rozwiązania zadania pierwszego, w obszarze wspólnym dla obu grup badanych
+    \item rozwiązania zadania drugiego, w obszarze o zmodyfikowanym współczynniku sprzężenia pomiędzy klasami
+\end{enumerate}
+
+Poniżej każdy etap jest szczegółowo opisany, wskazując jego cel i interakcje pomiędzy prowadzącym badanie a
+badanym programistą.
+
+\subsection{Wprowadzenie do badania}
+
+Celem tego etapu jest wyjaśnienie programu i jego struktury badanemu programiście.
+Badany nie powinien mieć problemu z określeniem rozwiązywanego problemu i potrafić wskazać elementy kodu, które wykonują
+rejestrację konsumenta i przekazywanie wiadomości.
+Jednocześnie wyjaśnienie powinno zawierać tę samą ilość informacji we wszystkich przeprowadzonych eksperymentach.
+
+Badany programista otrzymuje kod źródłowy, z którym zapoznaje się w trakcie eksperymentu.
+Badacz opisuje problem rozwiązywany przez program --- przekazywanie wiadomości zarejestrowanym konsumentom podkreślając,
+że na potrzeby eksperymentu program zakłada funkcjonowanie wewnątrz jednego wątku procesu JVM, więc
+programista nie musi rozważać współbieżności.
+
+Na tym etapie programista może zadawać pytania co do przedstawionego problemu i zaprezentowanych klas.
+Prowadzący badanie powinien odpowiedzieć wyłącznie na pytania, które odnoszą się do zaprezentowanego wyjaśnienia.
+
+\subsection{Zadanie pierwsze}
+
+Celem zadania pierwszego jest pomiar czasu zadania w obszarze kodu wspólnego dla obu wariantów.
+Jednocześnie programista zapoznaje się z ogólną strukturą programu, by w zadaniu drugim skupić się na klasach o
+zmodyfikowanym stopniu sprzężenia.
+
+Prowadzący badanie instruuje uczestnika, aby odblokował pierwszy test, a następnie go uruchomił.
+Po stwierdzeniu, że test kończy się błędem asercji, programista otrzymuje zadanie zmiany kodu.
+Polega ona na wprowadzeniu obsługi klas niebezpośrednio implementujących \texttt{Message}.
+Badacz informuje programistę, że może zmieniać wyłącznie implementacje programu, a interfejsy i testy musi pozostawić
+nienaruszone.
+Programista może wielokrotnie uruchamiać testy jednostkowe.
+Badacz rejestruje czas rozpoczęcia zadania po wyjaśnieniu zadania, a czas zakończenia w chwili, gdy wszystkie testy
+jednostkowe zakończą się sukcesem.
+Jeżeli programista nie uruchomi testów jednostkowych po modyfikacji kodu, badacz poleca ich uruchomienie.
+
+\subsection{Zadanie drugie}
+
+Celem zadania drugiego jest właściwy pomiar czasu wprowadzenia zmiany w obszarze o różnym stopniu sprzężenia klas.
+Programista powinien w tym czasie przeanalizować relacje pomiędzy klasami i wprowadzić oczekiwane zmiany.
+
+Prowadzący badanie wyjaśnia, że zadanie drugie jest analogiczne do pierwszego.
+Polega ono na zaimplementowaniu dodatkowej strategii informowania konsumentów o nowej wiadomości.
+Klasa konsumenta może otrzymać wiadomość wyłącznie w sytuacji, gdy wszystkie uprzednio zarejestrowane obiekty klasy
+\texttt{Consumer} zwróciły błąd po wywołaniu metody \texttt{consume}.
+Programista odblokowuje dwa kolejne testy, uruchamia je i przystępuje do realizacji zadania.
+Podobnie jak w zadaniu pierwszym, badacz rejestruje moment rozpoczęcia zadania i pomyślnego przetestowania
+zmodyfikowanego kodu.

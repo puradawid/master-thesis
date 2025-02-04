@@ -1,0 +1,12 @@
+Cześć Krzysztof, Sii wytypowało Cię do udziału w małym 30-tominutowym eksperymencie, który prowadzę. Daj mi znać, czy jesteś OK z udziałem, to wybierzemy jakiś time slot, żeby pojechać z tematem.
+
+Badam jakość kodu i jego wpływ na czas wprowadzania zmian. Chciałbym, żebyśmy razem usiedli na screensharingu i żebyś wykonał dwa proste zadania w projekcie, do którego Ci dam dostęp. Zadania będą bardzo krótkie, nie będzie to nic z algorytmiki, a rzecz w tym, że będą się działy w kontekście istniejącego kodu. Chciałbym nagrać ten live coding, by potem obrobić to statystycznie z większej ilości developerów.
+
+Projekt, w którym prosiłbym Cię o zmiany:
+
+* jest napisany w czystej Javie (w sumie to w Java 11, choć kod raczej korzysta z API Java 8, ale nie ma to znaczenia),
+* wykorzystuje JUnit, kod jest obwarowany testami, więc w zasadzie zadania są na poziomie "odbezpiecz test i zobacz co trzeba zrobić".
+* ma jakieś 500 linii z testami (małe klasy)
+* odpala się przez gradle, z gradlew, więc możesz użyć IDE jakie Ci odpowiada
+
+Daj mi znać czy OK, to ustalimy sobie timeslot w tym tygodniu (lub następnym).
