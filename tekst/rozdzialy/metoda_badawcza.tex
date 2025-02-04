@@ -1,11 +1,9 @@
-\section{Przedmiot badań}
-
 Przedmiotem badań jest obciążenie kognitywne programisty podczas wprowadzania zmian w istniejącym kodzie programu
 napisanego w języku Java.
 Obciążenie kognitywne w tym badaniu mierzone jest pośrednio poprzez czas wymagany na zrozumienie i modyfikacje kodu.
 
-W szczególności badanie koncentruje się na tym, czy i w jakim stopniu wysoki poziom sprzężenia utrudnia modyfikację
-kodu.
+W szczególności badanie koncentruje się na tym, czy i w jakim stopniu wysoki poziom sprzężenia klas zwiększa
+obciążenie kognitywne, a to wpływa na czas .
 
 Celem badawczym jest określenie wpływu stopnia sprzężenia istniejących klas na czas wymagany do wprowadzenia zmian w
 kodzie przez programistę.
@@ -14,20 +12,74 @@ Następny podrozdział formułuje hipotezę badawczą, którą eksperyment ma za
 
 \section{Hipoteza badawcza}
 
-Hipoteza badawcza zakłada, że jeśli klasa jest powiązana z inną klasą o znacząco różnym stopniu sprzężenia, to czas
-potrzebny na wprowadzenie zmian w obszarze tej relacji wykazuje statystycznie istotną różnicę.
+W pracy postawiono hipotezę badawczą, zgodnie z którą czas potrzebny na wprowadzenie zmian w kodzie programu zależy
+od stopnia sprzężenia klas --- jeśli klasa jest powiązana z inną o znacząco różnym stopniu sprzężenia, to czas
+ten różni się w sposób statystycznie istotny.
 
-Weryfikacja tej hipotezy polega na zmierzeniu czasu wykonywania tego samego zadania przez programistów na dwóch
-wariantach tego samego programu.
-Jeden z nich będzie posiadał zmodyfikowany kod źródłowy tak, żeby zwiększyć stopień sprzężenia pomiędzy
-zaimplementowanymi wewnątrz klasami.
-Mierząc czas wykonania zadania, można zbadać statystycznie istotną różnicę w średnim czasie potrzebnym do
-wprowadzenia zmian.
+W poniższej pracy tę hipotezę weryfikuje się poprzez przeprowadzenie eksperymentu z udziałem
+programistów.
+Poproszono każdego z programistów o wykonanie pewnych zmian w kodzie dostarczonym przez badacza.
+Badani nie mają możliwości zapoznać się z kodem wcześniej, co zmniejsza szum uprzedniego przygotowania do wykonania
+zadania.
+Programistów podzielono na dwie grupy: jedna z nich otrzymała kod zmodyfikowany tak, że w jednej konkretnej klasie
+współczynnik sprzężenia z inną klasą był znacząco wyższy, niż w drugiej grupie.
+Czas wykonania poleconych zadań został zmierzony i poddany analizie pod kątem istotnych statystycznych różnic pomiędzy
+dwoma grupami.
 
-\section{Kod źródłowy do badania}
+W powyższej hipotezie występują dwie zmienne.
+Zmienną niezależną jest stopień sprzężenia klas.
+Jak wykazano w poprzednich rozdziałach, struktura kodu i sposób komunikacji klas w zastanym kodzie może
+jednoznacznie określać tę wielkość.
+Czas wprowadzenia zmian w kodzie jest zmienną zależną hipotezy.
+
+Powyższy szkic eksperymentu nie adresuje zmiennych zakłócających, w szczególności faktu, że programiści z różnym
+doświadczeniem, zdolnościami w pracy z zastanym kodem będą rozwiązywać zadanie w różnym czasie.
+Zgodność zastanego kodu z nomenklaturą używaną w swoim środowisku pracy również może mieć wpływ na czas wykonania
+zadania.
+Kod bardziej zbliżony w formule, stylu i strukturze do codziennego środowiska programisty będzie tworzył mniejsze
+obciążenie poznawcze, co będzie skutkować szybszym wykonaniem zadania.
+Programiści, których styl jest odmienny od zastanego kodu, doświadczą większego obciążenia poznawczego.
+Efektem może być szybsze wykonanie zadania, niezależnie od stopnia sprzężenia między klasami.
+
+Aby kontrolować tą zmienną zakłócającą, autor pracy zdecydował się wprowadzić do eksperymentu zadanie, które powinno
+zostać wykonane w części kodu wspólnej dla obu grup.
+Jeżeli eksperyment dostarczy dwa czasy potrzebne na wykonanie zadania przez każdego z uczestników, czas zadania
+wspólnego obu grupom może normalizować czas zadania o zmodyfikowanym stopniu sprzężenia klas.
+
+Normalizacja będzie odbywać się o poniższe równanie:
+
+\begin{equation}
+    T_2^{norm}(i) = \frac{T_2(i)}{T_1(i)}
+    \label{eq:normalization}
+\end{equation}
+
+gdzie:
+\begin{itemize}
+    \item \( T_2(i) \) -- czas wykonania drugiego zadania przez uczestnika \( i \)
+    \item \( T_1(i) \) -- czas wykonania pierwszego zadania przez uczestnika \( i \).
+\end{itemize}
+
+Powyższa normalizacja czasu wykonania zadania pozwala na porównywanie czasów z kontrolowaniem zmiennej niezależnej,
+jaką są indywidualne predyspozycje każdego z programistów do wykonywania zadania.
+
+\section{Grupa badana}
+
+Grupę 10 programistów wybrano z jednej firmy zajmującej się wytwarzania oprogramowania.
+Kryteria przystąpienia do eksperymentu to:
+
+\begin{itemize}
+    \item przynajmniej 2 lata (niekoniecznie ciągłe) doświadczenia w języku Java w wersji przynajmniej 8
+    \item podstawowa znajomość JUnit
+\end{itemize}
+
+Każdą osobę spełniającą kryteria losowo przydzielono do jednej z dwóch grup, następnie grupom losowo przydzielono
+repozytorium kodu,
+który został przedstawiony jako kod źródłowy, w którym należało wykonać zadania.
+
+\section{Kod źródłowy wykorzystany do eksperymentu}
 
 Istotną częścią badania jest poprawna manipulacja zmienną niezależną --- współczynnikiem sprzężenia klas.
-Oba warianty programu rozwiązują ten sam problem, to znaczy, że są testowane przy użyciu tego samego zestawu
+Oba warianty programu rozwiązują ten sam problem i są testowane przy użyciu tego samego zestawu
 testów jednostkowych.
 
 Ze względu na ograniczenia czasowe eksperyment nie mógł trwać dłużej niż godzinę dla każdego uczestnika.
@@ -58,7 +110,8 @@ zostanie wywołana w momencie wysłania obiektu implementującego klasę \texttt
 
 \section{Opis eksperymentu}
 
-Eksperyment obejmuje trzy kolejne etapy:
+Eksperyment jest przeprowadzany w formie nagrywanej telekonferencji ze współdzieleniem ekranu (okna zintegrowanego
+środowiska programistycznego) badanego i składa się z trzech etapów:
 
 \begin{enumerate}
     \item wprowadzenia, w którym prowadzący badanie przedstawia kod źródłowy programu i problem, który rozwiązuje
