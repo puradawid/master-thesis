@@ -13,4 +13,5 @@ pdflatex : clean
 	pdflatex EE-dyplom
 	
 clean :
-	-rm *.acn *.app *.aux *.bbl *.blg *.bcf *.glo *.ist *.lof *.log *.lot *.out *.pdf *.run.xml *.slo *.toc
+	-rm *.gls *.acn *.app *.aux *.bbl *.blg *.bcf *.glo *.ist *.lof *.log *.lot *.out *.pdf *.run.xml *.slo *.toc
+	find -name *.aux -exec rm {} \;
