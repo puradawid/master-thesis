@@ -1,0 +1,47 @@
+name: Build and Release Thesis PDF Using Container
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      # Replace with your actual ECR image URI.
+      image: 634368661050.dkr.ecr.eu-central-1.amazonaws.com/latex:latest
+      credentials:
+        username: AWS
+        password: ${{ secrets.ECR_PASSWORD }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Run thesis build script
+        run: |
+          chmod +x run.sh
+          ./run.sh
+
+      - name: Upload generated PDF artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: thesis-pdf
+          path: EE-dyplom.pdf
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download PDF artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: thesis-pdf
+
+      - name: Create GitHub Release and attach PDF
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ github.ref }}
+          files: EE-dyplom.pdf
