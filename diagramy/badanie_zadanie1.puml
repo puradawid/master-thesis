@@ -1,0 +1,9 @@
+@startuml
+(A)
+:Poleć badanemu odblokować pierwszy test i uruchomić go;
+:Wyjaśnij potrzebę wprowadzenia rozpoznania typu wiadomości;
+:Poleć badanemu rozpocząć zadanie i zarejestruj czas jego rozpoczęcia;
+:Poczekaj, aż badany wprowadzi zmiany i uruchomiony zestaw testów zakończy się skucesem;
+:Zarejestruj czas zakończenia pierwszego zadania;
+(B)
+@enduml

@@ -1,0 +1,18 @@
+@startuml
+!theme plain
+hide empty members
+
+interface Bus {
+    register(Consumer<T>, Topic, Class<T>)
+    unregister(Consumer<T>, Topic)
+    send(Topic, T)
+}
+
+interface "Consumer<MessageType>" as Consumer {
+    consume(MessageType): Confirmation
+}
+
+InMemoryBus --|> Bus
+Consumer --> Bus : registers to
+
+@enduml

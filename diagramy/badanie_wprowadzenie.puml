@@ -1,0 +1,22 @@
+@startuml
+start
+group Wprowadzenie
+:Wyjaśnij problem rozwiązywany przez program;
+:Wyjaśnij interfejsy i ich metody;
+:Wyjaśnij implementacje InMemoryBus i RegisteredConsumers;
+if (Badany ma pytania do powyższych?) then (tak)
+    if (Pytanie jest do wyjaśnionej części?) then (tak)
+    :Wyjaśnij problematyczny obszar;
+    else (nie)
+    :Pomiń pytanie;
+    endif
+    else (nie)
+endif
+:Poleć badanemu uruchomić zestaw testów;
+if (Testy nie uruchamiają się bądź kończą się błędem?) then (tak)
+:Wraz z badanym napraw problem środowiska uruchomieniowego;
+else (nie)
+endif
+end group
+(A)
+@enduml

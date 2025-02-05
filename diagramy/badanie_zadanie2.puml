@@ -1,0 +1,9 @@
+@startuml
+(B)
+:Poleć badanemu odblokować dwa następne testy i uruchomić je;
+:Wyjaśnij potrzebę wprowadzenia nowej strategii przekazywania wiadomości;
+:Poleć badanemu rozpocząć zadanie i zarejestruj czas jego rozpoczęcia;
+:Poczekaj, aż badany wprowadzi zmiany i uruchomiony zestaw testów zakończy się sukcesem;
+:Zarejestruj czas zakończenia drugiego zadania;
+stop
+@enduml

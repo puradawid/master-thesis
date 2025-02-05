@@ -1,20 +1,33 @@
-Przedmiotem badań jest obciążenie kognitywne programisty podczas wprowadzania zmian w istniejącym kodzie programu
-napisanego w języku Java.
-Obciążenie kognitywne w tym badaniu mierzone jest pośrednio poprzez czas wymagany na zrozumienie i modyfikacje kodu.
+Niniejszy rozdział szczegółowo opisuje metodę badawczą.
+Przedstawia hipotezę badawczą oraz definiuje zmienne, które są kluczowe dla przeprowadzonego eksperymentu.
+Opisuje również kod źródłowy i zadanie, które wykonywali badani programiści.
+Prezentuje szczegóły przeprowadzenia samego eksperymentu w celu zapewnienia rzetelności wyników i kontrolowania
+zmiennych zakłócających.
+
+Przedmiotem badań jest obciążenie kognitywne programisty podczas wprowadzania zmian w istniejącym kodzie źródłowym w
+języku Java.
+Obciążenie to jest mierzone pośrednio poprzez czas wymagany na zrozumienie kodu i jego modyfikacje.
 
 W szczególności badanie koncentruje się na tym, czy i w jakim stopniu wysoki poziom sprzężenia klas zwiększa
-obciążenie kognitywne, a to wpływa na czas .
-
+obciążenie kognitywne, a to wpływa na czas.
 Celem badawczym jest określenie wpływu stopnia sprzężenia istniejących klas na czas wymagany do wprowadzenia zmian w
 kodzie przez programistę.
 
-Następny podrozdział formułuje hipotezę badawczą, którą eksperyment ma za zadanie zweryfikować.
+Do zaprojektowania badania autor pracy bazował głównie na informacjach zawartych~w~\cite{wohlin2012experimentation}.
+Publikacja ta wyjaśnia w szczegółach proces prowadzenia poprawnych eksperymentów w dziedzinie inżynierii oprogramowania.
 
 \section{Hipoteza badawcza}
 
-W pracy postawiono hipotezę badawczą, zgodnie z którą czas potrzebny na wprowadzenie zmian w kodzie programu zależy
-od stopnia sprzężenia klas --- jeśli klasa jest powiązana z inną o znacząco różnym stopniu sprzężenia, to czas
-ten różni się w sposób statystycznie istotny.
+W pracy postawiono hipotezę badawczą:
+
+\newtheorem{hypothesis}{Hipoteza}
+
+\begin{hypothesis}
+    Czas potrzebny na wprowadzenie zmian w kodzie programu zależy od stopnia sprzężenia klas.
+\end{hypothesis}
+
+Innymi słowy, jeśli klasa jest powiązana z inną o znacząco różnym stopniu sprzężenia, to czas ten różni się w sposób
+statystycznie istotny.
 
 W poniższej pracy tę hipotezę weryfikuje się poprzez przeprowadzenie eksperymentu z udziałem
 programistów.
@@ -43,17 +56,18 @@ Efektem może być szybsze wykonanie zadania, niezależnie od stopnia sprzężen
 
 Aby kontrolować tą zmienną zakłócającą, autor pracy zdecydował się wprowadzić do eksperymentu zadanie, które powinno
 zostać wykonane w części kodu wspólnej dla obu grup.
-Jeżeli eksperyment dostarczy dwa czasy potrzebne na wykonanie zadania przez każdego z uczestników, czas zadania
-wspólnego obu grupom może normalizować czas zadania o zmodyfikowanym stopniu sprzężenia klas.
+Jeżeli wynikiem pojedynczego eksperymentu będą dwa czasy potrzebne na wykonanie zadania przez każdego z uczestników,
+czas zadania wspólnego obu grupom może normalizować czas zadania o zmodyfikowanym stopniu sprzężenia klas.
 
 Normalizacja będzie odbywać się o poniższe równanie:
-
+\nopagebreak[4]
 \begin{equation}
     T_2^{norm}(i) = \frac{T_2(i)}{T_1(i)}
     \label{eq:normalization}
 \end{equation}
 
 gdzie:
+
 \begin{itemize}
     \item \( T_2(i) \) -- czas wykonania drugiego zadania przez uczestnika \( i \)
     \item \( T_1(i) \) -- czas wykonania pierwszego zadania przez uczestnika \( i \).
@@ -61,6 +75,31 @@ gdzie:
 
 Powyższa normalizacja czasu wykonania zadania pozwala na porównywanie czasów z kontrolowaniem zmiennej niezależnej,
 jaką są indywidualne predyspozycje każdego z programistów do wykonywania zadania.
+Uzyskaną wartość traktujemy jak próbkę pozyskaną z grupy jej właściwej.
+
+Aby zweryfikować postawioną hipotezę, należy utworzyć sformalizowaną hipotezę zerową i
+jej odpowiednik i zastosować odpowiedni test~\cite{wohlin2012experimentation:hypotheses}.
+
+\begin{equation}
+    \label{eq:hypotheses}
+    \begin{aligned}
+        H_{0} &: \mu_{1} = \mu_{2}, \\
+        H_{1} &: \mu_{1} \neq \mu_{2}.
+    \end{aligned}
+\end{equation}
+
+gdzie:
+
+\begin{itemize}
+    \item średnia wartość \(\mu_{1}\) -- \(T_2^{norm}(i)\) dla uczestników pierwszej grupy
+    \item średnia wartość \(\mu_{2}\) -- \(T_2^{norm}(i)\) dla uczestników drugiej grupy
+\end{itemize}
+
+
+Potwierdzeniem hipotezy badawczej będzie odrzucenie hipotezy zerowej~\(H_{0}\) i przyjęcie hipotezy do niej
+przeciwnej~\(H_{1}\).
+W przypadku danych w formie dwóch zbiorów próbek stosuje się test t~Welcha, który w przeciwieństwie do testu
+t~Studenta nie zakłada tożsamych wariancji w obu rozkładach~\cite{wohlin2012experimentation:welch}.
 
 \section{Grupa badana}
 
@@ -68,8 +107,8 @@ Grupę 10 programistów wybrano z jednej firmy zajmującej się wytwarzania opro
 Kryteria przystąpienia do eksperymentu to:
 
 \begin{itemize}
-    \item przynajmniej 2 lata (niekoniecznie ciągłe) doświadczenia w języku Java w wersji przynajmniej 8
-    \item podstawowa znajomość JUnit
+    \item przynajmniej 2 lata (niekoniecznie ciągłe) doświadczenia w języku Java w wersji przynajmniej~8,
+    \item podstawowa znajomość biblioteki \texttt{JUnit}.
 \end{itemize}
 
 Każdą osobę spełniającą kryteria losowo przydzielono do jednej z dwóch grup, następnie grupom losowo przydzielono
@@ -77,6 +116,11 @@ repozytorium kodu,
 który został przedstawiony jako kod źródłowy, w którym należało wykonać zadania.
 
 \section{Kod źródłowy wykorzystany do eksperymentu}
+
+Ten podrozdział nie wyjaśnia wszystkich aspektów przygotowania kodu źródłowego, a jedynie przedstawia ograniczenia
+i wymagania narzucone przez konstrukcję eksperymentu i sposób ich rozwiązania.
+Więcej szczegółów na temat manipulacji stopniem sprzężenia klas w powyższym kodzie
+źródłowym znajduje się w rozdziale~\ref{cha:code}.
 
 Istotną częścią badania jest poprawna manipulacja zmienną niezależną --- współczynnikiem sprzężenia klas.
 Oba warianty programu rozwiązują ten sam problem i są testowane przy użyciu tego samego zestawu
@@ -99,14 +143,17 @@ Jest to kategoria problemu powszechnie znana wśród programistów Java, nie wym
 informatyki, a większość badanych od razu porównywała rozwiązywaną problematykę do programu \texttt{Kafka} — programu
 realizującego magistralę danych w złożonym środowisku rozproszonym.
 
-Tutaj powinienem przestawić diagram UML programu.
+\begin{figure}[!hb]
+    \centering \includegraphics[width=0.618\linewidth]{diagramy/javabus}
+    \caption{Diagram UML programu JavaBus}
+    \label{fig:uml_javabus}
+\end{figure}
 
 Zadaniem programu \texttt{JavaBus} jest przesyłanie wiadomości do uprzednio zarejestrowanych odbiorców.
 Klasa \texttt{InMemoryBus} implementująca interfejs \texttt{Bus} jest głównym elementem programu.
 Umożliwia ona zarejestrowanie klas implementujących interfejs \texttt{Consumer}, których metoda \texttt{consume}
 zostanie wywołana w momencie wysłania obiektu implementującego klasę \texttt{Message} z odpowiadającym obiektem klasy
 \texttt{Topic}.
-
 
 \section{Opis eksperymentu}
 
@@ -119,17 +166,31 @@ Eksperyment jest przeprowadzany w formie nagrywanej telekonferencji ze współdz
     \item rozwiązania zadania drugiego, w obszarze o zmodyfikowanym współczynniku sprzężenia pomiędzy klasami
 \end{enumerate}
 
-Poniżej każdy etap jest szczegółowo opisany, wskazując jego cel i interakcje pomiędzy prowadzącym badanie a
-badanym programistą.
+\begin{figure}[!hb]
+    \centering \includegraphics{diagramy/badanie}
+    \caption{Diagram aktywności badacza podczas wykonywania eksperymentu}
+    \label{fig:activity_diagram}
+\end{figure}
+
+Etapy można podzielić głębiej na zadania badacza, które ilustruje~\ref{fig:activity_diagram}.
+W podrozdziałach poniżej każdy etap jest szczegółowo omówiony, wskazując jego cel i interakcje pomiędzy prowadzącym
+badanie a badanym programistą.
 
 \subsection{Wprowadzenie do badania}
 
-Celem tego etapu jest wyjaśnienie programu i jego struktury badanemu programiście.
+\begin{figure}[ht]
+    \centering \includegraphics[width=0.8\textwidth]{diagramy/badanie_wprowadzenie}
+    \caption{Diagram aktywności badacza podczas wprowadzenia do eksperymentu}
+    \label{fig:badanie_activity_diagram}
+\end{figure}
+
+\textbf{Cel:} wyjaśnienie programu i jego struktury badanemu programiście.
 Badany nie powinien mieć problemu z określeniem rozwiązywanego problemu i potrafić wskazać elementy kodu, które wykonują
 rejestrację konsumenta i przekazywanie wiadomości.
 Jednocześnie wyjaśnienie powinno zawierać tę samą ilość informacji we wszystkich przeprowadzonych eksperymentach.
 
-Badany programista otrzymuje kod źródłowy, z którym zapoznaje się w trakcie eksperymentu.
+\textbf{Interakcje:} Diagram~\ref{fig:badanie_activity_diagram} opisuje proces: badany programista otrzymuje kod
+źródłowy, z którym zapoznaje się w trakcie eksperymentu.
 Badacz opisuje problem rozwiązywany przez program --- przekazywanie wiadomości zarejestrowanym konsumentom podkreślając,
 że na potrzeby eksperymentu program zakłada funkcjonowanie wewnątrz jednego wątku procesu JVM, więc
 programista nie musi rozważać współbieżności.
@@ -143,6 +204,13 @@ Celem zadania pierwszego jest pomiar czasu zadania w obszarze kodu wspólnego dl
 Jednocześnie programista zapoznaje się z ogólną strukturą programu, by w zadaniu drugim skupić się na klasach o
 zmodyfikowanym stopniu sprzężenia.
 
+\begin{figure}[!hb]
+    \centering \includegraphics[width=0.8\textwidth]{diagramy/badanie_zadanie1}
+    \caption{Diagram aktywności badacza podczas zadania pierwszego}
+    \label{fig:badanie_activity_diagram_zadanie_1}
+\end{figure}
+
+Proces przeprowadzenia przez pierwsze zadanie ilustruje Rysunek~\ref{fig:badanie_activity_diagram_zadanie_1}.
 Prowadzący badanie instruuje uczestnika, aby odblokował pierwszy test, a następnie go uruchomił.
 Po stwierdzeniu, że test kończy się błędem asercji, programista otrzymuje zadanie zmiany kodu.
 Polega ona na wprowadzeniu obsługi klas niebezpośrednio implementujących \texttt{Message}.
@@ -158,8 +226,17 @@ Jeżeli programista nie uruchomi testów jednostkowych po modyfikacji kodu, bada
 Celem zadania drugiego jest właściwy pomiar czasu wprowadzenia zmiany w obszarze o różnym stopniu sprzężenia klas.
 Programista powinien w tym czasie przeanalizować relacje pomiędzy klasami i wprowadzić oczekiwane zmiany.
 
-Prowadzący badanie wyjaśnia, że zadanie drugie jest analogiczne do pierwszego.
-Polega ono na zaimplementowaniu dodatkowej strategii informowania konsumentów o nowej wiadomości.
+\begin{figure}[h]
+    \centering \includegraphics[width=0.8\textwidth]{diagramy/badanie_zadanie2}
+    \caption{Diagram aktywności badacza podczas zadania drugiego}
+    \label{fig:badanie_activity_diagram_zadanie_2}
+\end{figure}
+
+Proces przeprowadzenia przez drugie zadanie ilustruje Rysunek~\ref{fig:badanie_activity_diagram_zadanie_2}.
+Prowadzący badanie wyjaśnia, że zadanie drugie jest analogiczne do pierwszego, czyli wymaga odblokowania
+pozostałych testów jednostkowych i zmienić kod tak, by testy zakończyły się powodzeniem.
+Różnica znajduje się w istocie oczekiwanej zmiany:
+wymaga ona zaimplementowania dodatkowej strategii informowania konsumentów o nowej wiadomości.
 Klasa konsumenta może otrzymać wiadomość wyłącznie w sytuacji, gdy wszystkie uprzednio zarejestrowane obiekty klasy
 \texttt{Consumer} zwróciły błąd po wywołaniu metody \texttt{consume}.
 Programista odblokowuje dwa kolejne testy, uruchamia je i przystępuje do realizacji zadania.
