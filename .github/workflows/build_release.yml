@@ -13,7 +13,7 @@ jobs:
       # Replace with your actual ECR image URI.
       image: 634368661050.dkr.ecr.eu-central-1.amazonaws.com/latex:latest
       credentials:
-        username: AWS
+        username: ${{ secrets.ECR_USER }}
         password: ${{ secrets.ECR_PASSWORD }}
     steps:
       - name: Checkout repository
