@@ -1,7 +1,14 @@
 @startuml
+!theme plain
 start
-:Wprowadzenie;
-:Zadanie 1;
-:Zadanie 2;
+:Wprowadzenie do programu;
+note right
+    Przekazanie kodu źródłowego
+    Wyjaśnienie funkcji programu
+end note
+:Przeprowadzenie zadania pierwszego;
+note right: Pomiar T<sub>1</sub>
+:Przeprowadzenie zadania drugiego;
+note right: Pomiar T<sub>2</sub>
 stop
 @enduml
