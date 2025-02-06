@@ -9,12 +9,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    container:
-      # Replace with your actual ECR image URI.
-      image: 634368661050.dkr.ecr.eu-central-1.amazonaws.com/latex:latest
-      credentials:
-        username: ${{ secrets.ECR_USER }}
-        password: ${{ secrets.ECR_PASSWORD }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -22,7 +16,8 @@ jobs:
       - name: Run thesis build script
         run: |
           chmod +x run.sh
-          ./run.sh
+          ./run.sh docker
+          ./run.sh build
 
       - name: Upload generated PDF artifact
         uses: actions/upload-artifact@v4
