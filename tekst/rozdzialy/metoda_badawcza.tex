@@ -1,28 +1,35 @@
 Niniejszy rozdział szczegółowo opisuje metodę badawczą pracy.
-Przedstawia hipotezę badawczą oraz definiuje kluczowe dla przeprowadzonego eksperymentu zmienne.
-Na podstawie wstępnego szkicu badania, definiuje zmienne zakłócające i przedstawia metody ich kontrolowania.
-Opisuje również kod źródłowy i zadania, które wykonywali badani programiści.
-Aby zadbać o rzetelność wyników, rozdział o metodzie badawczej kończy się szczegółowym scenariuszem przeprowadzonego
-eksperymentu.
+Przedstawia hipotezę badawczą oraz definiuje zmienne kluczowe dla przeprowadzonego eksperymentu.
+Na podstawie wstępnego szkicu badania, wskazuje zmienne zakłócające i przedstawia metody ich kontrolowania.
+Opisuje kod źródłowy i zadania, które wykonywali badani programiści.
+Aby zadbać o rzetelność wyników, rozdział o metodzie badawczej kończy się szczegółowym scenariuszem przeprowadzonych
+eksperymentów.
+
+Wyjaśnienia zawarte poniżej mają na celu przede wszystkim spojrzeć na problem ze strony badawczej --- odpowiedzieć
+na pytania, dlaczego autor pracy wybrał eksperyment, do jakiego stopnia przewidział zachowanie badanych, w
+jaki sposób zaprojektował przeprowadzany eksperyment i jak testuje pozyskane dane pod kątem statystycznej istotności
+różnic w nich istniejących.
+Nadrzędną wartością tego rozdziału jest odtwarzalność toku myślowego prowadzącego do podjęcia decyzji o
+przeprowadzeniu dokładnie tego eksperymentu, umożliwiając jego najdokładniejszą ocenę.
 
 Przedmiotem badań całej pracy jest obciążenie kognitywne programisty podczas wprowadzania zmian w
 istniejącym kodzie źródłowym w języku \texttt{Java}.
 Wybór \texttt{Java}
-jako języka programowania jest nieprzypadkowy --- w przedsiębiorstwie Sii, z którego pochodzą badani, 40\%
+jako języka programowania jest nieprzypadkowy --- w Sii sp. z o.o., z którego pochodzą badani, 40\%
 stanowisk jest związanych z tworzeniem oprogramowania właśnie w tym języku.
-\texttt{Java} zajmuje pierwsze miejsce w rankingu najczęściej używanych tam technologii.
-Globalnie \texttt{Java} zajmuje trzecie miejsce z wynikiem 10,15\% w rankingu najbardziej popularnych języków
+\texttt{Java} jest tam najczęściej używana.
+Globalnie zajmuje trzecie miejsce z wynikiem 10,15\% w rankingu najbardziej popularnych języków
 programowania~\cite{TiobeIndex2024}, co zwiększa szansę na replikacje badania przedstawionego w niniejszej pracy.
 
 Wspomniane obciążenie kognitywne jest mierzone pośrednio poprzez czas wymagany na zrozumienie kodu i jego modyfikacje.
-W szczególności badanie koncentruje się na tym, czy wyższy stopień sprzężenia klas sprawia więcej trudności
-w zrozumieniu kodu źródłowego, a to zwiększa obciążenie kognitywne, przez co wydłuża się czas potrzebny
-programiście na oczekiwaną zmianę kodu.
+Badanie koncentruje się na tym, czy wyższy stopień sprzężenia klas wydłuża czas potrzebny programiście na zmianę
+kodu według przekazanych wymagań, a to oznaczałoby, że w takiej sytuacji taki kod jest trudniejszy do zrozumienia,
+prowadząc do wniosku, że ma to wpływ na obciążenie kognitywne programisty podczas pracy z tak zaprojektowanymi klasami.
 Celem badawczym tej pracy jest zweryfikowanie zależności pomiędzy stopniem sprzężenia istniejących klas
-a czasem poświęconym na wprowadzenie zmiany przez programistę.
+a czasem programisty poświęconym na wprowadzenie zmiany.
 
 Autor pracy zaprojektował badanie, korzystając z informacji zawartych w monografii~\cite{wohlin2012experimentation},
-poświęconej tematowi badań empirycznych w inżynierii oprogramowania.
+podręcznikowi w zakresie badań empirycznych w dziedzinie inżynierii oprogramowania.
 
 
 \section{Hipoteza badawcza}
@@ -43,32 +50,86 @@ Zmienną niezależną jest stopień sprzężenia klas.
 Jak wykazano w poprzednich rozdziałach, struktura kodu i sposób komunikacji klas w zastanym kodzie może
 jednoznacznie określać tę wielkość.
 Czas wprowadzenia zmian w kodzie jest zmienną zależną hipotezy.
+
+\subsection{Hipoteza a metoda badawcza}
+
+Podręcznik~\cite{wohlin2012experimentation} wyróżnia trzy główne strategie pozyskiwania wiedzy w sposób doświadczalny:
+\begin{itemize}
+    \item ankietowanie,
+    \item studium przypadku,
+    \item eksperyment.
+\end{itemize}
+Nieodzowne jest przybliżenie każdej strategii i wybranie tej, która pozwoli na najbardziej obiektywne stwierdzenie
+zależności postawionej w hipotezie.
+
+\textbf{Ankietowanie} jest metodą do zrozumienia populacji, z której pobiera się próbki poprzez ankiety~\cite{babbie1990survey}.
+W przypadku hipotezy zależności czasu wykonania od stopnia sprzężenia klas badacz zapytałby się, czy według
+programistów ze środowiska X (firmy, uczelni, społeczności języka programowania itd.) wyższy współczynnik sprzężenia
+klas sprawia, że kod staje się trudniejszy do zrozumienia i w ostateczności zamiana go zajmuje więcej czasu.
+W rzeczywistości postawione pytanie byłoby bardziej skomplikowane, gdyż techniki ankietyzowania są zaawansowane
+metodologicznie i pozwalają, za pomocą serii krzyżowych pytań, pozyskać najbliższą prawdzie \emph{opinię} ankietowanych.
+Opinia programistów nie stwierdzi jednak czy istnieje faktyczny taki wpływ.
+Nie istnieją narzędzia w obszarze ankiet, które pozwoliłyby zaobserwować bezpośredni efekt postawiony przez hipotezę
+w~tej pracy.
+W związku z powyższym ankietowanie nie jest odpowiednią metodą na wykazanie faktycznego wpływu cech kodu
+obiektowego na koszty wprowadzania zmian w oprogramowaniu.
+
+Z kolei \textbf{studium przypadku} polega na obserwacji rzeczywistych sytuacji i dogłębnej ich analizie.
+W przypadku tej pracy badacz mógłby obserwować środowisko pracy w projektach charakteryzującym się niskim i wysokim
+stopniu sprzężenia klas w kodzie źródłowym.
+Wprowadzenie pewnych metryk do obu projektów pozwoliłoby na ocenę i porównanie obu projektów.
+Niestety, taka obserwacja byłaby poprawna wyłącznie w porównaniu tych dwóch projektów i nie stanowiłaby dobrej
+podstawy do kształtowania ogólnych wniosków~\cite{wohlin2012experimentation}.
+W świetle postawionej hipotezy, studium przypadku wymagałoby jej dostosowania poprzez określenie szczególnych
+warunków i środowiska, w którym obserwacja miałaby miejsce.
+Innym rozwiązaniem byłoby obserwowanie dwóch bliźniaczych projektów, jednak jest to stosunkowo rzadki przypadek, do
+którego autor tej pracy nie miał dostępu.
+
+Ostatnią dostępną strategią jest \textbf{eksperyment}, który polega na powtarzalnym, kontrolowanym i wyizolowanym
+stosowaniu pewnej metody lub zestawu metod, mierząc oczekiwane parametry i analizując wyniki~\cite{wohlin2012experimentation}.
+Eksperymenty mogą być zorientowane na ludzi lub na technologie.
+W przypadku hipotezy postawionej w tej pracy to człowiek jest poddawany obserwacji, chociaż przedmiotem badania jest
+stopień sprzężenia pomiędzy klasami w istniejącym kodzie źródłowym.
+Izolowane środowisko eksperymentalne pozwala na bardziej rzetelne pomiary, w szczególności pomiar podstawowej
+metryki, jaką jest czas, a także pozwala na kontrolę nad wszelkimi zakłóceniami wynikającymi ze złożoności systemów,
+jakimi są projekty oprogramowanie.
+
+Podsumowując, na podstawie wyżej wymienionych argumentów autor pracy doszedł do wniosku, że przeprowadzenie
+\textbf{eksperymentu} jest najwłaściwszą strategią na badanie postawionej hipotezy.
+Eksperyment wymaga uprzedniego zaprojektowania, określenia zmiennych zakłócających i sposobów ich kontrolowania, co
+zostało opisane poniżej.
+
+\subsection{Zarys eksperymentu i zmienne}
+
 W celu rozpatrzenia eksperymentu pod kątem istnienia innych zmiennych należy przedstawić przynajmniej jego wstępny
 zarys.
 
 W poniższej pracy postawioną hipotezę weryfikuje się poprzez przeprowadzenie eksperymentu z udziałem
 programistów.
-Losowo dzieli się ich na dwie grupy: jedna z nich otrzymuje kod zmodyfikowany tak, że w jednej konkretnej klasie
-współczynnik sprzężenia z inną klasą był znacząco wyższy, niż w drugiej grupie.
+Losowo dzieli się ich na dwie grupy:
+\begin{itemize}
+    \item grupę kontrolną, która pracuje na kodzie o bazowym współczynniku sprzężenia klas,
+    \item grupę pracującą na kodzie z podwyższonym współczynnikiem.
+\end{itemize}
 Następnie, eksperyment przeprowadza się indywidualnie z każdym programistą.
 Badanemu poleca się wykonanie pewnych zmian w kodzie dostarczonym przez badacza.
 Badani nie mają możliwości zapoznać się z kodem wcześniej, co redukuje niepewność wyników związaną z uprzednim
 niekontrolowanym przygotowaniem się programisty do wykonywanego zadania.
-Czas wykonywania poleconych zmian w kodzie jest rejestrowany.
+Czas od momentu rozpoczęcia wykonywania zadania do jego zakończenia jest rejestrowany.
 Po zebraniu wszystkich próbek zbiór poddaje się analizie pod kątem istotnych statystycznych różnic pomiędzy
 dwoma grupami badanych.
 
-Powyższy szkic eksperymentu nie adresuje faktu, że programiści z różnym doświadczeniem, zdolnościami w pracy z zastanym
-kodem będą rozwiązywać zadanie w różnym czasie.
+Powyższy szkic eksperymentu nie adresuje następującego problemu --- programiści z różnym doświadczeniem, zdolnościami w
+pracy z zastanym kodem będą rozwiązywać zadanie w różnym czasie.
 Zgodność zastanego kodu z nomenklaturą używaną w swoim środowisku pracy również może mieć wpływ na czas wykonania
 zadania.
-Kod bardziej zbliżony w formule, stylu i strukturze do codziennego środowiska programisty będzie tworzył mniejsze
-obciążenie poznawcze, co będzie skutkować szybszym wykonaniem zadania.
+Kod bardziej zbliżony w formule, stylu i strukturze do takiego, z którym na co dzień pracuje dany programista, będzie
+tworzył mniejsze obciążenie poznawcze, co będzie skutkować szybszym wykonaniem zadania.
 Programiści, których styl jest odmienny od zastanego kodu, doświadczą większego obciążenia poznawczego.
-Efektem może być szybsze wykonanie zadania, niezależnie od stopnia sprzężenia między klasami.
+Efektem może być wolniejsze wykonanie zadania, co utrudnia stwierdzenie wpływu stopnia sprzężenia pomiędzy klasami.
 
-Aby kontrolować tę zmienną zakłócającą, autor pracy zdecydował się wprowadzić do eksperymentu zadanie, które powinno
-zostać wykonane w części kodu wspólnej dla obu grup.
+Aby kontrolować tę zmienną zakłócającą, autor pracy zdecydował się wprowadzić do eksperymentu zadanie kontrolne, które
+powinno zostać wykonane w części kodu wspólnej dla obu grup.
 Jeżeli wynikiem pojedynczego eksperymentu będą dwa czasy potrzebne na wykonanie zadania przez każdego z uczestników,
 czas zadania wspólnego obu grupom może normalizować czas zadania o zmodyfikowanym stopniu sprzężenia klas.
 
@@ -82,16 +143,17 @@ Normalizacja będzie odbywać się zgodnie z poniższym równaniem:
 gdzie:
 
 \begin{itemize}
-    \item \( T_2(i) \) -- czas wykonania drugiego zadania przez uczestnika \( i \)
-    \item \( T_1(i) \) -- czas wykonania pierwszego zadania przez uczestnika \( i \).
+    \item \( T_2(i) \) -- czas wykonania drugiego zadania przez uczestnika~\(i\)
+    \item \( T_1(i) \) -- czas wykonania pierwszego (kontrolnego) zadania przez uczestnika~\(i\).
 \end{itemize}
 
 Powyższa normalizacja czasu wykonania zadania umożliwia porównywanie wyników przy jednoczesnym kontrolowaniu
 zmiennej zakłócającej, na którą składają się indywidualne predyspozycje każdego z programistów do wykonywania zadania.
-Uzyskaną wartość traktujemy jak próbkę pozyskaną z grupy jej właściwej.
+Uzyskaną wartość traktujemy jako próbkę przypisaną do odpowiedniej grupy.
 
 Aby zweryfikować postawioną hipotezę, należy utworzyć sformalizowaną hipotezę zerową i
 jej odpowiednik i zastosować odpowiedni test~\cite{wohlin2012experimentation:hypotheses}.
+W tym celu wprowadza się hipotezy formalne:
 
 \begin{equation}
     \label{eq:hypotheses}
@@ -104,19 +166,23 @@ jej odpowiednik i zastosować odpowiedni test~\cite{wohlin2012experimentation:hy
 gdzie:
 
 \begin{itemize}
-    \item średnia wartość \(\mu_{1}\) -- \(T_2^{norm}(i)\) dla uczestników pierwszej grupy
-    \item średnia wartość \(\mu_{2}\) -- \(T_2^{norm}(i)\) dla uczestników drugiej grupy
+    \item \(\mu_{1}\) -- średnia wartość \(T_2^{norm}(i)\) dla uczestników pierwszej (kontrolnej) grupy
+    \item \(\mu_{2}\) -- średnia wartość \(T_2^{norm}(i)\) dla uczestników drugiej grupy
 \end{itemize}
 
 Potwierdzeniem hipotezy badawczej będzie odrzucenie hipotezy zerowej~\(H_{0}\) zakładającej tożsamość średnich w obu
-grupach i przyjęcie hipotezy do niej przeciwnej~\(H_{1}\).
-W przypadku danych w formie dwóch zbiorów próbek stosuje się test t~Welcha, który w przeciwieństwie do testu
-t~Studenta nie zakłada tożsamych wariancji w obu rozkładach~\cite{wohlin2012experimentation:welch}.
-
+grupach i przyjęcie hipotezy~\(H_{1}\) do niej przeciwnej.
+W przypadku danych w formie dwóch zbiorów próbek o liczności~\(n < 30\)~stosuje się test t~Welcha, który w
+odróżnieniu od testu
+t~Studenta nie zakłada tożsamych wariancji w obu rozkładach~\cite{arciszewska2023metodologia}.
 
 \section{Grupa badana}
 
-Grupę 10 programistów wybrano z jednej firmy zajmującej się wytwarzania oprogramowania.
+Grupę 10 programistów wybrano z \emph{Sii sp. z o.o}.
+Jest to firma zatrudniająca 7556 osób w Polsce w 2022 roku~\cite{sii}.
+Sii zajmuje się głównie świadczeniem usług w sektorze wytwarzania oprogramowania.
+Używając wewnętrznych kanałów komunikacyjnych, dokładniej \emph{Java Community Teams}, autor pracy ogłosił poszukiwania
+programistów chętnych do wzięcia udziału w eksperymencie.
 Kryteria przystąpienia do eksperymentu to:
 
 \begin{itemize}
@@ -132,30 +198,34 @@ zadania.
 \section{Kod źródłowy wykorzystany do eksperymentu}
 
 Ten podrozdział nie wyjaśnia wszystkich aspektów przygotowania kodu źródłowego, jedynie przedstawiając ograniczenia
-i wymagania narzucone przez konstrukcję eksperymentu i sposób ich rozwiązania.
-Więcej szczegółów na temat manipulacji stopniem sprzężenia klas w powyższym kodzie
-źródłowym znajduje się w rozdziale~\ref{cha:code}.
+i wymagania narzucone przez konstrukcję eksperymentu i sposób ich spełnienia.
+Szczegóły manipulacji stopniem sprzężenia klas w powyższym kodzie źródłowym znajdują się w rozdziale~\ref{cha:code}.
 
-Istotną częścią badania jest poprawna manipulacja zmienną niezależną --- współczynnikiem sprzężenia klas.
-Oba warianty programu rozwiązują ten sam problem i są testowane przy użyciu tego samego zestawu
+Istotną częścią badania jest poprawna manipulacja zmienną niezależną --- w tym wypadku współczynnikiem sprzężenia klas.
+Oba warianty programu muszą rozwiązywać ten sam problem i być testowane przy użyciu tego samego zestawu
 testów jednostkowych.
 
-Ze względu na ograniczenia czasowe eksperyment nie mógł trwać dłużej niż godzinę dla każdego uczestnika.
-Wyzwaniem postawionym przed autorem pracy było utworzenie kodu źródłowego, który jest:
+Ze względu na ograniczenia czasowe eksperyment nie może trwać dłużej niż godzinę dla każdego uczestnika.
+Wyzwaniem stojącym przed autorem pracy było utworzenie kodu źródłowego, który jest:
 
 \begin{itemize}
     \item niewielki rozmiarem, zawiera nie więcej niż 10 klas, a żaden z plików klas nie jest dłuższy niż 100 linii kodu
-    \item zrozumiale napisany, nie wymaga dodatkowego wyjaśniania zaimplementowanych algorytmów czy wprowadzonych
-    abstrakcyjnych pojęć
+    \item zrozumiale napisany, badani programiści nie powinni mieć dodatkowych pytań co do kodu
     \item na tyle skomplikowany, by zmodyfikować relację między klasami i nie naruszyć ogólnej struktury programu i
-    rozwiązywanego problemu
-    \item kompletnie weryfikowalny za pomocą przygotowanych testów jednostkowych
+    rozwiązywanego problemu --- zmiana jednej relacji nie zmieni wszystkich głównych klas programu
+    \item kompletnie weryfikowalny za pomocą przygotowanych testów --- 90\% odgałęzień kodu pokryta
+    testami jednostkowymi
 \end{itemize}
 
-Kod źródłowy programu implementuje mechanizm magistrali wiadomości (ang. \textit{message bus}).
+Poszukiwanie programu o wyżej wymienionych cechach nie przyniosło efektów, gdyż większość publicznie dostępnych
+repozytoriów o takim rozmiarze kodu występuje w języku programowania \texttt{JavaScript}.
+Aby spełnić wszystkie postawione warunki, autor utworzył projekt \texttt{JavaBus}.
+Kod źródłowy tego programu implementuje mechanizm magistrali wiadomości (ang. \textit{message bus}).
 Jest to kategoria problemu powszechnie znana wśród programistów Java, nie wymaga znajomości dziedziny spoza
 informatyki, a większość badanych od razu porównywała rozwiązywaną problematykę do programu \texttt{Kafka} — programu
 realizującego magistralę danych w złożonym środowisku rozproszonym~\cite{Dankiewicz2024Kafka}.
+Wewnętrzna struktura programu posiada algorytm do przekazywania wiadomości konsumentom, a także definiuje~
+\acrshort{API} konsumentów i wiadomości.
 
 \begin{figure}[h]
     \centering \includegraphics[width=0.7\linewidth]{diagramy/javabus}
@@ -170,11 +240,28 @@ Umożliwia ona zarejestrowanie klas implementujących interfejs \texttt{Consumer
 jest wywoływana w momencie wysłania obiektu implementującego klasę \texttt{Message} z odpowiadającym obiektem klasy
 \texttt{Topic}.
 
+Podsumowując, utworzony na potrzeby eksperymentu program spełnia:
+\begin{itemize}
+    \item warunek rozmiaru, zawiera 7 klas i 6 interfejsów,
+    \item warunek zrozumiałości, stosując zasady formatowania Google Style Guide~\cite{googleStyleGuide},
+    \item warunek wystarczającej złożoności, gdyż modyfikacja kontraktu \texttt{InMemoryBus} i
+    \texttt{MessageDelivery} nie zmienia innych klas,
+    \item warunek weryfikowalności --- przygotowane testy jednostkowe pokrywają 100\% gałęzi kodu.
+\end{itemize}
+W związku z powyższym \texttt{JavaBus} może zostać użyty w eksperymencie jako kod przeznaczony do modyfikacji.
 
 \section{Opis eksperymentu}
 
-Eksperyment jest przeprowadzany w formie nagrywanej telekonferencji ze współdzieleniem ekranu (dokładniej: okna
-zintegrowanego środowiska programistycznego) badanego i składa się z trzech etapów:
+W kwestiach technicznych przeprowadzenia eksperymentu potrzebny jest dostęp do badanego, komputera, na którym badany
+będzie wykonywał zadanie i zintegrowanego środowiska programistycznego (\acrshort{IDE}).
+Komunikacja z badanym jest bezpośrednim warunkiem, natomiast dostęp do komputera lub \acrshort{IDE} jest pośrednim
+warunkiem, gwarantującym weryfikowalność wykonywanych zadań.
+W dobie niezawodnego połączenia internetowego i możliwości dostępu do znacznie większej ilości programistów autor
+badania zdecydował się na przeprowadzanie eksperymentów w formie telekonferencji.
+Dodatkowo wszystkie sesje eksperymentów zostały nagrane, w razie potrzeby głębszej analizy czynności programistów
+podczas wykonywania zadań.
+
+Eksperyment składa się z trzech etapów:
 
 \begin{enumerate}
     \item wprowadzenia, w którym prowadzący badanie przedstawia kod źródłowy programu i problem, który rozwiązuje
@@ -182,7 +269,7 @@ zintegrowanego środowiska programistycznego) badanego i składa się z trzech e
     \item rozwiązania zadania drugiego, w obszarze o zmodyfikowanym współczynniku sprzężenia pomiędzy klasami
 \end{enumerate}
 
-\begin{figure}[h]
+\begin{figure}[!hb]
     \centering\includegraphics[width=0.6\textwidth]{diagramy/badanie}
     \caption{Diagram aktywności prowadzącego eksperyment}
     \label{fig:activity_diagram}
@@ -194,38 +281,39 @@ badanie a badanym programistą.
 
 \subsection{Wprowadzenie do badania}
 
-\begin{figure}[h]
-    \centering \includegraphics[width=0.6\textwidth]{diagramy/badanie_wprowadzenie}
-    \caption{Diagram aktywności badacza podczas wprowadzenia do eksperymentu}
-    \label{fig:badanie_activity_diagram}
-\end{figure}
-
-Celem wprowadzenia jest przekazanie kodu źródłowego, przygotowanie zintegrowanego środowiska programowania,
-wyjaśnienie programu i jego struktury badanemu programiście.
+Celem wprowadzenia jest przekazanie kodu źródłowego, przygotowanie~\acrshort{IDE},
+wyjaśnienie programu i struktury jego kodu badanemu programiście.
 Po zakończeniu tego etapu badany powinien otworzyć kod źródłowy programu, rozumieć jego główne zadanie, a także
 wskazać klasy biorące udział w rejestracji i przekazaniu wiadomości obiektom klasy \texttt{Consumer}.
 Jednocześnie wyjaśnienie powinno zawierać te same informacje we wszystkich przeprowadzonych eksperymentach, aby nie
-narazić wyników na skażenie nierównym dostępem badanych do wiedzy o działaniu programu.
+narazić wyników na skażenie nierównym dostępem badanych do wiedzy o działaniu programu~\cite{torgerson2001contamination}.
 
-Diagram aktywności na Rysunku~\ref{fig:badanie_activity_diagram} przedstawia poszczególne akcje wykonywane przez
-badacza.
+Diagram aktywności na Rysunku~\ref{fig:badanie_activity_diagram} (strona~\pageref{fig:badanie_activity_diagram})
+przedstawia poszczególne akcje, które ma wykonać osoba prowadząca badanie.
 Programista otrzymuje kod źródłowy, z którym zapoznaje się w trakcie eksperymentu.
-Badacz opisuje problem rozwiązywany przez program --- przekazywanie wiadomości zarejestrowanym konsumentom podkreślając,
-że na potrzeby eksperymentu program zakłada funkcjonowanie wewnątrz jednego wątku procesu JVM, więc
+Badacz opisuje problem rozwiązywany przez program --- przekazywanie wiadomości zarejestrowanym konsumentom ---
+podkreślając, że na potrzeby eksperymentu program zakłada funkcjonowanie wewnątrz jednego wątku procesu JVM, więc
 programista nie musi rozważać współbieżności.
 
 Na tym etapie programista może zadawać pytania co do przedstawionego problemu i zaprezentowanych klas.
-Prowadzący badanie powinien odpowiedzieć wyłącznie na pytania, które odnoszą się do zaprezentowanego wyjaśnienia.
+Zgodnie z wcześniej wspomnianą zasadą o równym dostępie do informacji, prowadzący badanie powinien odpowiedzieć
+wyłącznie na pytania, które odnoszą się do zaprezentowanego objaśnienia.
 
 \subsection{Schemat przeprowadzania zadań}
 
-Działania, które podejmuje prowadzący badanie w przypadku obu zadań, pozwalają na wyodrębnienie wspólnego schematu
+Działania, które podejmuje prowadzący badanie w przypadku obu zadań, pozwalają na wyodrębnienie uniwersalnego schematu
 postępowania.
 Z tego powodu został on przedstawiony jako oddzielne zagadnienie eksperymentu, a następne sekcje
 omawiają szczegóły samych zadań i oczekiwanych rozwiązań.
 
-Zasadniczy cel obu etapów jest ten sam --- odpowiedzieć na pytanie ile czasu zajęło badanemu wykonanie zadania.
-Aby go osiągnąć, należy kolejno:
+Zasadniczy cel obu etapów jest ten sam --- zmierzyć czas wykonania zadania przez badanego.
+Aby zapewnić rzetelność wyników, prowadzący badanie nie powinien wywierać presji czasu na programistę ani sugerować, że
+czas wykonania zadania jest istotnym elementem eksperymentu, gdyż presja czasu prowadzi do zaburzenia efektywności oraz
+obniżenia jakości wykonywanych zadań~\cite{moore2012}.
+Z perspektywy badanego, celem w obu zadaniach jest uruchomienie pełnego zestawu testów (włączając odblokowane),
+czyli spełnienie nowych wymagań wobec kodu, jednocześnie zachowując istniejące.
+
+W kontekście powyższego pomiar wymaga wykonania przez prowadzącego eksperyment następujących czynności:
 
 \begin{enumerate}
     \item Wskazać testy jednostkowe, które badany musi odblokować, aby umożliwić weryfikacje zakończenia zadania.
@@ -240,17 +328,17 @@ Szczegóły poniżej odnoszą się do treści zadań, przy założeniu, że ogó
 W obu przypadkach zadaniem badanego jest zarejestrować czas spędzony przez badanego na modyfikacji kodu.
 
 \begin{figure}[h]
-    \centering \includegraphics[width=0.65\textwidth]{diagramy/badanie_zadanie1}
+    \centering \includegraphics[width=0.4\textwidth]{diagramy/badanie_zadanie1}
     \caption{Diagram aktywności badacza podczas przeprowadzania zadań}
     \label{fig:badanie_activity_diagram_zadanie_1}
 \end{figure}
 
 \subsection{Zadanie pierwsze}
 
-Pierwszym zadaniem badanego zmodyfikować kod, by uruchomienie poniższego testu zakończyło się sukcesem:
+Zadanie pierwsze (kontrolne) składa się z jednego testu jednostkowego.
 
 \begin{lstlisting}[language=Java,
-    caption={Test dotyczący obsługi wiadomości dziedziczących z zarejestrowanego typu},
+    caption={Test weryfikujący obsługę wiadomości dziedziczących z zarejestrowanego typu},
     label={lst:shouldCallInheritedMessage}]
     @Test
     void shouldCallInheritedMessage() {
@@ -266,52 +354,168 @@ Pierwszym zadaniem badanego zmodyfikować kod, by uruchomienie poniższego testu
 \end{lstlisting}
 
 Klasy \texttt{DummyConsumer}, \texttt{DummyMessage} i \texttt{InheritedDummyMessage} są częścią pakietu testowego ---
-w najprostszy możliwy sposób implementują interfejsy.
+w możliwie najprostszy sposób implementują interfejsy, odpowiednio \texttt{Consumer} i \texttt{Message}.
 Dodatkowo klasa \texttt{InheritedDummyMessage} bezpośrednio dziedziczy z \texttt{DummyMessage}.
 
-Listing~\ref{lst:shouldCallInheritedMessage} reprezentuje następujący scenariusz testowy: obiekt klasy
+Listing~\ref{lst:shouldCallInheritedMessage} przedstawia następujący scenariusz testowy: obiekt klasy
 \texttt{DummyConsumer} rejestruje się do \texttt{Bus} oczekując otrzymania wiadomości klasy \texttt{DummyMessage}.
-W metodzie \texttt{send} jednak jest użyty obiekt klasy \texttt{InheritedDummyMessage}.
+W metodzie \texttt{send} jest przekazany obiekt klasy \texttt{InheritedDummyMessage} dziedziczącej z wyżej
+wymienionej.
+W istniejącej implementacji ta klasa nie zostanie uznana za wiadomość, do której zarejestrował się \texttt{consumer}.
 Bez wprowadzenia zmiany kod kończy się błędem asercji, gdyż żadna wiadomość nie trafia do konsumenta.
 Innymi słowy, \texttt{consumer.wasCalled()} zwraca wartość \texttt{false}.
 
-Wymaganie wobec zmienionego kodu jest następujące: jeżeli w wywołaniu metody \texttt{consume} klasy
-\texttt{InMemoryBus} zostanie przekazana wiadomość jedynie dziedzicząca, a nie konkretnego typu, to implementacja
-musi rozważyć dodatkowo typy bazowe i również przekazać obiektowi klasy \texttt{Consumer} taki obiekt.
+Wymaganie tu postawione brzmi następująco: wywołanie metody \texttt{consume} klasy
+\texttt{InMemoryBus} z obiektem dowolnej klasy X dziedziczącej z \texttt{Message} musi wywołać konsumentów
+zarejestrowanych na \textbf{wszystkie bazowe typy klasy X}.
+Takie wymaganie jest powszechne w środowisku Java, ponieważ obiekty są opakowywane w dynamicznie utworzone klasy
+pośredników (ang. \textit{proxy}) niebędące ich oryginalnymi klasami, na przykład używając narzędzi \acrshort{AOP}~\cite{Mak2008}.
+
+\begin{lstlisting}[language=Java,
+    caption={Metoda klasy \texttt{RegisteredConsumers} odpowiedzialna za wybranie wszystkich odpowiednich konsumentów do
+    przekazania wiadomości},
+    label={lst:find}]
+List<Consumer> find(Topic topic, Class<? extends Message> messageType) {
+    return Optional.ofNullable(consumers.get(topic))
+    .map(m -> m.get(messageType))
+    .orElse(List.of());
+}
+\end{lstlisting}
+
+Oczekiwanym i jednocześnie najprostszym rozwiązaniem jest modyfikacja metody \texttt{find} klasy
+\texttt{RegisteredConsumers}, którą przedstawia Listing~\ref{lst:find}.
+
+Zadaniem programisty jest modyfikacja metody \texttt{find} w taki sposób, by wszystkie klucze zostały przejrzane pod
+kątem zgodności z~klasą bazową.
+Do tego celu może posłużyć metoda \texttt{isAssignableFrom} podstawowej klasy pakietu \texttt{java.lang} ---
+\texttt{Class}.
+Listing~\ref{lst:modified_find} przedstawia propozycje takiego rozwiązania za pomocą operacji na strumieniach.
+
+\begin{lstlisting}[language=Java,
+    caption={Przykładowe rozwiązanie zadania pierwszego --- modyfikacja klasy \texttt{find}},
+    label={lst:modified_find}]
+List<Consumer> find(Topic topic, Class<? extends Message> messageType) {
+    return Optional.ofNullable(consumers.get(topic))
+            .map(m -> m.keySet().stream()
+                    .filter(k -> k.isAssignableFrom(messageType))
+                    .flatMap(k -> m.get(k).stream())
+                    .collect(Collectors.toList()))
+            .orElse(List.of());
+}
+\end{lstlisting}
+
+Kluczową aktywnością prowadzącą do wykonania zadania nie jest zmiana kodu, a wskazanie metody, w której zmianę
+należy zastosować.
+Programista musi w pierwszej kolejności odczytać poprawnie implementację klasy \texttt{InMemoryBus}, następnie
+prześledzić implementację \texttt{RegisteredConsumers} i wskazać metodę \texttt{find} jako tę, która wymaga zmiany.
+Przed wykonaniem zadania pierwszego programista jest informowany o przeznaczeniu obu klas, jednakże nie można założyć,
+że będzie to bezpośrednio użyta informacja w kontekście zadania.
+Programista prawdopodobnie będzie musiał zapoznać się z kodem obu klas po rozpoczęciu zadania.
+
+Powyższe rozwiązanie może przybierać wiele form --- niektórzy programiści preferują używanie pętli zamiast
+strumieni~\cite{mazinanian2017understanding}, więc mogą zastosować refaktoryzację i utworzyć pętlę \textit{for-loop}
+z warunkiem sprawdzającym poszczególne klasy.
+
+W każdym z tych przypadków zaaplikowana zmiana będzie skutkować poprawnym wykonaniem testów jednostkowych, co
+pozwala badanemu zarejestrować czas zakończenia zadania i przejść do wyjaśnienia zadania drugiego.
 
 \subsection{Zadanie drugie}
 
-Celem zadania drugiego jest właściwy pomiar czasu wprowadzenia zmiany w obszarze o różnym stopniu sprzężenia klas.
-Programista powinien w tym czasie przeanalizować relacje pomiędzy klasami i wprowadzić oczekiwane zmiany.
+Następne zadanie opiera się o dwa testy jednostkowe, które opisują scenariusze tego samego wymagania.
+Jeżeli obiektowi klasy \texttt{InMemoryBus} przekaże się w konstruktorze obiekt klasy
+\texttt{FirstSuccessfulConsumerStrategy} jako sposób dostarczenia wiadomości (ang. \textit{message delivery}),
+to każda wiadomość zostanie przekazana wyłącznie pierwszemu konsumentowi, który zwróci obiekt klasy
+\texttt{PlainConfirmation} w metodzie \texttt{consume}.
+Innymi słowy, konsument może otrzymać wiadomość wyłącznie w sytuacji, gdy wszystkie uprzednio zarejestrowane
+obiekty klasy \texttt{Consumer} zwróciły błąd po wywołaniu metody \texttt{consume}.
+
+Listing~\ref{lst:firstConsumerStrategy} przedstawia przypadek, w którym tylko pierwszy konsument otrzymuje
+przekazaną wiadomość.
+
+\begin{lstlisting}[language=Java,
+    caption={Pierwszy test zadania drugiego --- poinformowany może być tylko pierwszy konsument},
+    label={lst:firstConsumerStrategy}]
+@Test
+void shouldCallOnlyFirstConsumerWithinTheTopic() {
+    Bus bus = new InMemoryBus(new FirstSuccessfulConsumerStrategy());
+    DummyConsumer consumer = new DummyConsumer();
+    DummyConsumer consumer1 = new DummyConsumer();
+
+    StringNamedTopic topic = new StringNamedTopic("test");
+
+    bus.register(consumer, topic, DummyMessage.class);
+    bus.register(consumer1, topic, DummyMessage.class);
+
+    bus.send(topic, new DummyMessage());
+
+    assertTrue(consumer.wasCalled());
+    assertFalse(consumer1.wasCalled());
+}
+\end{lstlisting}
+
+Listing~\ref{lst:nextConsumer} opisuje scenariusz, w którym pierwszy konsument poinformuje o porażce przetworzenia
+wiadomości poprzez zwrócenie obiektu klasy \texttt{Failure} w metodzie \texttt{consume}.
+
+\begin{lstlisting}[language=Java,
+    caption={Drugi test zadania drugiego --- jeżeli pierwszy konsument zwrócił błąd odbioru wiadomości, wyłącznie drugi
+    konsument powinien ją otrzymać},
+    label={lst:nextConsumer}]
+@Test
+void shouldCallNextConsumerInCaseOfFailure() {
+    Bus bus = new InMemoryBus(new FirstSuccessfulConsumerStrategy());
+    DummyConsumer consumer = new FailingConsumer();
+    DummyConsumer consumer1 = new DummyConsumer();
+    DummyConsumer consumer2 = new DummyConsumer();
+
+    StringNamedTopic topic = new StringNamedTopic("test");
+
+    bus.register(consumer, topic, DummyMessage.class);
+    bus.register(consumer1, topic, DummyMessage.class);
+    bus.register(consumer2, topic, DummyMessage.class);
+
+    bus.send(topic, new DummyMessage());
+
+    assertTrue(consumer.wasCalled());
+    assertTrue(consumer1.wasCalled());
+    assertFalse(consumer2.wasCalled());
+}
+\end{lstlisting}
 
 Zadanie wymaga zaimplementowania dodatkowej strategii informowania konsumentów o nowej wiadomości.
 Klasa konsumenta może otrzymać wiadomość wyłącznie w sytuacji, gdy wszystkie uprzednio zarejestrowane obiekty klasy
 \texttt{Consumer} zwróciły błąd po wywołaniu metody \texttt{consume}.
 
+Rozwiązaniem jest zaimplementowanie klasy \texttt{FirstSuccessfulConsumerStrategy}, dostosowując jej zachowanie do
+przedstawionych wyżej scenariuszy.
+W zależności od przynależności programisty do jednej z badanych grup kod będzie się różnił, oba rozwiązania zostaną
+szczegółowo przedstawione w Rozdziale~\ref{cha:code}.
+
+Niezależnie od kontraktu pomiędzy \texttt{InMemoryBus} a \texttt{MessageDelivery}, poprawna implementacja
+\texttt{FirstSuccessfulConsumerStrategy} skutkuje poprawnym uruchomieniem zestawu testów jednostkowych, a to kończy
+zadanie drugie, co pozwala prowadzącemu badanie zarejestrować czas ukończenia drugiego zadania i zakończyć eksperyment.
+
+
 \section{Podsumowanie}
 
-W niniejszym rozdziale przedstawiono szczegółowy opis metody badawczej zastosowanej w pracy.
-Omówiono postawioną hipotezę badawczą, według której czas wprowadzenia zmian w kodzie zależy od stopnia sprzężenia klas,
-a także określono zmienne niezależne, zależne oraz czynniki zakłócające eksperyment.
-W celu ograniczenia wpływu indywidualnych predyspozycji programistów na wyniki zaproponowano normalizację czasu
-wykonania zadania.
+W niniejszym rozdziale zaprojektowano i szczegółowo opisano metodologię eksperymentalną, której celem było
+zweryfikowanie zależności między stopniem sprzężenia klas a czasem modyfikacji kodu źródłowego – wskaźnikiem obciążenia
+kognitywnego programistów.
+Opracowano ramy badania obejmujące:
 
-Badanie przeprowadzono wśród 10 programistów z Sii sp. z o.o., którzy zostali losowo przydzieleni do dwóch grup.
-Każda z nich pracowała nad inną wersją kodu źródłowego, różniącą się stopniem sprzężenia klas.
-Jako materiał badawczy wykorzystano implementację mechanizmu magistrali wiadomości (message bus) w języku Java, co
-pozwoliło na przeprowadzenie eksperymentu w kontekście powszechnie stosowanej technologii.
+\begin{itemize}
+    \item
+    sformułowanie hipotezy badawczej oraz identyfikację zmiennych (niezależnej – stopnia sprzężenia klas, zależnej –
+    czasu modyfikacji kodu),
+    \item określenie i kontrolę czynników zakłócających przy pomocy zadania kontrolnego oraz normalizacji wyników,
+    \item szczegółowy opis przebiegu eksperymentu wraz z kryteriami oceny, umożliwiający pełną odtwarzalność toku badań.
+\end{itemize}
 
-Eksperyment składał się z trzech głównych etapów: wprowadzenia do badania, wykonania pierwszego zadania w celu
-normalizacji wyników oraz drugiego zadania, w którym analizowano wpływ sprzężenia klas na czas wykonania zmian w kodzie.
-Całość była realizowana w formie zdalnej telekonferencji, a interakcje badacza i uczestników zostały zobrazowane w
-postaci diagramów aktywności.
+Przyjęta metodologia stanowi solidną podstawę do dalszej analizy, umożliwiając obiektywną ocenę wpływu architektury kodu
+na obciążenie poznawcze programistów.
+W kolejnym rozdziale przejdziemy do prezentacji wyników eksperymentu oraz ich szczegółowej analizy.
 
-Na potrzeby analizy wyników sformalizowano hipotezę zerową i alternatywną, a następnie zastosowano test t-Welcha w celu
-sprawdzenia statystycznej istotności różnic pomiędzy grupami badawczymi.
-Zapewniono także kontrolę zmiennych zakłócających, co zwiększa wiarygodność wyników eksperymentu.
-
-W kolejnym rozdziale przedstawione zostaną uzyskane wyniki oraz ich interpretacja w kontekście postawionej hipotezy
-badawczej.
-
-
-
+\begin{figure}[!hb]
+    \centering \includegraphics[width=0.6\textwidth]{diagramy/badanie_wprowadzenie}
+    \caption{Diagram aktywności badacza podczas wprowadzenia do eksperymentu}
+    \label{fig:badanie_activity_diagram}
+\end{figure}
