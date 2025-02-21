@@ -1,0 +1,25 @@
+@startuml
+!theme plain
+hide empty members
+
+class A {
+    CBO(A) = 2
+    RFC(A) = 5
+    MPC(A) = 3
+}
+class B {
+    CBO(B) = 1
+    RFC(B) = 50
+    MPC(B) = 0
+}
+
+class C {
+    CBO(C) = 1
+    RFC(C) = 10
+    MPC(C) = 0
+}
+
+A --> B : <<use>>
+A --> C : <<use>>
+
+@enduml

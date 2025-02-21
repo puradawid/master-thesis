@@ -1,42 +1,428 @@
-\section{Relacje pomiędzy klasami}
-Ninejsza praca analizuje sprzężenie pomiędzy klasami.
-W pierwszej kolejności należy opisać, czym są relacje, a tym właśnie jest sprzężenie, w kontekście klas.
-Praca zakłada, że czytelnik ma wiedzę w zakresie paradygmatu programowania obiektowego i nie ma potrzeby
-wyjaśniać pojęcia obiektu, klasy, metod i atrybutów.
+Niniejszy rozdział stanowi wprowadzenie do pojęcia sprzężenia pomiędzy klasami.
+Wyjaśnia istniejące relacje w literaturze i ich użyteczność, po czym definiuje intuicję sprzężenia pomiędzy klasami,
+wskazując definicje występujące w literaturze.
+Stawia tezę, że sprzężenie między klasami może mieć negatywny wpływ na jakość kodu, popierając istniejącymi
+badaniami w kontekście obciążenia poznawczego.
+W ostatniej części rozdział przedstawia dostępne metryki sprzężenia, wskazując ich użyteczne aspekty a także
+przykłady, które uwypuklają różnice między nimi.
 
-W przeważającej ilości literatury poświęconej programowaniu obiektowemu relacje pomiędzy klasami opierają się
-na dziedziczeniu i agregacji:~\cite{wegner1990concepts}.
-Agregacje rozróżnia się w zależności od stopnia zależności od klasy agregującej.
-Silna agregacja, gdy klasa posiadająca instancję obiektu innej klasy kontroluje cykl życia klasy agregowanej.
-Kompozycja jest często definiowana jako rodzaj silnej agregacji, gdzie cykl życia obiektu klasy agregowanej jest
-zarządzany przez klasę agregującą.k
+\section{Relacje pomiędzy klasami}
+Niniejsza praca analizuje sprzężenie, które jest relacją występującą pomiędzy klasami.
+Relacja w paradygmacie programowania obiektowego opiera się na konstrukcji klasy --- wewnątrz jej kodu źródłowego
+występują referencje do innych klas.
+
+W poniższym podrozdziale przedstawiono relacje opisywane w literaturze, aby porównać je z relacją sprzężenia
+wskazaną w metrykach.
+
+\subsection{Rodzaje relacji pomiędzy klasami w literaturze}
+\label{subsec:relations}
+
+Podręczniki poświęcone programowaniu obiektowemu dzielą relacje klas na dwie kategorie:
+dziedziczenie i agregację~\cite{wegner1990concepts,olsen2007design,wiener1988introduction}~.
+
+Agregacja w różnym stopniu może wiązać klasę agregowaną.
+Najsilniejszy jej przypadek, czyli kompozycja, zachodzi, gdy klasa posiadająca instancję obiektu innej klasy kontroluje
+cykl życia obiektu klasy zależnej.
+Zarządza nim poprzez tworzenie instancji klasy w konstruktorze i usunięcie w destruktorze (jeżeli język
+programowania nie posiada mechanizmu odśmiecania pamięci (ang. \textit{garbage collector})).
+
 Podręcznik~\cite{Wiener_Pinson_2000} wyróżnia relacje pomiędzy klasami jako:
 
 \begin{itemize}
     \item dziedziczenie (ang. \textit{inheritance}),
-    \item kompozycja (ang. \textit{composition}), wspominając o słabszych formach agregacji.
+    \item kompozycja (ang. \textit{composition}), wspominając o słabszych formach jako agregacji.
 \end{itemize}
 
-W obiektowych językach programowania wyróżniamy następujące relacje pomiędzy klasami:
+Warto tu podkreślić wyróżnienie kompozycji jako ogólnej kategorii relacji.
+W przeciwieństwie do powyżej wspomnianych podręczników ta relacja jest tu istotniejsza niż agregacja, aczkolwiek w
+źródle brakuje wyjaśnienia tej priorytetyzacji.
+
+Diagram klas UML w wersji 2.1, język modelowania użyteczny wobec obiektowych języków programowania, przedstawia te
+relacje (związek) w formie linii łączącej dwie klasy~\cite{dkabrowski2007modelowanie}:
 
 \begin{itemize}
-    \item \textbf{dziedziczenia} --- klasa A dziedziczy z klasy B
-    \item \textbf{agregacji} --- obiekt klasy A zawiera w sobie obiekt klasy B
-    \item \textbf{kompozycji} --- obiekt klasy A zawiera w sobie obiekt klasy B
-    \item \textbf{asocjacji} --- obiekt klasy A wywołuje operacje na obiekcie klasy B
+    \item generalizację (tożsamą z dziedziczeniem w powyższym),
+    \item zależność,
+    \item asocjację, w tym:
+    \begin{itemize}
+        \item agregację,
+        \item kompozycję.
+    \end{itemize}
 \end{itemize}
 
-Relacje te są użyteczne na
+Zależność nie została wcześniej wspomniana.
+Jest to typ relacji, który nie był w poprzednich przypadkach przedstawiony jako odrębny rodzaj.
+\cite{dkabrowski2007modelowanie}~opisuje zależność jako ,,związek pomiędzy dwoma elementami modelowania polegający
+na tym, że zmiana w jednym --- niezależnym elemencie pociąga zmianę w drugim --- zależnym elemencie''.
+Innymi słowy, jest to jednokierunkowa relacja pomiędzy klasami, gdzie obiekt klasy bezpośrednio współpracuje z innym
+obiektem klasy niezależnie od metody tej współpracy.
+Typy tej zależności określają tę metodę, znajduje się w nich między innymi:
+\begin{itemize}
+    \item \texttt{<<call>>} --- wywołanie,
+    \item \texttt{<<create>>} --- utworzenie instancji,
+    \item \texttt{<<use>>} --- wymaganie do funkcjonowania.
+\end{itemize}
 
-W rzeczywistości relacje kompozycji i agregacji nie wskazują, jaka zachodzi interakcja pomiędzy obiektem klasy
-posiadającej inny obiekt. \cite{briand1999unified}~wskazuje sprzężenie jako formę relacji między klasami,
-niezależnie od użytej metryki.
+Relacje te są użyteczne na etapie projektowania systemu.
+Architekci i osoby odpowiedzialne za utworzenie modelu obiektowego posługują się relacjami pomiędzy klasami, by
+opisać zależności pomiędzy nimi.
 
-\section{RFC - metryka sprzężenia klas}
+W powyższych przypadkach kryterium podziału relacji jest sposób odniesienia się do klasy zewnętrznej.
+Jest to silnie związane ze strukturą klasy w najpopularniejszych językach programowania (C++, Java, Ruby).
+Dziedziczenie jest oddzielną, specyficzną deklaracją w definicji klasy, a pola (kompozycja/agregacja), wywołania
+metod (zależność o stereotypie \texttt{<<call>>}) czy \texttt{import} (\texttt{<<use>>}) występują jako syntaktyczne
+sformułowania języka programowania.
+
+Podręcznik poświęcony kompozycji klas~\cite{nierstrasz1995object} stosuje inne kryterium podziału relacji na kategorie:
+\begin{itemize}
+    \item zbieżność funkcjonalna (ang. \textit{functional commonality}) --- dziedziczenie metod z klas bazowych
+    \item znajomość (ang. \textit{class acquaintances}) --- wiadomości wysyłane do obiektów innych klas
+    \item narodziny i śmierć obiektu (ang. \textit{object birth and death}) --- tworzenie instancji klasy
+\end{itemize}
+
+Powyższe typy relacji skupione są na określeniu interakcji, bardziej niż na opisywaniu struktury klas.
+Relacje te określają, jakie funkcje, wiadomości i kontrola obiektów jest przekazywana pomiędzy klasami.
+Intencją tego podziału jest odkrywanie złożoności istniejącego kodu.
+Diagram sekwencji UML w wersji 2.1 również skupia się na aspekcie przepływu sterowania pomiędzy obiektami~\cite{dkabrowski2007modelowanie:sequence}.
+Głównym jego elementem jest wiadomość, przesyłana pomiędzy obiektami różnych (z reguły) klas.
+Jak już wcześniej wspomniano, również w tym przypadku wymiana wiadomości (faktycznie istniejąca w \texttt{Ruby} i jej przodku
+\texttt{Smalltalk}) jest tożsama z wywołaniem metody na obiekcie.
+
+Podsumowując, w literaturze można wyróżnić dwa sposoby podziału relacji pomiędzy klasami: na strukturalne
+(dziedziczenie, kompozycja) i funkcjonalne (przepływ informacji i odpowiedzialności).
+W następnym podrozdziale zostanie omówione sprzężenie, które jest relacją łączącą te dwa sposoby, aby ostatecznie
+przedstawić narzędzia do pomiaru siły związania klas ze sobą.
+
+\subsection{Relacja sprzężenia}
+
+Relacje kompozycji i agregacji nie wskazują, jakie interakcje zachodzą pomiędzy obiektami w tych relacjach.
+Świadczą jedynie o tym, że obiekt klasy docelowej jest przetrzymywany jako pole klasy ją przechowującej i, w
+przypadku kompozycji, kiedy zostanie zwolniona pamięć obiektu zależnego.
+Analizując wyłącznie te związki, nie można wskazać szeregu wywołań metod lub dostępu do pól między tymi klasami.
+Z kolei relacja zależności nie wskazuje, jakie metody klasa docelowa wywołuje.
+Dotychczas wymienione relacje nie pozwalają na pełną ocenę jakości zaimplementowanego systemu klas.
+W tym celu stosuje się pojęcie sprzężenia (ang. \textit{coupling}) klas, czyli ogólnej relacji pomiędzy klasami, która
+sprawia, że klasy są od siebie zależne na poziomie semantycznym lub syntaktycznym.
+Nie precyzuje ona metody związania dwóch klas, ale określa, czy w ogóle dane klasy są ze sobą związane.
+Sprzężenie nie występuje w podręcznikach jako relacja używana do projektowania systemu obiektowego,
+znacznie częściej jest wykorzystywana w kontekście analizy złożoności i jakości kodu, co zostało szczegółowo omówione
+poniżej.
+
+Definicja sprzężenia w~\cite{chidamber1991towards} sprowadza się do stwierdzenia, że ,,dwie rzeczy są ze sobą
+sprzężone wtedy i tylko wtedy, gdy przynajmniej jedna z nich działa na drugą.''
+W tym przypadku termin \textit{działanie na} można opisać jako wpływ jednego obiektu na stan drugiego.
+Formalnie ta definicja jest przedstawiona następująco: zakładając, że \(X\) i \(Y\) są pewnymi klasami, a
+\(S_{i}\) to zbiór metod, a \(I_{i}\) to zbiór pól klasy \(i\), jeżeli wywołanie dowolnej metody z \(S_{X}\) wywoła
+dowolną metodę z \(S_{Y}\) lub ma wpływ na dowolne pole \(I_{Y}\) to \(X\) jest sprzężone z \(Y\).
+
+W~\cite{yourdon1996case:19} znajduje się mniej formalna definicja sprzężenia:
+\begin{quote}
+(\textellipsis) [Sprzężenie] oznacza siłę wzajemnych powiązań między oddzielnymi składnikami systemu.
+Sprzężenie to przybiera postać powiązań komunikatami.
+(\textellipsis) Sprzężenie jest również tworzone przez dziedziczenie w hierarchii klas, ale jest to zwykle ocenianie z punktu
+widzenia wskazówek dotyczących spójności (\textellipsis)
+\end{quote}
+
+Jak wyjaśniono w podrozdziale~\ref{subsec:relations}, termin \textit{powiązań komunikatami} w nowoczesnych językach
+programowania oznacza również wywoływanie metod na innych obiektach.
+
+\begin{figure}[h]
+    \centering \includegraphics[width=0.2\textwidth]{diagramy/sprzezenie}
+    \caption{Przykładowe relacje klas}
+    \label{fig:sprzezenie}
+\end{figure}
+
+Rysunek~\ref{fig:sprzezenie} przedstawia relacje \texttt{<<use>>} pomiędzy przykładowymi klasami.
+Sprzężenie, jak większość relacji pomiędzy klasami, jest kierunkowe: jeżeli klasa \(A\) jest sprzężona z klasą \(B\), to
+nie oznacza, że klasa \(B\) musi być sprzężona z klasą \(A\).
+Jeżeli żadne sprzężenie nie występuje pomiędzy klasą \(C\) i \(D\), to znaczy, że żadna zmiana w klasie
+\(C\) nie wymusza wprowadzenia zmiany w \(D\).
+Najbardziej skrajnym przykładem zmiany w kodzie obiektowym jest usunięcie klasy.
+W przypadku klas niesprzężonych, usunięcie klasy docelowej nie wymusza żadnej zmiany na klasie bazowej.
+
+Sprzężenie w kontekście programowania jest pojęciem wykraczającym poza obiektowy paradygmat, gdyż pochodzi z koncepcji
+efektywnego programowania strukturalnego.
+Oryginalnie dotyczy siły związania ze sobą modułów lub procedur.
+Pomaga to programistom analizować kod źródłowy programu, aby łączyć ze sobą zestawy procedur o wysokim sprzężeniu w moduły
+i jednocześnie wykrywać obszary, które są od siebie niezależne, rozdzielając je na oddzielne moduły~\cite{stevens1974structured}.
+
+Powszechnie występujący wysoki stopień sprzężenia klas uznawany jest za nieoptymalne zaprojektowanie systemu~\cite{295895}.
+Jednocześnie~\cite{taube2011can} podkreśla, że nie jest możliwe zbudowanie przeciętnie skomplikowanego systemu bez
+wysokiego sprzężenia przynajmniej w niektórych jego klasach.
+Nie oznacza to jednak, że silne sprzężenie jest oczekiwanym zjawiskiem w każdym obszarze systemu --- z tego powodu
+programiści wprowadzają do swoich zasad programowania techniki, które redukują sprzężenia pomiędzy klasami,
+poświęcając tym metodom całe książki~\cite{feathers2004working}.
+
+W przedstawionej definicji sprzężenia brakuje szczegółów wynikających z konstrukcji klas.
+Porównywanie alternatywnych sposobów zaprojektowania systemu lub analiza zestawu klas wymaga narzędzia badawczego
+jednoznacznie określającego współczynnik sprzężenia.
+W tym celu konstruuje się metryki, które w formalny sposób określają sposób metody przypisania skalarnych wielkości
+do relacji.
+Sprzężenie może być opisywane za pomocą metryk opisanych w podrozdziale~\ref{subsec:metryki}.
+
+\section{Wpływ sprzężenia na czytelność kodu}
+
+Istniejące paradygmaty programowania mają na celu podziału kodu źródłowego na mniejsze części, w tym celu
+wprowadzają abstrakcje dzielące kod na mniejsze, łatwiejsze do zrozumienia pod-problemy: funkcje, klasy, obiekty,
+moduły, czy też procedury.
+Niektóre języki programowania (\texttt{C++}, \texttt{Scala}) pozwalają na zastosowanie więcej niż jednego paradygmatu.
+Rozkładanie złożonego programu na mniejsze elementy nie wynika z powodów technicznych.
+Ponowne wykorzystanie tych elementów i umożliwienie programistom definiowania abstrakcji pomiędzy rozwiązywanymi
+problemami są głównymi celami tego zabiegu.
+
+Rozwiązywanie abstrakcyjnych problemów przez człowieka opiera się na wykorzystywaniu zdolności poznawczych.
+Zdolności te są ograniczone, a teoria obciążenia poznawczego zajmuje się zagadnieniem wyznaczania tej granicy~\cite{plass2010cognitive}.
+Programowanie jest czynnością wybitnie wykorzystującą zdolności poznawczych, a złożoność przeciętnego rozwiązania w
+formie programu komputerowego wykracza poza możliwości pamięci ludzkiej.
+Dotyczy to w szczególności zmiany istniejącego kodu źródłowego w ramach dostosowywania go do nowych wymagań.
+Jeżeli obszar, w którym programista musi wykonać zmiany, wytwarza znaczne obciążenie poznawcze, to czas potrzebny na
+zmianę wydłuża się, tym samym generując dodatkowe koszty.
+Ma to znaczący wpływ na ogólny koszt projektu, gdyż powszechnie istnieje oczekiwanie, że projekt będzie dłużej istniał,
+niż był budowany.
+Z tego powodu pojawia się pytanie, czy istnieje sposób na podział dowolnego rozwiązania na takie abstrakcje, żeby
+miały one możliwie najmniejsze obciążenie poznawcze.
+Aktualnie problem pozostaje nierozwiązany i wymaga dalszych badań~\cite{yousoof2007measuring}.
+
+Badanie sprzężenia pomiędzy klasami ma odpowiedzieć na pytanie, jak bardzo dana abstrakcja (klasa) jest powiązana z
+innymi.
+Struktura klas i ich zależności odzwierciedla złożoność problemu, ale może też dodatkowo dodawać przypadkową złożoność
+(ang. \textit{incidental complexity}), która wynika zwykle z dodania nadmiarowych abstrakcji.
+Dostarczenie narzędzia umożliwiającego pomiar związku między klasami jest warunkiem koniecznym do przeprowadzenia
+takiej analizy.
+Dzięki temu można na przykład stwierdzić, czy nie istnieją dwie klasy, które są tak bardzo powiązane ze sobą, że mogą
+stanowić jedną abstrakcję.
+Taki zabieg redukuje obciążenie poznawcze, a tym samym zmniejsza koszt wprowadzenia zmian w takim systemie klas.
+
+Wprowadzenie mierzalności sprzężenia klas do procesu wytwórczego i zmiany według~\cite{295895} pozwala na:
+
+\begin{itemize}
+    \item estymowanie kosztów prac,
+    \item ustalanie harmonogramu,
+    \item ocenianie wpływu użycia nowych technik i narzędzi,
+    \item określaniu efektywności prac w czasie,
+    \item podnoszeniu jakości kodu źródłowego,
+    \item przewidywania potrzebnych zasobów w projekcie,
+    \item przewidywania przyszłych wymagań na system.
+\end{itemize}
+
+\section{Metryki sprzężenia klas}
+\label{subsec:metryki}
+
+Ze względu na ilość metod sprzężenia klas ze sobą, sprzężenie nie posiada pojedynczej metryki określającej jej
+współczynnik.
+W tym podrozdziale zostanie przedstawiony formalny sposób zapisu metryk, a także dostępne metryki w kontekście języka
+\texttt{Java}.
+
+Publikacją, którą niniejsza praca się posługuje w kontekście definicji metryk sprzężenia, jest~\cite{briand1999unified}.
+Przedstawia ona ujednolicony model dostępnych metod pomiarów sprzężenia w systemach obiektowych.
+Model ten łączy wiele prac poświęconych zagadnieniu metryk tej relacji, wprowadza wspólny formalny zapis metryk, a
+także ustala ich użyteczność.
+
+Pełen model przedstawiony w publikacji składa się 25 metryk.
+Autor podjął odrzucić te, które nie mają praktycznego zastosowania w języku \texttt{Java}, to znaczy:
+
+\begin{itemize}
+    \item przeznaczone wyłącznie dla języka \texttt{C++},
+    \item korzystające z określenia typów niebędących klasami,
+    \item używających wielodziedziczenia niezwiązanego z implementacją interfejsów.
+\end{itemize}
+
+W wyniku odrzucenia powyższych model składa się z 3 metryk: \acrshort{CBO}, \acrshort{RFC}, \acrshort{MPC}.
+Wszystkie bazują na zapisie formalnym pochodzącym z teorii zbiorów.
+Poniżej wyjaśnienie elementarnych funkcji i zbiorów, które będą używane w definicjach metryk.
+
+\begin{itemize}
+    \item \(C\) --- zbiór wszystkich klas w systemie
+    \item \(c \in C\) --- dowolna klasa
+    \item \(M(c)\) --- zbiór metod klasy \(c\)
+    \item \(M_{D}(c)\) --- zbiór zadeklarowanych metod klasy \(c\)
+    \item \(M_{I}(c)\) --- zbiór zaimplementowanych metod klasy \(c\),
+    \item \(A_{D}(c)\) --- zbiór zadeklarowanych atrybutów (pól) klasy \(c\),
+    \item \(A_{I}(c)\) --- zbiór zaimplementowanych atrybutów klasy \(c\).
+\end{itemize}
+
+Metody i pola deklarowane oznaczają, że dana klasa posiada do nich dostęp poprzez dziedziczenie, ale nie
+implementuje ich, lub deklaruje wyłącznie ich sygnaturę.
+W języku \texttt{Java} oznacza to metody abstrakcyjne w klasach abstrakcyjnych, metody odziedziczone lub deklaracje
+metod w interfejsach.
+Jeżeli ciało klasy \(c\) posiada implementacje metody lub pola (\texttt{Java} nie posiada koncepcji pól
+abstrakcyjnych), to znajduje się w zbiorze \(M_{I}(c)\) albo \(A_{I}(c)\).
+Innymi słowy, oba zbiory są rozłączne, czyli zachodzą:
+
+\begin{equation*}
+    \begin{aligned}
+     M_{D}(c) \cup M_{I}(c) &= M(c) \\
+     A_{D}(c) \cup A_{I}(c) &= A(c) \\
+     M_{D}(c) \cap M_{I}(c) &= \varnothing \\
+     A_{D}(c) \cap A_{I}(c) &= \varnothing
+    \end{aligned}
+\end{equation*}
+
+Aby rozszerzyć możliwości modelu, Briand i in.\@ wprowadza dodatkowe funkcje wyróżniające metody i
+atrybuty o wspólnych cechach~\cite{briand1999unified}.
+
+\textbf{\(SIM(m)\)} to zbiór metod statycznie wywołanych (ang.\@ \textit{Statically Invoked Method}) wewnątrz metody
+\(m\).
+Termin \textit{statyczne wywołanie} odnosi się do wywołania bezpośredniej metody obiektu.
+W przeciwieństwie do wywołania metody polimorficznej (w języku \texttt{C++} jest to \textit{metoda wirtualna}),
+wywołanie jej nie wyszukuje wskaźnika do funkcji metody w tablicy metod wirtualnych.
+Wynika z tego, że aby zbiór \(SIM(m)\) był niepusty, metoda \(m\) musi przynajmniej należeć do \(M_{I}(c)\).
+Wywołania obiektów klas obcych są zawsze traktowane jako
+
+\(PIM(m)\) to zbiór polimorficznie wywołanych metod (ang.\@ \textit{Polymorphically Invoked Methods}) wewnątrz metody
+\(m\).
+Jeżeli \(m' \in PIM(m)\) to znaczy, że mechanizm polimorficzny (lub statyczne wywołanie) może wywołać tę metodę.
+Jednocześnie \(m'\) musi istnieć w drzewie dziedziczenia klasy w której się znajduje lub być wirtualną.
+
+\textbf{\(AR(m)\)} to zbiór referencji do pól (ang. \textit(attribute references)) wywołanych wewnątrz metody \(m\).
+W przypadku tej funkcji nie ma znaczenia metoda dostępu do pola klasy --- może to być zarówno odczyt, jak i zapis.
+
+\(NSI(m, m')\) liczba statycznych wywołań (ang.\@ \textit{Number of Static Invocations}) metody \(m'\) w \(m\).
+Oznacza ona ile razy metoda \(m'\) została wywołana w ciele metody \(m\).
+Jest to bardziej szczegółowa funkcja niż powyższe, dlatego, że opisuje wywołania w obrębie jednej wskazanej metody.
+Istotnym założeniem jest, że \(m' \in SIM(m)\).
+
+\subsection{Metryka \textit{Coupling Between Objects}}
+\label{subsec:CBO}
+
+\textit{Sprzężenie pomiędzy obiektami} (\acrshort{CBO}) jest miarą skalarną, określającą
+\textbf{liczbę klas, z którymi dana klasa bezpośrednio współpracuje w systemie}.
+Metryka nie podtrzymuje cechy kierunkowości, która została przedstawiona wcześniej.
+Wynika to z faktu, że \(CBO\) określa ilość klas, które współpracują z \(c\), a nie o sile jej relacji.
+Może to być wykorzystane w odkrywaniu miejsc wrażliwych na zmiany (ang. \textit{hot spots} w
+\cite{feathers2004working}), wybierając klasy o najwyższej wartości \(CBO\).
+Metrykę posiada następującą definicję:
+
+\begin{equation*}
+    CBO(c) = |{d \in C - {c} | uses(c, d) \vee uses(d, c)}|
+\end{equation*}
+
+Funkcja \(uses(c, d)\) gdzie \(c, d \in C\) to uproszczenie relacji ,,używania'' klasy.
+Można to rozumieć jako dowolne odniesienie się do innej klasy, na przykład poprzez wywołanie metody, dziedziczenie,
+albo import, a~\cite{briand1999unified} proponuje poniższą, formalną definicję:
+
+\begin{equation*}
+    uses(c, d) \leftrightarrow (\exists m \in M_{I}(c): \exists m' \in M_{I}(d): m' \in SIM(m))
+    \wedge (\exists m \in M_{I}(c): \exists a \in A_{I}(d): a \in AR(m))
+\end{equation*}
+
+Funkcja \(uses(c, d)\) definiuje intuicję ,,używania'' klasy, którą posługują się programiści.
+Wprowadzenie innej definicji może dopasować metrykę do specyficznych języków programowania bądź
+obserwacji niebezpośrednich zależności, takich jak wywoływanie metod klas bazowych.
+
+\subsection{Metryka \textit{Response For Class}}
+
+Metryka \textit{odpowiedzi klasy} (\acrshort{RFC}) wskazuje na
+\textbf{ilość metod, które mogą być potencjalnie wywołane w odpowiedzi na wywołanie dowolnej metody obiektu klasy}.
+Ta metryka, w porównaniu do CBO opisanego w podrozdziale~\ref{subsec:CBO} wskazuje, jak wiele metod może wywołać
+obiekt w aktualnej implementacji, wliczając w to własne metody.
+
+RFC posiada dwa parametry: poddawaną pomiarowi klasę \(c\) i poziom zagnieżdżenia metod \(\alpha\).
+Drugi parametr stanowi o maksymalnej liczbie poziomów wywołań.
+W zależności od parametru \(\alpha\), RFC przedstawia się następująco:
+
+\begin{equation*}
+    \begin{aligned}
+        &RFC_{0}(c) = M(c) \\
+        &RFC_{\alpha}(c) = \left\lvert{\bigcup_{i=0}^{\alpha}R_{i}(c)}\right\rvert \text{ dla } \alpha = 1, 2, 3\mathellipsis \\
+    \end{aligned}
+\end{equation*}
+
+\(R_{i}(c)\) jest zbiorem \(PIM(m)\) dla wszystkich metod klasy \(c\):
+
+\begin{equation*}
+    R_{i+1}(c) = \bigcup_{m \in R_{i}(c)} PIM(m)
+\end{equation*}
+
+Ze względu na największą użyteczność poziomu pierwszego, przyjmuje się:
+
+\begin{equation*}
+    RFC(c) = RFC_{1}(c)
+\end{equation*}
+
+czyli:
+
+\begin{equation*}
+    RFC(c) = \left\lvert{M(C) \cup (\bigcup_{m \in R_{i}(c)} PIM(m) }\right\rvert
+\end{equation*}
+
+Miara \acrshort{RFC} jest użyteczna w analizie złożoności implementacji metod użytych w klasach.
+Wykracza ona poza podstawową topologię, którą można przedstawić np.\@ w diagramie UML\@.
+Dzięki niej badacze są w stanie ustalić bardziej szczegółowy obraz sprzężenia pomiędzy klasami.
+
+\begin{figure}[h]
+    \centering \includegraphics[width=0.4\textwidth]{diagramy/rfc}
+    \caption[Przykładowy układ klas i wskaźników CBO i RFC]{Diagram przykładowej różnicy pomiędzy metrykami CBO i
+    RFC. Klasa \(A\) w relacji wydaje się być główną klasą, ale RFC wskazuje, że to klasa \(B\) komunikuje się najwięcej.}
+    \label{fig:rfc}
+\end{figure}
+
+Rysunek~\ref{fig:rfc} ilustruje przykład systemu klas \(A\), \(B\) i \(C\) z przypisanymi do nich metrykami CBO i RFC\@.
+W tym przypadku zadaniem postawionym przed badaczem jest wskazanie najbardziej złożonej klasy w systemie.
+Używając metryki CBO, stwierdza się, że jeżeli klasa \(A\) komunikuje się z klasą \(B\) i \(C\), to \(CBO(A) = 2\),
+\(CBO(B) = 1\) i \(CBO(C) = 1\).
+Z powyższego wynika, że obie klasy \(B\) i \(C\) są jednakowo sprzężone z innymi, a klasa \(A\)
+jest najbardziej istotnym elementem tego systemu.
+Gdyby analizę rozszerzyć o \acrshort{RFC}, wtedy \(RFC(B) = 50\), \(RFC(A) = 5\) i \(RFC(C) = 10\), a to
+oznaczałoby, że klasa
+\(B\) wykonuje najwięcej komunikacji z innymi klasami, i sama posiada (prawdopodobnie) dużą ilość metod, zmienia to
+wynik w porównaniu do analizy wyłącznie CBO\@.
+
+\acrshort{RFC} pozwala porównać ogólną złożoność klasy, zacierając granicę między komunikacji wewnątrz i na zewnątrz
+klasy (z innymi obiektami).
+Jak wykazano przykładem powyżej, badacz nie jest w stanie stwierdzić, czy wysoka wartość \acrshort{RFC} jest wynikiem
+nagromadzenia metod wewnątrz klasy, czy też ilości wywołanych metod poza klasą.
+Jest to użyteczne dla wskazywania klas o największej złożoności, nie posługując się kryterium linii kodu (\acrshort{LoC}).
+
+\subsection{Metryka \textit{Message Passing Coupling}}
+
+Metryka \textit{sprzężenia przez przekazywanie komunikatów} (\acrshort{MPC}) opisuje
+\textbf{sumę metod wywołanych na obiektach innych klas przez wszystkie metody danej klasy}.
+Dla \(c \in C\), \(MPC(c)\) wskazuje, ile razy metody klasy \(c\) korzystają z zewnętrznych klas, jak bardzo są od
+nich zależne.
+
+MPC zdefiniowana jest następująco:
+
+\begin{equation*}
+    MPC(c) = \sum_{m \in M_{I}(c)} \sum_{m' \in SIM(m) - M_{I}(c)} NSI(m, m')
+\end{equation*}
+
+\(MPC(c) = 0\) oznacza, że żadna z metod klasy \(c\) nie wywołuje metod obcych klas.
+Rysunek~\ref{fig:mpc} rozszerza przytoczony dla RFC przykład i wskazuje rozbieżność w parametrach, które opisują
+metrykę, zliczając wywoływanie metod.
+Klasy \(C\) i \(B\) nie korzystają z zewnętrznych obiektów, wobec tego ich współczynnik MPC musi wynosić 0.
+W tym przykładzie \(A\) wywołuje raz metodę z klasy \(B\), a dwa razy metodę z klasy \(C\).
+Ten przykład sprawiłby niemały kłopot badaczom, którzy musieliby wskazać najważniejszą klasę w tym systemie.
+
+\begin{figure}[h]
+    \centering \includegraphics[width=0.4\textwidth]{diagramy/mpc}
+    \caption[Przykładowy układ klas i wskaźników CBO, RFC i MPC]{Rozszerzony przypadek przedstawiany już na Rysunku~\ref{fig:rfc}. MPC może znacząco różnic się od RFC, pomimo faktu, że opisują wywołania metod wewnątrz klasy}
+    \label{fig:mpc}
+\end{figure}
+
+\section{Podsumowanie}
+
+Przedstawione metryki opierają się o różne elementy implementacji klas.
+W zależności od celu analizy, badacz musi posłużyć się odpowiednią miarą sprzężenia.
+Tabela~\ref{tab:metryki} podsumowuje definicje metryk i ich przeznaczenie.
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{l|l|l}
+        Nazwa & Definicja & Przeznaczenie \\ \hline\hline
+        CBO & \(CBO(c) = |{d \in C - {c} | uses(c, d) \vee uses(d, c)}|\) & analiza topologiczna \\ \hline
+        RFC & \(RFC(c) = \left\lvert{M(C) \cup (\bigcup_{m \in R_{i}(c)} PIM(m) }\right\rvert\) & złożoność
+        wewnętrzna \\ \hline
+        MPC & \(MPC(c) = \sum_{m \in M_{I}(c)} \sum_{m' \in SIM(m) - M_{I}(c)} NSI(m, m')\) & zależność od innych klas
+    \end{tabular}
+    \caption{\label{tab:metryki}Porównanie wybranych metryk sprzężenia}
+\end{table}
 
 
-\section{Wpływ sprzężenia na jakość kodu}
-
-\subsection{W szarej literaturze}
-
-\subsection{W literaturze}
+Rozdział poświęcono wyjaśnieniu zagadnienia sprzężenia.
+Wykazano systemy podziału związków pomiędzy klasami w literaturze, wyróżniając funkcjonalne i strukturalne perspektywy
+podziałów.
+Sprzężenie przedstawiono jako rodzaj relacji pomiędzy klasami, będące połączeniem aspektów funkcjonalnych i
+strukturalnych.
+Wprowadzono pojęcie metryki i przedstawiono najważniejsze z nich: CBO, RFC i MPC\@.
+Porównano powyższe miary pod kątem ich zastosowania do analizy systemów klas.

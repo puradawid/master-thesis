@@ -1,0 +1,14 @@
+@startuml
+!theme plain
+hide empty members
+
+class A
+class B
+class C
+class D
+
+A --> B : <<use>>
+A --> C : <<use>>
+B --> D : <<use>>
+
+@enduml
