@@ -1,0 +1,11 @@
+@startmindmap
+'https://plantuml.com/mindmap-diagram
+!theme plain
+
+* tożsamość programów
+** wspólne wymagania
+*** stan \sigma przed i po uruchomieniu programu
+*** opisane wymagania na program
+*** testy jednostkowe
+
+@endmindmap

@@ -1,5 +1,297 @@
+Celem niniejszego rozdziału jest zbadanie tworzenia tożsamych programów obiektowych o różnych współczynnikach sprzężenia.
+Takie narzędzie jest konieczne do kontroli tej zmiennej niezależnej eksperymentu.
+
+W tym rozdziale zostanie przedstawiona definicja tożsamych programów w rozumieniu klasycznej semantyki operacyjnej,
+a następnie jej dostosowanie do kontekstu programowania obiektowego.
+Przybliżony zostanie sposób redukcji siły sprzężenia pomiędzy klasami za pomocą powszechnie uznanych metod
+refaktoryzacji kodu źródłowego.
+Następnie w drodze badania możliwości manipulacji zmienną niezależną zostanie przedstawiona metoda celowego zwiększenia
+przypadkowej złożoności: odwróconej refaktoryzacji.
+Przedstawione zostaną przykłady takiego zabiegu porównane za pomocą miar sprzężenia wspomnianych w rozdziale~\ref{cha:coupling}.
+Na zakończenie rozdziału zostanie omówiony przykład programu \texttt{JavaBus}, użytego do eksperymentu, którego
+metodę badawczą przedstawiono w rozdziale~\ref{cha:metoda}, a wyniki w rozdziale~\ref{cha:wyniki}.
+
+\section{Pojęcie tożsamości programów}
+
+Jednym z głównych zadań postawionych przed pracą jest utworzenie dwóch alternatywnych wersji programu o różnych
+stopniach sprzężenia pomiędzy klasami.
+Utworzenie alternatywy nie może być przeprowadzone przez dowolną modyfikację programu wyjściowego.
+Zmiany kodu źródłowego programu mogą zmienić program tak, że nie spełnia on swojej założonej funkcji.
+Jeżeli do tego dojdzie, porównywanie zjawisk występujących przy wprowadzaniu zmian będzie nieuzasadnione.
+Każde odstępstwo od wspólnego punktu odniesienia niesie ze sobą dodatkowe zniekształcenia w przeprowadzeniu
+kontrolowanego eksperymentu, a ich znaczenie omówiono szczegółowo w rozdziale~\ref{cha:metoda}.
+
+\begin{figure}[h]
+    \centering
+    \begin{minipage}[t]{0.45\linewidth}
+        \lstset{
+            basicstyle=\ttfamily\small,
+            frame=single,
+            numbers=left,
+            numberstyle=\tiny,
+            language=Java
+        }
+        \begin{lstlisting}
+String rev(String s) {
+ String r="";
+ for(int i=s.length()-1;i>=0;i--){
+  r+=s.charAt(i);
+ }
+ return r;
+}
+        \end{lstlisting}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.45\linewidth}
+        \lstset{
+            basicstyle=\ttfamily\small,
+            frame=single,
+            numbers=left,
+            numberstyle=\tiny,
+            language=Java
+        }
+        \begin{lstlisting}
+String rev(String s) {
+ String reversed="";
+ for(int i=s.length()-1;i>=0;i--){
+  r = addChar(r, s.charAt(i);
+ }
+ return reversed;
+}
+String addChar(String r, char c){
+ return r + c;
+}
+        \end{lstlisting}
+    \end{minipage}
+    \caption{Dwie funkcje \texttt{rev}, które mogą być rozważane jako tożsame programy}
+    \label{fig:podobny_kod}
+\end{figure}
+
+Z powyższego formułuje się następująca intuicja: należy tak zmodyfikować program, aby zmiany nie wpłynęły na funkcję
+programu, jednocześnie w pożądany sposób zmieniły jego strukturę.
+Przykładem czynności nienaruszających funkcji programu mogą być zmiana nazw zmiennych używanych w metodach lub
+dodanie prywatnej metody w celu wydzielenia bloku z istniejącego kodu.
+Przykład na Rysunku~\ref{fig:podobny_kod} ilustruje takie modyfikacje, programista naturalnie stwierdzi, że oba
+programy są takie same pomimo widocznych różnic.
+Takie czynności zmiany kodu, powszechnie znane jako refaktoryzacje (szczegółowo omówione w dalszych podrozdziałach),
+nie wpływają na przebieg, a tym samym na wynik programu.
+
+\begin{figure}[h]
+    \centering
+    \begin{minipage}[t]{0.45\linewidth}
+        \lstset{
+            basicstyle=\ttfamily\small,
+            frame=single,
+            numbers=left,
+            numberstyle=\tiny,
+            language=Java
+        }
+        \begin{lstlisting}
+String rev(String s) {
+ String r = "";
+ for(int i=s.length()-1;i>=0;i--){
+  r = s.charAt(i) + r;
+ }
+ return r;
+}
+        \end{lstlisting}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.45\linewidth}
+        \lstset{
+            basicstyle=\ttfamily\small,
+            frame=single,
+            numbers=left,
+            numberstyle=\tiny,
+            language=Java
+        }
+        \begin{lstlisting}
+String rev(String s) {
+ String r = "";
+ for(int i=s.length()-1;i>=0;i--){
+  r = r + s.charAt(i);
+ }
+ return r;
+}
+        \end{lstlisting}
+    \end{minipage}
+    \caption{Dwie bardzo podobne do siebie funkcje \texttt{rev}, które na pewno nie są tożsame}
+    \label{fig:rozny_kod}
+\end{figure}
+
+Inny przypadek brzegowy: zmiana kolejności wynikowych elementów w programie sortującym sprawia, że program zdecydowanie
+pełni inną funkcję i nie może być rozważany jako alternatywna struktura kodu rozwiązująca ten sam problem.
+Innym przykładem jest Rysunek~\ref{fig:rozny_kod}, gdzie przedstawiony kod źródłowy jest bardzo podobny, ale
+rezultat jest różny, zatem te funkcje nie mogą być tożsamymi programami.
+W wielu algorytmach sortowania takie przekształcenie programu polega na zmianie znaku pojedynczej operacji porównania.
+W związku z powyższym rozmiar modyfikacji nie świadczy o znaczeniu zmiany.
+
+Wynika stąd potrzeba określenia narzędzia badawczego, które będzie w stanie stwierdzić, że oba programy, pomimo różnic
+strukturalnych, są takie same.
+Nieodzownym jest wbudowanie tego narzędzia do eksperymentu w niniejszej pracy jako kryterium przygotowanej pary
+programów.
+
+Rozumowaniu ,,takich samych dwóch programów'' podanemu powyżej brakuje ścisłej definicji.
+Choć pojawia się pojęcie ,,zmiany kodu źródłowego tak, by nie zmienić programu'', ciężko je uznać za weryfikowalne.
+Sugeruje to, że programy mogą być ,,podobne'' lub nawet ,,takie same'' pomimo różnic syntaktycznych.
+W tym celu autor pracy wprowadza poniżej definicję programów tożsamych, w pierwszej kolejności przedstawiając
+definicje występujące w literaturze.
+
+\subsection{Definicje tożsamości w literaturze}
+
+Tożsamość programów jest pojęciem wywodzącym się z informatyki teoretycznej, dokładniej z teorii automatów.
+Jest to zagadnienie nietrywialne, stosowane do analizy programów pod kątem własności stopu, optymalizacji i
+weryfikacji poprawności~\cite{tzevelekos2012program}.
+Literatura skupia się na teoretycznym zastosowaniu do analizy programów napisanych w formalnych językach
+programowania, takich jak \texttt{nu-calculus}.
+Są to zastosowania nieadekwatne bezpośrednio do programów napisanych w językach programowania wysokiego poziomu,
+niemniej na ich podstawie można przeprowadzić syntezę definicji osadzonej w wymaganym kontekście.
+
+Artykuł~\cite{tzevelekos2012program} wprowadza pojęcie tożamości programów jako ,,dwa programy są
+tożsame obserwacyjnie, lub po prostu tożsame, jeżeli można ich używać zamiennie użyte w dowolnym kontekście wykonania
+programu bez wpływania na obserwowalne zachowanie tego kontekstu''.
+Kontekstem wykonania jest pamięć, czyli stan programu, a także wejście-wyjście środowiska, w którym program jest
+uruchomiony.
+Do tej definicji wymagane są dodatkowe założenia w kontekście środowiska obsługującego błędy, więc aby programy były
+tożsame, musi zajść jeden z warunków~\cite{churchill2019semantic}:
+\begin{itemize}
+    \item oba programy kończą się normalnie z podobnymi stanami stosów i rejestrów wyjścia, lub
+    \item każdy z programów kończy się błędem wykonania, lub zamiast tego wykonuje się w nieskończonej pętli.
+\end{itemize}
+
+W tej definicji oba tożsame programy muszą zakończyć się w tym samym stanie albo ulec awarii.
+Formalne języki programowania, takie jak \texttt{nu-calculus} rozważany w przytaczanej pracy, posiadają bardzo
+ścisłą definicję stanu, który wymaga uogólnienia na inne języki programowania.
+Warunek awarii nie odpowiada zastosowaniu w niniejszej pracy --- zakłada, że oba programy mogą pełnić w założeniu
+inne funkcje, ale jeżeli kończą się błędem lub nie spełniają warunku stopu, to są równoważne.
+Przy takim założeniu można porównywać ze sobą dowolne programy, o ile zawierają błędy prowadzące do powyższych.
+
+Artykuł poświęcony \cite{plotkin1981structural} definiuje tożsamość programów \(e\) i \(e'\) dla stanu \(\sigma\) jako:
+\begin{equation}
+    \label{eq:equivalence}
+    \forall\sigma.eval(e, \sigma) = eval(e', \sigma)
+\end{equation}
+
+To oznacza, że oba tożsame programy dla dowolnego wejścia pozostawiają ten sam stan.
+Problemem w złożonych nowoczesnych programach jest ustalenie i porównywanie tego stanu:
+może na niego składać się wiele elementów niezwiązanych z wykonaniem samego programu, zaczynając od niederministycznego
+przełączania procesów w systemie operacyjnym, na nieprzewidywalności alokacji stron pamięci kończąc.
+Stan musi zatem zostać dokładnie określony, pomijając elementy, które nie mają znaczenia przy analizie pod kątem
+tożsamości programów.
+Podobne rozumienie testowania tożsamości występuje w innych publikacjach, dekomponując stan na dane wejściowe i
+wyjściowe~\cite{corbett2000bandera, tzevelekos2012program}.
+
+Idea tożsamości programów dla wszystkich definicji jest spójna i oznacza równoważność wyniku obu programów na wejście.
+W przypadku poniższej pracy należy osadzić powyższe w kontekście programów napisanych w językach wysokiego poziomu,
+biorąc pod uwagę ograniczenia i narzędzia dostępne w tym środowisku.
+
+\subsection{Definicja tożsamości programu obiektowego}
+
+Cytowany już~\cite{tzevelekos2012program} wspomina również o stwierdzaniu tożsamości dwóch programów na podstawie
+zbioru wymagań, który jest weryfikowany dla dwóch programów, wobec czego stwierdza się tożsamość zachowania.
+Ta definicja jest bliższa potrzebom niniejszej pracy, którą można sformułować jako:
+
+\begin{definition}
+    \label{def:equivalence}
+    Program \(A\) jest tożsamy z \(B\), kiedy \(A\) spełnia wymagania \(B\) i \(B\) spełnia wymagania \(A\).
+\end{definition}
+
+Do definicji~\ref{def:equivalence} potrzeba jeszcze rozwinąć pojęcie \textit{spełnienia wymagań}:
+
+\begin{definition}
+    \label{def:requirements}
+    Program \(A\) spełnia wymagania \(B\) kiedy wszystkie wymagania wobec programu \(A\) zostają spełnione dla \(B\)
+\end{definition}
+
+Pojęcie \textit{spełnienia wymagań} nie jest precyzyjne.
+Formułowanie wymagań wobec programów jest obszernym tematem, którym zajmuje się inżynieria wymagań oprogramowania~\cite{macaulay2012requirements}.
+Na potrzeby tej pracy można przyjąć, że wymaganie wobec programu może przybrać formę określenia wejścia i
+wyjścia programu, w zależności od jego kontekstu wykonania.
+Oznacza to, że jeżeli program jest uruchamiany jako polecenie terminala, to wymaganiem będzie para komendy
+wejściowej i oczekiwanego wyniku, a zbiór takich wymagań będzie ich zestawem.
+Podobnie, jeżeli program wyposażony jest w interfejs użytkownika i ma działać jako taki, to wymaganiem będzie
+scenariusz testowy, opisujący krok po kroku interakcje użytkownika z interfejsem i oczekiwane rezultaty takiej
+interakcji.
+
+\begin{lstlisting}[language=Java,
+    caption={Przykładowy test JUnit dla metody statycznej \texttt{rev}},
+    label={lst:sample_unit_test}]
+@Test
+void shouldReturnReversedString() {
+    String input = "abc";
+
+    String result = rev(input);
+
+    assertEquals("cba", input);
+}
+\end{lstlisting}
+
+Dla programów, które są bibliotekami, wymagania mogą manifestować się w formie testów jednostkowych: scenariuszy
+użycia obiektów dostarczanych przez bibliotekę wraz z oczekiwanymi rezultatami.
+Listing~\ref{lst:sample_unit_test} przedstawia test jednostkowy skonstruowany dla wcześniej przedstawionej metody
+statycznej \texttt{rev}.
+Ze względu na to, że ciało metody reprezentującej test może być dowolne, należy dodać wymagania wobec testu
+jednostkowego precyzujące test jednostkowy, który może być rozważany jako wymaganie.
+Test jednostkowy opisujący wymaganie wobec programu musi:
+\begin{itemize}
+    \item jednoznacznie precyzować wejście programu,
+    \item wywoływać kod opisywanego programu oraz
+    \item weryfikować dane wyjściowe pod kątem oczekiwanych rezultatów.
+\end{itemize}
+
+Niespełnienie przynajmniej jednego z przytoczonych wymagań skutkuje odrzuceniem takiego testu jako testu jednostkowego
+opisującego wymaganie na program.
+Nie jest to sytuacja, która dotyczy wyłącznie wadliwych testów.
+Testy dymne (ang.\@ \textit{smoke tests}) stosowane są w ramach wykrywania wad, ale z reguły nie weryfikują wyjścia
+programu, najczęściej odtwarzając główne scenariusze użycia pod kątem wystąpienia błędów krytycznych~\cite{chauhan2014smoke}.
+
+Dane wejściowe i wyjściowe testu nie muszą być wyłącznie parametrami metod: może to być stan innych obiektów,
+statycznych atrybutów, a także urządzeń wejścia/wyjścia.
+
+Założenie, że testy jednostkowe opisują wszystkie wymagania na program, nie jest pozbawiony wad.
+Przede wszystkim należy założyć, że zbiór wymagań na program jest kompletny.
+Jest to założenie nieweryfikowalne, w szczególności, że dla programów o średniej złożoności prawie nigdy nie formułuje
+się pełnych wymagań, gdyż część z nich wynika z kontekstu wykonania~\cite{jkuchta2016}.
+Z tak założonego pełnego zbioru wymagań należy utworzyć \textbf{pełen} zestaw testów jednostkowych.
+Innymi słowy, zestaw testów jednostkowych musi w pełni odwzorowywać wymagania na program.
+
+Innym sposobem, by rozwiązać problem kompletności zestawu testów jednostkowych opisujących wymagania, jest zbadanie
+zestawu pod kątem pokrycia kodu.
+Każdy uruchomiony test jednostkowy pozostawia ślad wykonania kodu produkcyjnego (\textit{kodem produkcyjnym} nazywa
+się kod realizujący wymaganie i będący przedmiotem właściwego programu), następnie środowisko uruchomieniowe testu
+sumuje ślady i określa, ile z linii kodu zostało uruchomionych.
+Ta prosta metryka, zwana też wskaźnikiem pokrycia linii kodu, pomaga programistom na ustalenie, który kod nie został
+jeszcze wywołany.
+Niestety, taki sposób pomiaru nie wskazuje, ile odgałęzień kodu zostało uruchomionych, a posługiwanie się tą metryką
+pozwala na wykrycie jedynie 19\% błędów w przypadku 100\% pokrycia linii kodu~\cite{7272926}.
+Aby prześledzić dokładniej uruchomione odgałęzienia, stosuje się metrykę pokrytych gałęzi kodu --- czyli określa się,
+ile procent przypadków zostało uruchomionych.
+W związku z powyższym dla zestawu testów spełniających warunki testów jednostkowych opisujących wymagania na program
+należy wskazać minimalny obszar pokrycia gałęzi kodu.
+W przypadku poniższej pracy można założyć, że zestaw testów opisujących kompletne wymagania na program pokrywają
+100\%~gałęzi kodu produkcyjnego.
+
+Podsumowując, wprowadza się następującą definicję tożsamości programów, które mogą zostać opisane testami
+jednostkowymi w \texttt{Java}:
+\begin{definition}
+Program \(A\) jest tożsamy z programem \(B\) jeżeli istnieje wspólny zestaw testów jednostkowych opisujących wymagania
+pokrywający 100\% gałęzi programów \(A\) i \(B\).
+\end{definition}
+
+\section{Redukcja sprzężenia klas za pomocą refaktoringu}
+
+Program tożsamy z innym może składać się z innych klas wewnętrznych, lub metody jego mogą być poprzesuwane.
+
+Refactoring Fowlera opowiada o takich modyfikacjach programu i sugeruje takie rozwiązania.
+
+Jeżeli posiada się program, który realizuje założone wymagania, to można zastosować odwrócenie refactoringów Fowlera do
+zwiększenia złożoności.
 
 Oba repozytoria zostały pozbawione poprzedniej historii tak, aby badany nie mógł możliwości odkryć zmian, które zaszły w projekcie:
+
+\section{Odwrócona refaktoryzacja jako sposób na modyfikację programu}
+
+\section{Modyfikacja rogramu \texttt{JavaBus} metodą odwróconej refaktoryzacji}
 
 \begin{itemize}
     \item https://github.com/puradawid/silver-winner (współczynnik sprzężenia klas: 1)

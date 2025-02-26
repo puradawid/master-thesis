@@ -1,9 +1,13 @@
-Niniejszy rozdział stanowi wprowadzenie do pojęcia sprzężenia pomiędzy klasami.
-Wyjaśnia istniejące relacje w literaturze i ich użyteczność, po czym definiuje intuicję sprzężenia pomiędzy klasami,
-wskazując definicje występujące w literaturze.
+Aby badać zależność będącą tematem niniejszej pracy, należy w pierwszej kolejności opisać, czym sprzężenie w
+ogóle jest, jaka jest jego definicja, a także porównać istniejące definicje w literaturze, ostatecznie formułując
+ścisłe miary potrzebne do porównywania alternatywnych wersji programów.
+Tym zagadnieniom został poświęcony poniższy rozdział.
+Przede wszystkim, stanowi on wprowadzenie do pojęcia sprzężenia pomiędzy klasami.
+Przegląda relacje występujące w literaturze i bada ich użyteczność, po czym definiuje intuicję sprzężenia pomiędzy
+klasami, wskazując formalne jej definicje.
 Stawia tezę, że sprzężenie między klasami może mieć negatywny wpływ na jakość kodu, popierając istniejącymi
 badaniami w kontekście obciążenia poznawczego.
-W ostatniej części rozdział przedstawia dostępne metryki sprzężenia, wskazując ich użyteczne aspekty a także
+W ostatniej części przedstawia dostępne metryki sprzężenia, wskazując ich użyteczne aspekty, a także
 przykłady, które uwypuklają różnice między nimi.
 
 \section{Relacje pomiędzy klasami}
@@ -204,6 +208,15 @@ Wprowadzenie mierzalności sprzężenia klas do procesu wytwórczego i zmiany we
     \item przewidywania potrzebnych zasobów w projekcie,
     \item przewidywania przyszłych wymagań na system.
 \end{itemize}
+
+Podsumowując znaczenie sprzężenia w kontekście pracy nad kodem źródłowym: każde sprzężenie klas niesie ze sobą
+obciążenie poznawcze utrudniające zrozumienie kodu źródłowego.
+Tym samym wpływa ono negatywnie na efektywność wykonywania zmian, sprawiając, że wprowadzanie zmian zajmuje więcej
+czasu.
+Z drugiej strony, sprzężenie jest odzwierciedleniem złożoności programu i relacji pomiędzy obiektami, zatem istnieje
+minimalny nieunikniony poziom tej relacji.
+Zadaniem programistów i projektantów systemu klas jest utrzymywanie minimalnych poziomów sprzężenia pomiędzy
+klasami, by efektywnie dostosowywać oprogramowanie do zmieniających się potrzeb użytkowników.
 
 \section{Metryki sprzężenia klas}
 \label{subsec:metryki}
@@ -418,6 +431,11 @@ Tabela~\ref{tab:metryki} podsumowuje definicje metryk i ich przeznaczenie.
     \caption{\label{tab:metryki}Porównanie wybranych metryk sprzężenia}
 \end{table}
 
+Warto zauważyć, że przedstawione metryki nie uwzględniają specyfiki języka programowania \texttt{Java}.
+Modyfikatory dostępu nie są uwzględniane, co sprawia, że klasy o dużej ilości metod prywatnych mają wysoki
+współczynnik RFC pomimo niskiej istotności tych metod.
+Praca poświęcona utworzeniu programu mierzącego stopnie sprzężenia pomiędzy klasami wskazuje na problem występowania
+pól i metod prywatnych, ale nie zmienia definicji RFC i zlicza również prywatne metody~\cite{bidve2016tool}.
 
 Rozdział poświęcono wyjaśnieniu zagadnienia sprzężenia.
 Wykazano systemy podziału związków pomiędzy klasami w literaturze, wyróżniając funkcjonalne i strukturalne perspektywy
