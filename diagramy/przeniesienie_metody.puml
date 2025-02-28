@@ -1,0 +1,13 @@
+@startuml
+!theme plain
+
+group Przed refaktoryzacją "Przeniesienie Metody"
+    A -> B : calculate()
+    B -> A : result
+end
+
+group Po refaktoryzacji "Przeniesienie Metody"
+    A -> A : calculate()
+end
+
+@enduml

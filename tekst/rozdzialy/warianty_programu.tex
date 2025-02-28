@@ -12,6 +12,7 @@ Na zakończenie rozdziału zostanie omówiony przykład programu \texttt{JavaBus
 metodę badawczą przedstawiono w rozdziale~\ref{cha:metoda}, a wyniki w rozdziale~\ref{cha:wyniki}.
 
 \section{Pojęcie tożsamości programów}
+\label{sec:equivalence}
 
 Jednym z głównych zadań postawionych przed pracą jest utworzenie dwóch alternatywnych wersji programu o różnych
 stopniach sprzężenia pomiędzy klasami.
@@ -186,6 +187,7 @@ W przypadku poniższej pracy należy osadzić powyższe w kontekście programów
 biorąc pod uwagę ograniczenia i narzędzia dostępne w tym środowisku.
 
 \subsection{Definicja tożsamości programu obiektowego}
+\label{subsec:equivalence_definition}
 
 Cytowany już~\cite{tzevelekos2012program} wspomina również o stwierdzaniu tożsamości dwóch programów na podstawie
 zbioru wymagań, który jest weryfikowany dla dwóch programów, wobec czego stwierdza się tożsamość zachowania.
@@ -274,113 +276,325 @@ W przypadku poniższej pracy można założyć, że zestaw testów opisujących 
 Podsumowując, wprowadza się następującą definicję tożsamości programów, które mogą zostać opisane testami
 jednostkowymi w \texttt{Java}:
 \begin{definition}
+    \label{def:equivalence_java}
 Program \(A\) jest tożsamy z programem \(B\) jeżeli istnieje wspólny zestaw testów jednostkowych opisujących wymagania
 pokrywający 100\% gałęzi programów \(A\) i \(B\).
 \end{definition}
 
-\section{Redukcja sprzężenia klas za pomocą refaktoringu}
+\section{Redukcja sprzężenia klas za pomocą refaktoryzacji}
+\label{sub:refactoring}
 
-Program tożsamy z innym może składać się z innych klas wewnętrznych, lub metody jego mogą być poprzesuwane.
+% Czym jest refactoring?
+Usystematyzowaną metodą modyfikacji klas bez zmiany ich struktury jest \textit{refaktoryzacja},
+zaproponowany w~\cite{fowler2018refactoring}.
+Metody zaprezentowane w książce (niebędąca literaturą naukową) zostały naukowo opracowane pod kątem definicji i
+efektywności refaktoryzacji~\cite{opdyke1992refactoring, stroggylos2007refactoring}.
+Metody zaproponowane oryginalnie językowi \texttt{Java} przeniesiono na \texttt{C++}, \texttt{Ruby}, \texttt{C\#} i
+wiele innych języków obiektowych.
+Współczesne zintegrowane środowiska programistyczne (Eclipse, IntelliJ IDEA, VSCode) implementują refaktoryzacje
+jako automatyczne transformacje kodu źródłowego~\cite{drozdz2006refactoring}.
 
-Refactoring Fowlera opowiada o takich modyfikacjach programu i sugeruje takie rozwiązania.
+% Dlaczego refactoring zmienia strukturę, nie zmieniając funkcji programu?
+Zgodnie z definicją Martina Fowlera, refaktoryzacja to ,,proces zmieniania systemu informatycznego w sposób
+niewpływający na oryginalne zachowanie, jednak poprawiający wewnętrzną strukturę~\cite{fowler2018refactoring}''.
+Trywialnym przykładem jest zmiana nazwy pola klasy lub nazwy metody: jak wykazano
+w~podrozdziale~\ref{sec:equivalence}, program poddany takiej refaktoryzacji jest tożsamy z oryginalnym programem.
 
-Jeżeli posiada się program, który realizuje założone wymagania, to można zastosować odwrócenie refactoringów Fowlera do
-zwiększenia złożoności.
-
-Oba repozytoria zostały pozbawione poprzedniej historii tak, aby badany nie mógł możliwości odkryć zmian, które zaszły w projekcie:
-
-\section{Odwrócona refaktoryzacja jako sposób na modyfikację programu}
-
-\section{Modyfikacja rogramu \texttt{JavaBus} metodą odwróconej refaktoryzacji}
-
+% Refaktoring jako zbiór konkretnych działań
+Koncepcja składa się z 72 metod (refaktoryzacji), które można zastosować w programie obiektowym, na przykład:
 \begin{itemize}
-    \item https://github.com/puradawid/silver-winner (współczynnik sprzężenia klas: 1)
-    \item https://github.com/puradawid/verbose-parakeet (współczynnik sprzężenia klas: 3)
+    \item Ekstrakcja Klasy,
+    \item Rozplątanie Hierarchii Dziedziczenia,
+    \item Zastąpienie Delegacji Dziedziczeniem.
 \end{itemize}
 
-\begin{lstlisting}[language=Java,
-    caption={Klasa InMemoryBus o współczynniku sprzężenia z klasą DeliveryStrategy równym 1},
-    label={lst:inmemorybus_1}]
-package edu.pw.javabus;
+Konstrukcja opisu każdej z nich jest podobna do wzorców projektowych~\cite{gamma1994design}.
+Zawiera ona nazwę, schemat UML, motywację i przykład w języku \texttt{Java}.
+Dzięki temu zmiany są usystematyzowane i łatwo się odnosić do nich w innych sekcjach książki, a także odrębnej
+literaturze.
+Istotną częścią jest motywacja, gdyż opisuje cel zastosowania wymienionej metody refaktoryzacji.
+Na potrzeby tej pracy pozwoli odnaleźć wszystkie skatalogowane metody służące do zmniejszenia siły sprzężenia pomiędzy
+klasami.
 
-public class InMemoryBus implements Bus {
+\begin{figure}[h]
+    \centering \includegraphics[width=0.6\textwidth]{diagramy/refaktoring}
+    \caption{Mapa myśli refaktoryzacji osłabiających sprzężenie pomiędzy klasami}
+    \label{fig:refaktoring}
+\end{figure}
 
-    private final RegisteredConsumers registeredConsumers = new RegisteredConsumers();
+% Metody zmniejszające sprzężęnie pomiędzy klasami
+Spośród wszystkich metod, pięć w swojej motywacji odnoszą się do zmniejszenia sprzężenia między klasami:
+\begin{itemize}
+    \item Ekstrakcja Interfejsu,
+    \item Ekstrakcja Nadklasy,
+    \item Przeniesienie Metody,
+    \item Przeniesienie Pola,
+    \item Ukrycie Delegata.
+\end{itemize}
 
-    private final DeliveryStrategy deliveryStrategy;
+Rysunek~\ref{fig:refaktoring} przedstawia mapę myśli kategorii metod refaktoryzacji.
+Warto zauważyć, że przeniesienie dotyczy zarówno pól, jak i metod, posiadając równoważne motywacje.
+Użycie wymienionych metod wymaga odpowiedniego kontekstu zastosowania, opisywanych w źródle.
+Poniżej przedstawiona została motywacja w odniesieniu do modyfikacji metryk sprzężenia przy założeniu, że
+występują podstawy do zastosowania danej metody.
 
-    InMemoryBus(DeliveryStrategy deliveryStrategy) {
-        this.deliveryStrategy = deliveryStrategy;
-    }
+\textbf{Ekstrakcja} osłabia sprzężenie poprzez zmniejszenie ilości metod i pól dostępnych dla innych klas.
+W przypadku ekstrakcji interfejsu \acrshort{CBO} wzrasta ze względu na pojawienie się nowej używanej klasy,
+\acrshort{RFC} i \acrshort{MPC} nie zmieniają się, gdyż żaden z nich nie bierze pod uwagę metod potencjalnie używanych przez klasę obcą.
+W przypadku Ekstrakcji Nadklasy stopień \acrshort{RFC} zmniejsza się dla danej klasy, ponieważ liczba metod
+statycznie zadeklarowanych w klasie ulega redukcji, nawet jeśli metody te są używane w pozostawionych metodach klasy.
 
-    @Override
-    public <T extends Message> void register(Consumer<T> consumer, Topic topic, Class<T> messageType) {
-        registeredConsumers.add(consumer, topic, messageType);
-    }
+\begin{figure}[h]
+    \centering \includegraphics[width=0.6\textwidth]{diagramy/przeniesienie_metody}
+    \caption{Diagram sekwencji przedstawiający efekt refaktoryzacji Przeniesienie Metody}
+    \label{fig:przeniesienie_metody}
+\end{figure}
 
-    @Override
-    public <T extends Message> void unregister(Consumer<T> consumer, Topic topic) {
-        registeredConsumers.remove(consumer, topic);
-    }
+\textbf{Przeniesienie} metody i pola występuje, kiedy semantycznie nie przynależą one do danej klasy, a jedynie są
+wykorzystywane przez inną.
+Rysunek~\ref{fig:przeniesienie_metody} przedstawia różnice wynikającą z przeniesienia metody wewnątrz klasy ją
+wywołującej.
+Klasa \(B\) nie wywołuje własnej metody, wobec czego istnieje podejrzenie, że metoda \texttt{calculate} należy do \(A\).
+Ta refaktoryzacja nie wpływa na \acrshort{CBO} we wszystkich wypadkach, gdyż nadal \(B\) może być użyta przez \(A\),
+nie zmienia \acrshort{RFC}, gdyż suma metod pozostaje ta sama, ale zmniejsza \acrshort{MPC}, ponieważ nie wywołuje
+się zewnętrznej metody.
+W przypadku przeniesienia pola, metryki nie zmieniają się --- gdyż RFC i MPC nie zawierają w sobie zliczania referencji.
 
-    @Override
-    public <T extends Message> void send(Topic topic, T message) {
-        deliveryStrategy.deliver(registeredConsumers, topic, message);
-    }
+\begin{figure}[h]
+    \centering \includegraphics[width=0.5\textwidth]{diagramy/ukrycie_delegata}
+    \caption{Diagram sekwencji przedstawiający efekt refaktoryzacji Ukrycie Delegata}
+    \label{fig:ukrycie_delegata}
+\end{figure}
 
-}
-\end{lstlisting}
+\textbf{Ukrycie Delegata} zmniejsza ilość metod wywoływanych przez klasę, przenosząc odpowiedzialność komunikacji na
+klasę pośredniczącą.
+Rysunek~\ref{fig:ukrycie_delegata} przedstawia przykład przeniesienia odpowiedzialności komunikacji do \(C\) z \(A\)
+na \(B\), rozkładając sprzężenie.
+Ta refaktoryzacja redukuje \acrshort{CBO}, \acrshort{RFC} i \acrshort{MPC} zmniejszając ilość klas i metod, którymi
+posługuje się \(A\).
+Przeniesienie odpowiedzialności za komunikację z \(C\) jest zwykle pożądane, choć źródło zaznacza, że w przypadku klas
+będącymi wyłącznie strukturami danych ta metoda będzie negatywnie wpływać na ilość metod w \(B\).
 
-\begin{lstlisting}[language=Java,
-    caption={Klasa InMemoryBus o współczynniku sprzężenia z klasą DeliveryStrategy równym 3},
-    label={lst:inmemorybus_3}]
-package edu.pw.javabus;
+\begin{figure}[h]
+    \centering \includegraphics[width=0.6\textwidth]{diagramy/alt_ukrycie_delegata}
+    \caption{Diagram sekwencji przedstawiający efekt refaktoryzacji Ukrycie Delegata w przypadku wyłącznie metod}
+    \label{fig:alt_ukrycie_delegata}
+\end{figure}
 
-import java.util.Iterator;
+Przypadkiem brzegowym, gdzie Ukrycie Delegata jest refaktoryzacją polegającą na osłabieniu sprzężenia pomiędzy
+klasami, jest sekwencyjne wywoływanie metod obcej klasy.
+Przedstawiony na Rysunku~\ref{fig:alt_ukrycie_delegata} przykład zmienia wyłącznie ilość wywołań między klasami:
+zmienia on potrzebę sekwencyjnego wywoływania metod \texttt{getFirst()}, \texttt{getSecond(first)} i
+\texttt{getThird(second)}, zamieniając to w jedną bezparametrową metodę \texttt{getThird()}, która sama orkiestruje
+wywoływania wewnątrz klasy.
+W takim przypadku tylko wartości \acrshort{MPC} i \acrshort{RFC} klasy \(A\) ulegają zmniejszeniu.
+\acrshort{CBO} pozostaje bez zmian ze względu na brak modyfikacji używania wzajemnego klas.
 
-public class InMemoryBus implements Bus {
+% Podsumowanie: metody refactoringu w danym języku programowania pasują z definicją~\ref{def:equivalence_java}
+Przedstawione refaktoryzacje redukują siłę sprzężenia pomiędzy klasami.
+Refaktoryzacja zmienia strukturę programu, ale nie zmienia jego funkcji, co jest zgodne z definicją~
+\ref{def:equivalence_java} przedstawioną w~\ref{subsec:equivalence_definition}.
+W przypadku niniejszej pracy należy rozważyć te metody w kontekście \textbf{zwiększenia} sprzężenia, jeżeli można
+odwrócić ich efekt.
 
-    private final RegisteredConsumers registeredConsumers = new RegisteredConsumers();
+\section{Odwrócona refaktoryzacja jako modyfikacja sprzężenia}
 
-    private final MessageDelivery messageDelivery;
+% Cel pracy jest utworzenie programu alternatywnego o zwiększonej sprzężeniu w pewnym zakresie
 
-    InMemoryBus(MessageDelivery messageDelivery) {
-        this.messageDelivery = messageDelivery;
-    }
+% Docelowy eksperyment wymaga utworzenia alternatywnych programów.
+% Można przyjąć założenie, że do eksperymentu wybrano pewien program i zestawem testów opisujących jego wymagania.
+% Łącząc przedstawione refaktoryzacje w~\ref{sub:refactoring} i potrzebę modyfikacji zmiennej niezależnej, jaką jest
+% sprzężenie pomiędzy klasami, tworzy się program alternatywny poprzez przeprowadzenie odwrotnej.
 
-    @Override
-    public <T extends Message> void register(Consumer<T> consumer, Topic topic, Class<T> messageType) {
-        registeredConsumers.add(consumer, topic, messageType);
-    }
+% Praca potrzebuje jednej metody, która zwiększy sprzężenie w większości średniej złożoności kod
+Niniejsza praca, w celu kontroli zmiennej niezależnej, wymaga przedstawienia metody modyfikacji kodu tak, aby:
+\begin{itemize}
+    \item program zmodyfikowany był tożsamy z programem wyjściowym i
+    \item modyfikacja \textbf{zwiększała} lub \textbf{zmniejszała} stopień sprzężenia (przynajmniej \acrshort{RFC} i
+    \acrshort{MPC}).
+\end{itemize}
 
-    @Override
-    public <T extends Message> void unregister(Consumer<T> consumer, Topic topic) {
-        registeredConsumers.remove(consumer, topic);
-    }
+Zmniejszanie stopnia sprzężenia wiąże się z warunkiem, że na program może być nałożona taka modyfikacja --- to znaczy,
+że struktura programu wyjściowego musi byc nieoptymalna.
+Warunek ten jest trudny do spełnienia, jeżeli program ma być utworzony na potrzeby eksperymentu, to wymaga celowego
+utworzenia programu z nadmiarową lub niepoprawną strukturą.
+Istnieje ryzyko, że program będzie miał odpowiednią strukturę i żadna refaktoryzacja ze wspomnianych powyżej
+nie będzie miała zastosowania.
+Zwiększanie stopnia sprzężenia w programie alternatywnym zapewnia lepszą reprodukowalność eksperymentu w przyszłości.
 
-    @Override
-    public <T extends Message> void send(Topic topic, T message) {
-        boolean isLastDeliveryASuccess;
-        boolean anySuccess = false;
-        while (topic != null) {
-            Iterator<Consumer<? extends Message>> iterator = registeredConsumers.find(topic, message.getClass()).iterator();
-            while (iterator.hasNext()) {
-                Consumer<? extends Message> nextConsumer = iterator.next();
-                if (messageDelivery.shouldCallThisConsumer(nextConsumer, message, anySuccess)) {
-                    isLastDeliveryASuccess = new ConsumeMethodObject(nextConsumer).consume(message).isSuccess();
-                } else {
-                    continue;
-                }
-                if (messageDelivery.shouldStop(isLastDeliveryASuccess)) {
-                    return;
-                }
-                anySuccess = anySuccess || isLastDeliveryASuccess;
-            }
-            topic = messageDelivery.shouldGetParentTopic(anySuccess) ? topic.getParent() : null;
-        }
-    }
+\begin{table}[h]
+    \centering
+    \begin{tabular}{l|l|l}
+        Nazwa & Wpływ na metryki & Nazwa refaktoryzacji odwrotnej \\ \hline\hline
+        Ekstrakcja Interfejsu & CBO(+) & Zwinięcie Hierarchii \\ \hline
+        Ekstrakcja Nadklasy & CBO(+), RFC(-) & Zwinięcie Hierarchii \\ \hline
+        Przeniesienie Metody & MPC(-) & Przeniesienie Metody \\ \hline
+        Przeniesienie Pola & - & Przeniesienie Pola \\ \hline
+        Ukrycie Delegata & MPC(-) & Usunięcie Delegata
+    \end{tabular}
+    \caption[Lista refaktoryzacji wpływających na sprzężenie]{\label{tab:refaktoryzacje}Lista refaktoryzacji wpływających na sprzężenie}
+\end{table}
 
-}
+% Zwiększanie nie jest zadaniem tej refaktoryzacji
+Metody wspomniane w~\ref{sub:refactoring} nie spełniają takiej funkcji --- ich zadaniem jest zmniejszanie sprzężenia.
+Wprowadzane przez nie zmiany są jednak odwracalne, jeżeli Ekstrakcja Metody opiera się na utworzeniu nowej
+metody w klasie, wybranej z metody istniejącej, to musi istnieć jednoznaczne działanie, które wprowadza ciało metody
+w inną metodę.
+Fowler przewidział taką potrzebę, a nawet wskazuje, że taka symetria w zbiorze metod refaktoryzujących jest absolutnie
+niezbędna do balansowania abstrakcją programu~\cite{fowler2018refactoring}.
+Jednakże nie każda refaktoryzacja ma opisaną swoją refaktoryzację odwrotną.
+Tabela~\ref{tab:refaktoryzacje} przedstawia zestawienie refaktoryzacji i odwrotnych refaktoryzacji wraz z
+zestawieniem metryk, na które wpływają.
+Obie ekstrakcje odwraca się za pomocą Zwinięcia Hierarchii, gdyż nie przewidziano oddzielnych metod na zwijanie
+interfejsu i klasy bazowej (nadklasy).
+W przypadku przeniesienia metody i pola odwrotną refaktoryzacją jest również przeniesienie ze zmianą metody
+docelowej: powinna ona wrócić do metody źródłowej.
+Ukrycie Delegata jako jedyne z wybranych metod posiada oficjalne odwrócenie za pomocą rafaktoryzacji: Usunięcie
+Delegata.
+Polega ona na przywróceniu metod z wprowadzonej zdelegowanej metody z powrotem do metod klasy, która zarządzała
+wieloma metodami.
+W przykładzie z Rysunku~\ref{fig:alt_ukrycie_delegata} będzie to usunięcie bezparametrowej metody
+\texttt{calculateThird()} z \(B\) i wywoływanie pozostałych metod po stronie klasy \(A\).
 
-\end{lstlisting}
+Podsumowując, do programu napisanego w języku Java w celu zwiększenia sprzężenia można zastosować Usunięcie
+Delegata, Przeniesienie Metody, Przeniesienie Pola, Zwinięcie Hierarchii.
+Przeniesienie Metody i Ukrycie Delegata to najlepsze z refaktoryzacji, dlatego, że nie wpływają dodatnio na metrykę
+CBO jak obie ekstrakcje.
+W związku z powyższym, do zwiększenia sprzężenia w programie wyjściowym niniejszej pracy należy użyć Usunięcia
+Delegata lub Przeniesienia Metody.
+Ze względu na niejednoznaczność Przeniesienia Metody --- to znaczy, że w zależności od przypadku przeniesienie może
+zwiększać lub zmniejszać siłę sprzężenia --- jednoznacznie należy użyć Ukrycia Delegata.
+W podrozdziale poniżej przeprowadzone zostanie zastosowanie tej metody w programie wyjściowym przeznaczonym do
+eksperymentu.
 
+\section{Modyfikacja programu \texttt{JavaBus} metodą odwróconej refaktoryzacji}
+
+% Program szczegółowo opisany w funkcjach w metodzie badawczej, ze względu na to, że wyjaśnienie jego działania jest
+% kluczowe w samym procesie eksperymentu
+Celem tego podrozdziału jest omówienie zastosowanej refaktoryzacji do programu przygotowanego na potrzeby tej pracy.
+W tym rozdziale nie zostanie szczegółowo omówiony sam program: ze względu, że cały program należy wyjaśnić
+podczas badania i jest to bardziej kluczowe niż analiza całego programu w tym rozdziale, tę
+część omówiono w rozdziale~\ref{cha:metoda} poświęconym metodzie badawczej, dokładniej w podrozdziale~
+\ref{subsec:pierwsze}.
+
+Program implementuje mechanizm magistrali wiadomości.
+Składa się przede wszystkim z klasy \texttt{InMemoryBus} --- odpowiedzialnej za zarządzanie rejestracją konsumentów
+i wysyłaniem wiadomości.
+Jedną z funkcji programu jest możliwość zdefiniowania zachowania podczas wysyłania wiadomości.
+Zakłada się, że nie każda strategia wysyłania powinna wysyłać wiadomość do wszystkich konsumentów, ale może istnieć
+taki przypadek, kiedy wiadomość wysyła się wyłącznie do pierwszego z listy dostępnych konsumentów danego typu
+wiadomości.
+\texttt{MessageDelivery} jest interfejsem realizującym powyższe założenie.
+W podstawowej wersji programu posiada metodę \texttt{deliver(RegisteredConsumers, Message)}, która przekazuje obiekt
+zarejestrowanych konsumentów i obiekt wiadomości w celu wykonania wysyłki wedle obiektu implementującego ten interfejs.
+
+\begin{figure}[ht]
+    \centering \includegraphics[width=1\textwidth]{diagramy/inmemorybus_send}
+    \caption{Diagram sekwencji przedstawiający dla metody \texttt{send} klasy \texttt{InMemoryBus}}
+    \label{fig:inmemorybus_send}
+\end{figure}
+
+Wymianę wiadomości pomiędzy klasami przy wywołaniu metody \texttt{send} przedstawia Rysunek~\ref{fig:inmemorybus_send}.
+Metryki CBO, RFC i MPC zostały wyliczone dla klas, które biorą udział w powyższej sekwencji.
+Ze względu na to, że \texttt{MessageDelivery} jest jedynie interfejsem, zachowanie zostało przedstawione z klasy ją
+implementującej.
+Dla każdej z tych klas wyliczono metryki ustalone jako wyznaczniki sprzężenia w rozdziale~\ref{cha:coupling},
+zostały one przedstawione w Tabeli~\ref{tab:metryki_javabus}.
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{l|l|l|l}
+        Nazwa klasy                 & CBO & RFC & MPC \\ \hline\hline
+        InMemoryBus                 &   2 &   6 &   3 \\ \hline
+        RegisteredConsumers         &   0 &   3 &   0 \\ \hline
+        AllConsumersInTopicStrategy &   2 &   4 &   3
+    \end{tabular}
+    \caption{\label{tab:metryki_javabus}Metryki sprzężenia wybranych klas programu \texttt{JavaBus}}
+\end{table}
+
+Klasa \texttt{MessageDelivery}, implementowana przez \texttt{AllConsumersInTopicStrategy}, jest przykładowym
+sposobem rozesłania wiadomości do konsumentów.
+Na potrzeby eksperymentu badani będą dodawać dodatkową implementację interfejsu, co pozwoli sprawdzić wpływ
+sprzężenia na efektywność zmiany.
+
+Aby zastosować wspomnianą w podrozdziale wyżej refaktoryzację Usunięcie Delegata, należy rozważyć metodę
+\texttt{delivery} klasy \texttt{MessageDelivery} jako delegata.
+Operacje wykonywane w klasie należy przenieść do klasy klienckiej, to znaczy \texttt{InMemoryBus}.
+Ze względu na to, że ta refaktoryzacja nie przenosi odpowiedzialności, w klasie należy pozostawić informacje
+związane ze sterowaniem przekazywaniem informacji: dodać następujące metody sterujące:
+\begin{itemize}
+    \item \texttt{shouldCallThisConsumer(nextConsumer, message, anySuccess)} --- odpowiedzialna za podjęcie decyzji
+    o wywołaniu metody \texttt{consume} na danym konsumencie po przekazanym kontekście wykonania
+    \item \texttt{shouldStop(isLastDeliveryASuccess)} --- odpowiedzialna za zatrzymanie przetwarzania w zależności od
+tego, czy dostarczenie dla konsumenta zakończyło się sukcesem,
+    \item \texttt{shouldGetParentTopic(anySuccess)} --- odpowiedzialna za decyzję o przejrzeniu tematu wyższego
+    rzędu (rodzica).
+\end{itemize}
+
+Efekt przedstawiony został na Rysunku~\ref{fig:inmemorybus_send_alt}, uwzględniając zmiany w wywołaniach metod.
+Warto zauważyć, że nie jest to rozwiązanie pozbawione wad.
+Delegacja metody do klasy obcej gwarantuje, że dowolna funkcja może tam zostać zaimplementowana.
+W przypadku tej metody, choć odwzorowanie pętli i warunków jest poprawne, to nie występuje możliwość dowolności
+implementacji.
+Jako przykład może posłużyć uruchomienie wątków do obsługi każdej wysyłki wiadomości.
+W przypadku zastosowania tej odwróconej refaktoryzacji podział na wątki musiałby się odbywać w \texttt{InMemoryBus}.
+Jest to wada tego rozwiązania, chociaż nie rzutuje to na wymagania postawione przed tym programem, należy brać ją
+pod uwagę w przyszłych tego typu eksperymentach.
+
+\begin{figure}[h]
+    \centering \includegraphics[width=1\textwidth]{diagramy/inmemorybus_send_alt}
+    \caption{Diagram sekwencji przedstawiający efekt refaktoryzacji Ukrycie Delegata}
+    \label{fig:inmemorybus_send_alt}
+\end{figure}
+
+Zastosowanie powyższej refaktoryzacji nie wpływa, z definicji refaktoryzacji i uruchomienia zestawu
+testów dostarczonych do programu \texttt{JavaBus}, na funkcje programu.
+Struktura programu ulega zmianie w przeniesieniu niepełnej odpowiedzialności za iteracje po stronie
+\texttt{InMemoryBus}.
+Rysunek~\ref{fig:alt_ukrycie_delegata} przedstawia wywołania metod pomiędzy klasami w zmienionym programie.
+Do pracy załączony jest listing~\ref{lst:inmemorybus_3} przedstawiający kod klasy \texttt{InMemoryBus}.
+Tabela~\ref{tab:metryki_javabus_alt} przedstawia metryki sprzężenia po modyfikacji programu.
+\begin{table}[h]
+    \centering
+    \begin{tabular}{l|l|l|l}
+        Nazwa klasy                 & CBO & RFC & MPC \\ \hline\hline
+        InMemoryBus                 &   2 &  11 &   8 \\ \hline
+        RegisteredConsumers         &   0 &   3 &   0 \\ \hline
+        AllConsumersInTopicStrategy &   0 &   3 &   0
+    \end{tabular}
+    \caption{\label{tab:metryki_javabus_alt}Metryki sprzężenia wybranych klas programu \texttt{JavaBus} po zastosowaniu refaktoryzacji odwrotnej}
+\end{table}
+
+Należy zauważyć, że modyfikacja kodu nie tylko podniosła znacząco wskażniki dla klasy \texttt{InMemoryBus}, ale
+również obniżyła sprężęnie klasie \texttt{AllConsumersInTopicStrategy}.
+Wynika to z powodu odciążenia klasy strategii implementacją pętli.
+W przypadku niniejszej pracy ten efekt jest akceptowalny, natomiast warto zwrócić uwagę, że zastosowanie Ukryj
+Delegata w ramach odwrotnej refaktoryzacji może korzystnie wpłynąć na elementy, z których pobierane są metody.
+Taki efekt może wskazywać na pewną zasadę zachowania złożoności programu pomimo refaktoryzacji --- wymaga on jednak
+oddzielnych badań.
+Istotnym elementem jest miejsce wprowadzenia zmian --- eksperyment musi zostać zaprojektowany tak, że wprowadzane
+zmiany będą występowały w obrębie klasy implementującej kontrakt wynikający z \texttt{MessageDelivery}, lub dotyczyć
+samej klasy \texttt{InMemoryBus}.
+
+Podsumowując, program \texttt{JavaBus} w obrębie metody \texttt{send} klasy \texttt{InMemoryBus} został zmodyfikowany
+za pomocą celowej odwróconej refaktoryzacji tak, że oczekiwane metryki sprzężenia (RFC, a przede wszystkim MPC) wzrosły.
+Zostały utworzone dwa tożsame programy o różnym sprzężeniu pomiędzy klasami, co realizuje to cel postawiony temu
+rozdziałowi.
+
+\section{Podsumowanie}
+
+Niniejszy rozdział miał na celu utworzenie dwóch tożsamych programów o różnych współczynnikach sprzężenia między
+klasami.
+Zostały przedstawione definicje tożsamości programów w literaturze, aby na ich podstawie i wiedzy o ograniczeniach
+języków programowania wysokiego poziomu, ustalić definicję tożsamości programów korzystając z zestawu testów
+jednostkowych.
+Modyfikacja programu wraz z zachowaniem jego tożsamości jest refaktoryzacją, co przedstawiono i wybrano te
+refaktoryzacje, które mogą posłużyć w modyfikacji sprzężenia.
+Wywnioskowano, że najodpowiedniejszym sposobem modyfikacji programu jest zwiększanie, a nie zmniejszanie sprzężęnia.
+Do tego celu utworzono definicje refaktoryzacji odwrotnej, której metody opisano i wybrano odpowiednią do
+dalszej pracy.
+Na programie \texttt{JavaBus} zastosowano wybraną metodę Usunięcia Delegata, przeanalizowano zmiany zarówno w
+strukturze, jak i w metryce.
+Przedstawiono ograniczenia wynikające z metody, a także zauważono, że modyfikacja sprzężenia w jednej klasie będzie
+skutkować modyfikacją sprzężeń w klasach zależnych.
+Przygotowano alternatywne wersje programu do przeprowadzenia eksperymentu.

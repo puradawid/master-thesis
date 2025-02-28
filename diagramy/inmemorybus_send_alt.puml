@@ -1,0 +1,24 @@
+@startuml
+!theme plain
+
+InMemoryBus -> MessageDelivery : deliver(registeredConsumers, topic, message)
+
+loop topic in getParent()
+InMemoryBus -> RegisteredConsumers : find(topic, class)
+loop consumer in potentialConsumers
+    InMemoryBus -> MessageDelivery : shouldCallThisConsumer(nextConsumer, message, anySuccess)
+    alt
+        InMemoryBus -> Consumer : consume(message)
+    end
+    InMemoryBus -> MessageDelivery : shouldStop(isLastDeliveryASuccess)
+    MessageDelivery -> Consumer : consume(message)
+end
+    InMemoryBus -> MessageDelivery : shouldGetParentTopic(anySuccess)
+    alt
+    InMemoryBus -> InMemoryBus : topic = topic.getParent()
+    end
+end
+
+MessageDelivery --> InMemoryBus : message
+
+@enduml

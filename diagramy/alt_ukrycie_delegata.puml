@@ -1,0 +1,23 @@
+@startuml
+!theme plain
+
+group Przed refaktoryzacją "Ukrycie Delegata"
+    A -> B: calculateFirst()
+    B --> A: firstResult
+    A -> B: calculateSecond(firstResult)
+    B --> A: secondResult
+    A -> B: calculateThird(secondResult)
+    B --> A: thirdResult
+end
+
+group Po refaktoryzacji "Ukrycie Delegata"
+    A -> B: calculateThird()
+    B -> B: calculateFirst()
+    B --> B: firstResult
+    B -> B: calculateSecond(firstResult)
+    B --> B: secondResult
+    B -> B: calculateThird(secondResult)
+    B --> A: thirdResult
+end
+
+@enduml

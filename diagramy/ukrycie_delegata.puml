@@ -1,0 +1,18 @@
+@startuml
+!theme plain
+
+group Przed refaktoryzacją "Ukrycie Delegata"
+    A -> B : getC()
+    B --> A : c
+    A -> C : calculate()
+    C --> A : result
+end
+
+group Po refaktoryzacji "Ukrycie Delegata"
+    A -> B : calculate()
+    B -> C : calculate()
+    C --> B : result
+    B --> A
+end
+
+@enduml

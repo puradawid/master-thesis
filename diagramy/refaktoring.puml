@@ -1,0 +1,13 @@
+@startmindmap
+!theme plain
+
+* Refaktoryzacja\nosłabiająca sprzężenie
+** Ekstrakcja
+*** Interfejsu
+*** Nadklasy
+** Przeniesienie
+*** Pola
+*** Metody
+** Ukrycie Delegata
+
+@endmindmap
