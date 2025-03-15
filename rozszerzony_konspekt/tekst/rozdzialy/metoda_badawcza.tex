@@ -1,0 +1,32 @@
+Niniejszy rozdział szczegółowo opisuje metodę badawczą pracy.
+Przedstawia hipotezę badawczą oraz definiuje zmienne kluczowe dla przeprowadzonego eksperymentu.
+Na podstawie wstępnego szkicu badania, wskazuje zmienne zakłócające i przedstawia metody ich kontrolowania.
+Opisuje kod źródłowy i zadania, które wykonywali badani programiści.
+Aby zadbać o rzetelność wyników, rozdział o metodzie badawczej kończy się szczegółowym scenariuszem przeprowadzonych
+eksperymentów.
+
+Wyjaśnienia zawarte poniżej mają na celu przede wszystkim spojrzeć na problem ze strony badawczej --- odpowiedzieć
+na pytania, dlaczego autor pracy wybrał eksperyment, do jakiego stopnia przewidział zachowanie badanych, w
+jaki sposób zaprojektował przeprowadzany eksperyment i jak testuje pozyskane dane pod kątem statystycznej istotności
+różnic w nich istniejących.
+Nadrzędną wartością tego rozdziału jest odtwarzalność toku myślowego prowadzącego do podjęcia decyzji o
+przeprowadzeniu dokładnie tego eksperymentu, umożliwiając jego najdokładniejszą ocenę.
+
+Przedmiotem badań całej pracy jest obciążenie kognitywne programisty podczas wprowadzania zmian w
+istniejącym kodzie źródłowym w języku \texttt{Java}.
+Wybór \texttt{Java}
+jako języka programowania jest nieprzypadkowy --- w Sii sp. z o.o., z którego pochodzą badani, 40\%
+stanowisk jest związanych z tworzeniem oprogramowania właśnie w tym języku.
+\texttt{Java} jest tam najczęściej używana.
+Globalnie zajmuje trzecie miejsce z wynikiem 10,15\% w rankingu najbardziej popularnych języków
+programowania~\cite{TiobeIndex2024}, co zwiększa szansę na replikacje badania przedstawionego w niniejszej pracy.
+
+Wspomniane obciążenie kognitywne jest mierzone pośrednio poprzez czas wymagany na zrozumienie kodu i jego modyfikacje.
+Badanie koncentruje się na tym, czy wyższy stopień sprzężenia klas wydłuża czas potrzebny programiście na zmianę
+kodu według przekazanych wymagań, a to oznaczałoby, że w takiej sytuacji taki kod jest trudniejszy do zrozumienia,
+prowadząc do wniosku, że ma to wpływ na obciążenie kognitywne programisty podczas pracy z tak zaprojektowanymi klasami.
+Celem badawczym tej pracy jest zweryfikowanie zależności pomiędzy stopniem sprzężenia istniejących klas
+a czasem programisty poświęconym na wprowadzenie zmiany.
+
+Autor pracy zaprojektował badanie, korzystając z informacji zawartych w monografii~\cite{wohlin2012experimentation},
+podręcznikowi w zakresie badań empirycznych w dziedzinie inżynierii oprogramowania.

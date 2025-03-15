@@ -1,0 +1,127 @@
+\chapter{Wstęp}
+
+We wstępie autor przedstawi powszechność praktyki zmiany istniejącego kodu źródłowego.
+Na podstawie badań wykaże, że utrzymanie oprogramowania stanowi 90\% kosztów~\cite{dehaghani2013factors}.
+Z powyższych wynika wniosek, że optymalizacja efektywności zmiany kodu jest kluczowym elementem uzyskania
+przewagi konkurencyjnej.
+Oznacza to, że przedsiębiorstwa, które będą w stanie niższym kosztem i w krótszym czasie dostosowywać oprogramowanie do
+zmieniającego się otoczenia zyskują przewagę na rynku.
+
+Za pomocą przedstawionych faktów, autor uzasadni potrzebę badania wpływu tworzonej
+struktury kodu na jej przyszłe koszty utrzymania.
+Przedstawi trudności w bezpośrednim opisie i porównywaniu struktur programów obiektowych, wskazując metryki
+sprzężenia jako sposób na względnie prosty substytyt eksperckiego porównywania drzew klas w systemie obiektowym.
+
+Autor określi cel badania jako empiryczne zbadanie wpływu sprzężenia klas w programie obiektowym
+na koszt wprowadzania zmian w dziedzinie czasu.
+Jednocześnie dodatkowym celem jest zbadanie możliwości przeprowadzania badań empirycznych z udziałem programistów,
+jako, że w literaturze nie występuje zbyt wiele dowodów empirycznych przeprowadzanych z użyciem
+takiej metody --- eksperymentu.
+
+\chapter{Stopień sprzężenia klas}
+
+W rozdziale pierwszym autor przedstawi występujące relacje pomiędzy klasami
+powszechnie opisywane w literaturze~\cite{
+    dkabrowski2007modelowanie,Wiener_Pinson_2000
+}.
+Następnie wprowadzi intuicję sprzężenia klas, opisując przykłady związków klas
+w języku programowania Java.
+Zbada w istniejącej literaturze~\cite{yourdon1996case:19} definicje sprzężenia,
+po czym przeprowadzi syntezę sprzężenia jako pojęcia adaptowanego do niniejszej
+pracy.
+
+Autor wyjaśni, jakie podstawy w literaturze mogą pozwalać sądzić, że sprzężenie
+ma wpływ na koszty wprowadzania zmian w oprogramowaniu~\cite{yousoof2007measuring}.
+Przedstawi pojęcie obciążenia kognitywnego i efektów z nim związanych~\cite{chidamber1991towards}.
+
+Po przedstawieniu podstawowej definicji sprzężenia, autor na podstawie~\cite{briand1999unified} opisze
+wybrane metryki sprzężenia klas z ich definicjami w teorii zbiorów: \textit{Coupling Between Object},
+\textit{Response For Class} i \textit{Message Passing Coupling}.
+Do każdej metryki przedstawi przykłady, porównując ich zastosowanie w kontekście pomiarów sprzężenia
+i analizy obciążenia kognitywnego.
+
+\chapter{Tożsame programy o~różnych stopniach sprzężenia klas}
+
+W rozdziale drugim autor wykaże potrzebę posiadania definicji tożsamych programów.
+Jest ona ściśle związana z potrzebą utworzenia dwóch programów o różnym stopniu sprzężenia, jednocześnie
+zachowując ich wspólne przeznaczenie.
+Na przykładach przedstawi, że dwa programy mogą spełniać inną funkcję nie zmieniajac swojej struktury, a
+jednocześnie w innym przypadku jej odpowiednia zmiana może utrzymać wszystkie funkcje programu w mocy.
+
+Autor zbada, czy istnieją definicje tożsamych programów i jak dospasowane są do niniejszej pracy.
+W tym celu sięgnie po definicje tożsamości z teorii informatyki~\cite{tzevelekos2012program, churchill2019semantic}.
+Po porównaniu tych definicji przeprowadzi syntezę definicji tożsamości programów dopasowaną do języków wyższego rzędu,
+opartą o testy jednostkowe jako wymagania na program.
+
+Na potrzeby przygotowania eksperymentu do pracy, autor wykaże, że istnieje zestaw modyfikacji programu zwanymi
+refaktoryzacjami~\cite{fowler2018refactoring}, a następnie wybierze spośród nich używane do zmniejszania stopnia
+sprzężenia klas.
+Następnie wykaże, że modyfikacja programu pod kątem zmniejszenia sprzężenia jest trudna do replikacji, gdyż nie
+dla każdego programu wyjściowego możliwe jest zastosowanie takiej techniki, gdyż program może już posiadać
+optymalną strukturę.
+Z tego powodu autor zaproponuje metodę \textit{odwróconej refaktoryzacji}, która ma na celu wzmocnienie sprzężenia.
+Takie zastosowanie pozwala na modyfikację dowolnego programu obiektowego do uzyskania alternatywnej wersji o
+zmodyfikowanym współczynniku sprzężenia pomiędzy kalsami.
+
+Podsumowaniem rozdziału będzie przedstawienie zmodyfikowanego programu, wyjaśnienie jego przeznaczenia, a także
+zaprezentowanie metryk w zmodyfikowanych obszarach i omówienie zjawisk temu towarzyszących.
+
+\chapter{Metoda badawcza}
+
+Celem rozdziału trzeciego będzie szczegółowy opis eksperymentu.
+Autor przedstawi podstawowe założenia eksperymentu jako metody badawczej, wybierając go z dostępnych metod
+opisanych w literaturze poświęconej empirycznemu badaniu inżynierii oprogramowania~\cite{fowler2018refactoring}.
+
+Następnie, autor zaproponuje ogólny zarys badania, przypominając cel pracy, a następnie opisze zmienne zależne i
+niezależne, hipotezę zerową.
+Określi grupę badaną, głównie przez wymagania brane pod uwagę podczas rekrutacji.
+Przy określaniu zarysu wskaże, jakie zmienne zakłócające mogą wpływać na wyniki i sposoby ich kontroli.
+
+Autor przedstawi wymagania wobec programu i zaproponuje jego formę, którego modyfikacja szczegółowo została
+opisana w poprzednim rozdziale.
+Opisze strukturę i problem rozwiązywany przez program.
+
+Eksperyment będzie podzielony na trzy etapy: wprowadzenia, zadania pierwszego i zadania drugiego.
+Wprowadzenie będzie miało za zadanie wyjaśnić program przez prowadzącego badanie i opisać poszczególne klasy tak,
+by badani mieli równy dostęp do informacji.
+Zadanie pierwsze będzie sposobem na kontrolę zmiennej zakłócającej poprzez pomiar czasu na wykonanie zadania,
+które jest wspólne wszystkim badanym.
+Zadanie drugie będzię badaniem właściwym, gdzie badani będą otrzymywać jeden z alternatywnych scenariuszy programu
+i w tym obszarze wprowadzać zmiany.
+
+Autor wprowadzi także metodę porównywania wyników zaczerpniętą z podręcznika do statystycznych metodologii
+badawczych~\cite{arciszewska2023metodologia}, opartą o t test Welcha.
+
+Podsumowaniem rozdziału będzie przede wszystkim szczegółowy opis każdego zadania, którego będą podejmować się
+badani programiści, a także oczekiwana metoda ich rozwiązania.
+
+\chapter{Wyniki badania}
+
+W czwartym rozdziale autor pracy podsumuje uzyskane wyniki z eksperymentu, na
+podstawie~\cite{arciszewska2023metodologia} przeprowadzi obliczenia statystyczne dla obu grup testując
+testem t Welcha.
+Autor skorzysta ze statystycznej biblioteki \texttt{scipy.stats} by przeprowadzić wyniki i utworzyć odpowiednie
+wykresy.
+Dodatkowo autor opisze poszczególne wyniki w formie tabeli, dodając informacje o dodatkowych obserwacjach podczas
+eksperymentu.
+
+Podsumowaniem tego rozdziału będzie wynik testu t, odpowiadającego na pytanie programy o różnym stopniu
+sprzężenia w statystycznie istotny sposób różnią się czasem wprowadzania do nich zmian.
+Przeprowadzony eksperyment zostanie przedstawiony w formie tabeli wyników i wykresie pudełkowym dla obu grup.
+
+\chapter{Wnioski}
+
+W zależności od wyniku, autor w piątym rozdziale opisze wnioski wynikające z wyniku przeprowadzonego eksperymentu.
+Wynik może być potwierdzający hipotezę zerową (brak statystycznej różnicy), zaprzeczający (istnieje statystyczna
+różnica) lub niewystarczający statystycznie.
+W każdym z przypadków autor omówi możliwe powody takiego wyniku i wyprowadzi ostateczne stwierdzenie dotyczące badania.
+
+Wskaże możliwe obszary do poprawienia przyszłych badań i wyzwania, które stoją za przeprowadzaniem eksperymentów
+w obszarze inżynierii oprogramowania.
+Zasugeruje kolejne badania i metody rozszerzenia istniejącego eksperymentu, aby przekształcić go w formę skalowalną
+pod względem ilości uczestników.
+
+Podsumowaniem tego rozdziału będą dalsze kroki możliwe do podjęcia przez innych badaczy w tym wąskim
+i niepopularnym obszarze badawczym.
+Autor przeanalizuje również badanie pod kątem efektywności poniesionych kosztów i zasugeruje możliwe
+optymalizacje przeprowadzenia takiego eksperymentu.

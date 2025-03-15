@@ -1,0 +1,133 @@
+% !TEX program = xelatex
+% !TeX encoding = utf8
+% !TeX spellcheck = pl-PL
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Wybierz rodzaj pracy dyplomowej oraz wydział
+% Pick thesis type and faculty
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[thesis=mgr,faculty=ee]{EE-dyplom} 
+
+% thesis=[inz|mgr|bsc|msc]
+%  * inz - praca inżynierska
+%  * mgr - praca magisterska
+%  * bsc - bachelor thesis
+%  * msc - master thesis
+
+% Skróty nazw wydziałów zgodne z domenami internetowymi
+% Abbreviations of Faculties according to Internet subdomains
+% faculty=[
+%	arch,
+%	gik,
+%	ee,
+%	wip
+%	]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Konfiguracja - do personalizacji
+% Configuration - to be personalized
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\instytut{Instytut Sterowania i Elektroniki Przemysłowej}
+\kierunek{Informatyka Stosowana}
+\specjalnosc{Inżynieria Oprogramowania}
+\title{
+    Wpływ stopnia sprzężenia klas na czas wprowadzenia zmian w programie
+    napisanym w języku Java --- badanie empiryczne
+}
+\engtitle{
+    Correlation between the class coupling parameter and the change
+    cycle-time in Java – an empirical study
+}
+\album{330579}
+\author{inż. Dawid Pura}
+\promotor{dr inż. Włodzimierz Dąbrowski}
+\date{2025}
+\longdate{2025-03-01}
+
+%\grantlicense{TRUE} % [TRUE|FALSE]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Streszczenie pracy i abstract.
+% In case of thesis in English swap the order - English version goes first.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\streszczeniepracy{
+    Wśród praktyków programowania obiektowego powszechnym przekonaniem jest
+    konieczność tworzenia klas o niskim sprzężeniu i wysokiej spójności.
+    Pozytywnie wpływa to na czytelność, przyspieszając poprawne zrozumienie
+    zastanego kodu źródłowego, w konsekwencji optymalizując koszta
+    poniesione podczas dostosowywania programu do zmieniających się wymagań.
+
+    To z pozoru logiczne założenie nie zostało jednak empirycznie
+    potwierdzone.
+    Niewielka ilość prac sugeruje istnienie takiego efektu, powołując się
+    głównie na fakt częstego używania refaktoryzacji przez programistów w
+    projektach otwartego źródła.
+
+    Celem niniejszej pracy było empiryczne potwierdzenie zależności czasu
+    potrzebnego na wprowadzenie zmian w kodzie źródłowym od stopnia
+    sprzężenia jego klas.
+    W pracy przeprowadzono eksperyment, w którym programiści (\(n = 10\))
+    Java wykonywali dwie z góry określone zmiany w istniejącym kodzie
+    źródłowym.
+    Programiści zostali podzieleni na dwie grupy, w których programy różniły
+    się stopniem sprzężenia w obszarze poddawanemu zmianom.
+
+    Wyniki sugerują różnice w średnim znormalizowanym czasie wykonania
+    pomiędzy programami, jednakże wyniki te nie są statystycznie istotne:
+    \(p = 0.25\), co sugeruje potrzebę większej grupy badawczej i zastosowanie
+    mniej kosztownych technik przeprowadzenia eksperymentu, taką jak
+    automatyzowane środowisko progrmaistyczne używane do przeprowadzania
+    zadań rekrutacyjnych w firmach technologicznych.
+
+
+} % koniec streszczenia
+
+\slowakluczowe{
+programowanie obiektowe, sprzężenie, empirycza inżynieria oprogramowania
+}
+
+\thesisabstract{
+Here it will be the paper's abstract.
+It will include research statement, method and results.
+} % end of abstract
+
+\thesiskeywords{
+object-oriented programming, coupling, empirical software engineering
+}
+
+\newtheorem{definition}{Definicja}
+
+\usetikzlibrary{mindmap,trees}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Tu zaczyna się dokument
+% Here is the beginning of the document
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+    % Strony nagłówkowe
+    % Headers
+    \frontpages
+
+    % Właściwa treść jest w pliku tekst/main.tex
+    % Real contents is in tekst/main.tex
+    \input{tekst/main}
+
+    % Bibliografia - musi być
+    % Bibliography - must exist
+    \bibliografia
+
+    % Strony końcowe - można zakomentować, jeśli zbędne
+    % Additional pages - comment out if not needed
+    
+    % Wykaz symboli i skrótów - patrz opis w tekście przykładowym
+    \acronymslist
+    % Spis rysunków
+    \listoffigures
+    % Spis tabel
+    \listoftables
+    % Załączniki (plik appendices.tex)
+    \easyappendices
+\end{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+

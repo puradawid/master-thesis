@@ -1,0 +1,112 @@
+Ten rozdział prezentuje wyniki przeprowadzonego eksperymentu, koncentrując się na uzyskanych danych i efektach badania.
+Zawiera zarówno surowe dane, jak i ich znormalizowaną wersję, a także statystyczne porównanie obu grup.
+W końcowej części przeprowadzona zostaje analiza z wykorzystaniem testu t Welcha w celu weryfikacji hipotezy zerowej
+\(H_{0}\).
+
+
+\section{Uzyskane pomiary}
+
+Od października do listopada 2024 roku autor pracy przeprowadził 10 eksperymentów z udziałem zgłoszonych do badania
+programistów.
+Wszyscy uczestnicy ukończyli oba zadania.
+
+Tabela~\ref{tab:czas_norm} przedstawia wykonane pomiary wraz ze znormalizowaną wartością, normalizacja została
+szczegółowo opisana w podrozdziale~\ref{subsec:zmienne}.
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{l|l|l|l|l}
+        Grupa & Badany \(i\) & \(T_{1}(i) [s]\) & \(T_{2}(i) [s]\) &
+        \(T_2^{norm}(i) = \frac{T_{2}(i)}{T_{1}(i)}\) \\\hline\hline
+        \multirow{5}{*}{1} & \underline{1} & 2027 & 529 & 0,2604834 \\
+        & \underline{2} & 1720 & 180 & 0,1046511 \\
+        & 3             & 1106 & 300 & 0,2712477 \\
+        & \underline{4} & 2265 & 273 & 0,1205298 \\
+        & 5             & 380  & 70  & 0,1842105 \\ \hline
+        \multirow{5}{*}{2} & \underline{6} & 2031 & 581 & 0,2860659 \\
+        & 7             & 411  & 120 & 0,2919708 \\
+        & \underline{8} & 2017 & 670 & 0,3321765 \\
+        & \underline{9} & 1213 & 480 & 0,3957131 \\
+        & 10            & 221  & 523 & 2,3665158 \\ \hline
+    \end{tabular}
+    \caption{\label{tab:czas_norm}Pomiary wykonane podczas eksperymentów.}
+\end{table}
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{l|l|l|l|l|l}
+        Grupa              & Badany \(i\)  & Doświadczenie Java [lata] & Technologia & Wykształcenie & Dziedzina
+        \\ \hline\hline
+        \multirow{5}{*}{1} & \underline{1} & 2                         & Spring      & mgr           & Bankowość
+        \\
+        & \underline{2} & 3                         & Spring      & mgr           & Linie lotnicze      \\
+        & 3             & 7                         & Spring      & mgr           & Bankowość           \\
+        & \underline{4} & 20                        & Spring      & mgr           & Bankowość           \\
+        & 5             & 9                         & EJB         & kurs          & Handel              \\ \hline
+        \multirow{5}{*}{2} & \underline{6} & 5                         & Spring      & mgr           & Bankowość
+        \\
+        & 7             & 20                        & Spring      & mgr           & Bankowość           \\
+        & \underline{8} & 5                         & Spring      & kurs          & Bankowość           \\
+        & \underline{9} & 2                         & Go          & technikum     & Transport/Produkcja \\
+        & 10            & 3                         & Spring      & mgr           & Biofarmaceutyka     \\ \hline
+    \end{tabular}
+    \caption{\label{tab:demografia}Doświadczenie, aktualnie używana technologia i dziedzina,
+        którą zajmują się badani programiści}
+\end{table}
+
+Jako dodatkowa obserwacja, w 6 przypadkach (podkreślonych w tabeli~\ref{tab:czas_norm}) eksperyment trwał dłużej niż
+założone 45 minut.
+Świadczy to o niedoszacowanej estymacji trwania badania przez autora pracy --- czas badania powinien być ustalony na 60
+minut.
+
+
+\section{Statystyczna analiza danych}
+
+\begin{figure}[h]
+    \centering \includegraphics[width=0.7\linewidth]{diagramy/normalized_time_comparison}
+    \caption{Wykres pudełkowy wyników obu grup}
+    \label{fig:results_stats}
+\end{figure}
+
+Na Rysunku~\ref{fig:results_stats} przedstawiono wykres pudełkowy podsumowujący pozyskane próbki.
+W grupie drugiej uzyskano jedną obserwację odstającą o wartości 2,36.
+Badany 10 rozwiązał najszybciej ze wszystkich zadanie kontrolne, jednocześnie uzyskując przeciętny czas zadania
+drugiego.
+W tym przypadku miała miejsce sytuacja związana z dobrą znajomością zagadnienia zadania pierwszego (rozpoznanie typów
+bazowych) i mniejsza
+
+Średnie z uzyskanych próbek to odpowiednio \(0.19\) i \(0.75\).
+
+
+\section{Testowanie \(H_{0}\) t testem Welcha}
+
+Test przeprowadzono przekazując zmierzone wartości \(T_{1}(i)\) i \(T_{2}(i)\), następnie określając znormalizowaną
+wartość \((T_2^{norm}(i)\) otrzymując dwa zbiory odpowiednie grupom.
+Do funkcji przeprowadzającej t test \texttt{ttest\_ind} z biblioteki \texttt{scipy.stats}~\cite{gonccalves2023effect}
+wprowadzono oba zbiory i przetestowano, korzystając z parametrów uruchamiających t~test Welcha.
+
+\lstinputlisting[language=Python,
+    caption=\lstname,
+    label={lst:ttest}]{ttest.py}
+
+Wynikiem skryptu jest wydruk na standardowe wyjście przedstawione na Listingu~\ref{lst:ttest_output}.
+
+\begin{lstlisting}[caption={Standardowe wyjście skryptu \texttt{ttest.py}},
+    label={lst:ttest_output}]
+First group normalized: [0.2604834731129748, 0.10465116279069768, 0.27124773960216997, 0.1205298013245033, 0.18421052
+631578946]
+Second group normalized: [0.2860659773510586, 0.291970802919708, 0.3321764997521071, 0.3957131079967024, 2.3665158371
+040724]
+First group mean: 0.18822454062922706
+Second group mean: 0.7344884450247298
+t value: -1.3326009187587142
+p value: 0.2525864436286632
+\end{lstlisting}
+
+Dla potwierdzenia poprawności wprowadzonych danych można porównać wartości obu grup \texttt{group normalized} z
+wydruku z danymi z Tabeli~\ref{tab:czas_norm}.
+Wynikiem testu t Welcha jest wartość \(t = -1,33\) z \(p = 0,2525\).
+
+Przy założeniu, że \(p < 0.05\) jest wymagane do odrzucenia hipotezy zerowej\(H_{0}\), w świetle przeprowadzonego
+testu nie ma podstaw do jej odrzucenia, tym samym dane uzyskane eksperymentalnie nie świadczą o
+statystycznie istotnej zależności pomiędzy stopniem sprzężenia klasy i czasem wprowadzenia zmian w jej kodzie.
