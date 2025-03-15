@@ -30,13 +30,19 @@
 \instytut{Instytut Sterowania i Elektroniki Przemysłowej}
 \kierunek{Informatyka Stosowana}
 \specjalnosc{Inżynieria Oprogramowania}
-\title{Wpływ stopnia sprzężenia klas na czas wprowadzenia zmian w programie napisanym w języku Java --- badanie empiryczne}
-\engtitle{Impact of classes encapsulation on cycle-time}
+\title{
+    Wpływ stopnia sprzężenia klas na czas wprowadzenia zmian w programie
+    napisanym w języku Java --- badanie empiryczne
+}
+\engtitle{
+    Correlation between the class coupling parameter and the change
+    cycle-time in Java – an empirical study
+}
 \album{330579}
 \author{inż. Dawid Pura}
 \promotor{dr inż. Włodzimierz Dąbrowski}
-\date{2024}
-\longdate{2024-04-01}
+\date{2025}
+\longdate{2025-03-01}
 
 %\grantlicense{TRUE} % [TRUE|FALSE]
 
@@ -45,18 +51,49 @@
 % In case of thesis in English swap the order - English version goes first.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \streszczeniepracy{
-Współczynnik sprzężenia klas może opisywać jakość kodu. Oprogramowanie jest używane przez wiele lat i podlega procesowi zmian. Czas wprowadzenia zmiany w istniejącym kodzie bezpośrednio przekłada się na koszt utrzymania oprogramowania. W tej pracy przedstawiam korelacje pomiędzy sprzężeniem klas, a czasem wprowadzania zmian do kodu.
+    Wśród praktyków programowania obiektowego powszechnym przekonaniem jest
+    konieczność tworzenia klas o niskim sprzężeniu i wysokiej spójności.
+    Pozytywnie wpływa to na czytelność, przyspieszając poprawne zrozumienie
+    zastanego kodu źródłowego, w konsekwencji optymalizując koszta
+    poniesione podczas dostosowywania programu do zmieniających się wymagań.
+
+    To z pozoru logiczne założenie nie zostało jednak empirycznie
+    potwierdzone.
+    Niewielka ilość prac sugeruje istnienie takiego efektu, powołując się
+    głównie na fakt częstego używania refaktoryzacji przez programistów w
+    projektach otwartego źródła.
+
+    Celem niniejszej pracy było empiryczne potwierdzenie zależności czasu
+    potrzebnego na wprowadzenie zmian w kodzie źródłowym od stopnia
+    sprzężenia jego klas.
+    W pracy przeprowadzono eksperyment, w którym programiści (\(n = 10\))
+    Java wykonywali dwie z góry określone zmiany w istniejącym kodzie
+    źródłowym.
+    Programiści zostali podzieleni na dwie grupy, w których programy różniły
+    się stopniem sprzężenia w obszarze poddawanemu zmianom.
+
+    Wyniki sugerują różnice w średnim znormalizowanym czasie wykonania
+    pomiędzy programami, jednakże wyniki te nie są statystycznie istotne:
+    \(p = 0.25\), co sugeruje potrzebę większej grupy badawczej i zastosowanie
+    mniej kosztownych technik przeprowadzenia eksperymentu, taką jak
+    automatyzowane środowisko progrmaistyczne używane do przeprowadzania
+    zadań rekrutacyjnych w firmach technologicznych.
+
+
 } % koniec streszczenia
 
-\slowakluczowe{A, B, C}
+\slowakluczowe{
+programowanie obiektowe, sprzężenie, empirycza inżynieria oprogramowania
+}
 
 \thesisabstract{
-This is abstract. This one is a little too short as it should occupy the whole page.
-
-\lipsum[1-4]
+Here it will be the paper's abstract.
+It will include research statement, method and results.
 } % end of abstract
 
-\thesiskeywords{X, Y, Z}
+\thesiskeywords{
+object-oriented programming, coupling, empirical software engineering
+}
 
 \newtheorem{definition}{Definicja}
 
