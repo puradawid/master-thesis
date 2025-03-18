@@ -35,30 +35,39 @@ szczegółowo opisana w podrozdziale~\ref{subsec:zmienne}.
 \begin{table}[h]
     \centering
     \begin{tabular}{l|l|l|l|l|l}
-        Grupa              & Badany \(i\)  & Doświadczenie Java [lata] & Technologia & Wykształcenie & Dziedzina
+        Grupa & Badany \(i\) & Doświadczenie Java [lata] & Technologia & Wykształcenie & Dziedzina
         \\ \hline\hline
-        \multirow{5}{*}{1} & \underline{1} & 2                         & Spring      & mgr           & Bankowość
+        \multirow{5}{*}{1} & \underline{1} & 2 & Spring & mgr & Bankowość
         \\
-        & \underline{2} & 3                         & Spring      & mgr           & Linie lotnicze      \\
-        & 3             & 7                         & Spring      & mgr           & Bankowość           \\
-        & \underline{4} & 20                        & Spring      & mgr           & Bankowość           \\
-        & 5             & 9                         & EJB         & kurs          & Handel              \\ \hline
-        \multirow{5}{*}{2} & \underline{6} & 5                         & Spring      & mgr           & Bankowość
+        & \underline{2} & 3  & Spring & mgr       & Linie lotnicze      \\
+        & 3             & 7  & Spring & mgr       & Bankowość           \\
+        & \underline{4} & 20 & Spring & mgr       & Bankowość           \\
+        & 5             & 9  & EJB    & kurs      & Handel              \\ \hline
+        \multirow{5}{*}{2} & \underline{6} & 5 & Spring & mgr & Bankowość
         \\
-        & 7             & 20                        & Spring      & mgr           & Bankowość           \\
-        & \underline{8} & 5                         & Spring      & kurs          & Bankowość           \\
-        & \underline{9} & 2                         & Go          & technikum     & Transport/Produkcja \\
-        & 10            & 3                         & Spring      & mgr           & Biofarmaceutyka     \\ \hline
+        & 7             & 20 & Spring & mgr       & Bankowość           \\
+        & \underline{8} & 5  & Spring & kurs      & Bankowość           \\
+        & \underline{9} & 2  & Go     & technikum & Transport/Produkcja \\
+        & 10            & 3  & Spring & mgr       & Biofarmaceutyka     \\ \hline
     \end{tabular}
     \caption{\label{tab:demografia}Doświadczenie, aktualnie używana technologia i dziedzina,
         którą zajmują się badani programiści}
 \end{table}
 
 Jako dodatkowa obserwacja, w 6 przypadkach (podkreślonych w tabeli~\ref{tab:czas_norm}) eksperyment trwał dłużej niż
-założone 45 minut.
+założone 45 minut, ale nie dużej niż godzinę.
 Świadczy to o niedoszacowanej estymacji trwania badania przez autora pracy --- czas badania powinien być ustalony na 60
 minut.
 
+\subsection{Odrzuczenie próbki}
+
+Uczestnik badania \(i = 10\) wykonał zadanie poprawnie, ale ---
+w przekonaniu prowadzącego eksperyment --- nie zrozumiał poprawnie zadania
+drugiego, wykonał implementację, która nie dotyczyła testu, a to spowodowało
+nieadekwatnie dłuższy czas.
+W tym rozumieniu uznaje się, że ten eksperyment zakończył się niepowodzeniem.
+Nie przewidziano takiego przypadku w zaprojektowaniu eksperymentu.
+Tą próbkę autor pracy zdecydował się odrzucić z dalszej analizy statystycznej.
 
 \section{Statystyczna analiza danych}
 
@@ -70,10 +79,6 @@ minut.
 
 Na Rysunku~\ref{fig:results_stats} przedstawiono wykres pudełkowy podsumowujący pozyskane próbki.
 W grupie drugiej uzyskano jedną obserwację odstającą o wartości 2,36.
-Badany 10 rozwiązał najszybciej ze wszystkich zadanie kontrolne, jednocześnie uzyskując przeciętny czas zadania
-drugiego.
-W tym przypadku miała miejsce sytuacja związana z dobrą znajomością zagadnienia zadania pierwszego (rozpoznanie typów
-bazowych) i mniejsza
 
 Średnie z uzyskanych próbek to odpowiednio \(0.19\) i \(0.75\).
 

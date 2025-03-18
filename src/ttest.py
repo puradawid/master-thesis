@@ -1,16 +1,32 @@
 from scipy.stats import ttest_ind
 from scipy.stats import describe
+import numpy as np
 
 def normalize(arr):
     return (arr[1] / arr[0])
 
 group_1 = [[2027, 528], [1720, 180], [1106, 300], [2265, 273], [380, 70]]
-group_2 = [[2031, 581], [411, 120], [2017, 670], [1213, 480], [221, 523]]
+group_2 = [[2031, 581], [411, 120], [2017, 670], [1213, 480]]
 
 sample_1 = list(map(normalize, group_1))
 sample_2 = list(map(normalize, group_2))
 
 t_stat, p_value = ttest_ind(sample_1, sample_2, equal_var=False)
+
+median_1 = np.median(sample_1)
+median_2 = np.median(sample_2)
+
+basic_stats = [
+    lambda x: np.std(x),
+    lambda x: np.mean(x),
+    lambda x: np.median(x),
+    lambda x: np.percentile(x, 25),
+    lambda x: np.percentile(x, 50),
+    lambda x: np.percentile(x, 75)
+]
+
+results = [stat(sample_1) for stat in basic_stats]
+print(f'{results}')
 
 print(f"First group seconds normalized: {sample_1}")
 print(f"Second group seconds normalized: {sample_2}")

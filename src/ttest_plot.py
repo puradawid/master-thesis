@@ -7,7 +7,7 @@ def normalize(arr):
 
 # Data for the two groups
 group_1 = [[2027, 528], [1720, 180], [1106, 300], [2265, 273], [380, 70]]
-group_2 = [[2031, 581], [411, 120], [2017, 670], [1213, 480], [221, 523]]
+group_2 = [[2031, 581], [411, 120], [2017, 670], [1213, 480]]
 
 # Apply normalization
 sample_1 = list(map(normalize, group_1))
