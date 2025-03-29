@@ -70,14 +70,17 @@ Uczestnik badania \(i = 10\) wykonał zadanie poprawnie, ale ---
 w przekonaniu prowadzącego eksperyment --- nie zrozumiał poprawnie zadania
 drugiego, wykonał implementację, która nie dotyczyła testu, a to spowodowało
 nieadekwatnie dłuższy czas.
-W tym rozumieniu uznaje się, że ten eksperyment zakończył się niepowodzeniem.
+Wobec czego założenie, że w czasie wykonania zadania pierwszego zawiera się
+czytanie i zrozumienie kodu, nie miało w tym przypadku zastosowania.
+W związku z tym uznaje się, że ten eksperyment zakończył się niepowodzeniem,
+nie dostarczając danych zgodnie z poczynionym założeniem.
 Nie przewidziano takiego przypadku w zaprojektowaniu eksperymentu.
-Tą próbkę autor pracy zdecydował się odrzucić z dalszej analizy statystycznej.
+Tę próbkę autor pracy zdecydował się odrzucić z dalszej analizy statystycznej.
 
 \section{Statystyczna analiza danych}
 
 \begin{figure}[h]
-    \centering \includegraphics[width=0.7\linewidth]{diagramy/normalized_time_comparison}
+    \centering \includegraphics[width=0.8\linewidth]{diagramy/normalized_time_comparison}
     \caption{Wykres pudełkowy wyników obu grup}
     \label{fig:results_stats}
 \end{figure}
@@ -90,7 +93,7 @@ Tabela~\ref{tab:wyniki_statystyka} przedstawia podstawowe wartości statystyczne
 \begin{table}[h]
     \centering
     \begin{tabular}{l|l|l|l|l|l}
-        Grupa & odchylenie standardowe & średnia & mediana & 25 percentyl & 75 percentyl \\ \hline \hline
+        Grupa & Odchylenie standardowe & Średnia & Mediana & 25.\@ percentyl & 75.\@ percentyl \\ \hline \hline
         1 & 0.068 & 0.19 & 0.18 & 0.12 & 0.26 \\
         2 & 0.044 & 0.33 & 0.31 & 0.29 & 0.35 \\
     \end{tabular}
@@ -156,7 +159,10 @@ kontrolnego nie różni się statystycznie pomiędzy grupami eksperymentu.
         1 & 681.32 & 1499.6 & 1720.0 & 1106.0 & 2027.0 \\
         2 & 669.07 & 1418.0 & 1615.0 & 1012.5 & 2020.5 \\
     \end{tabular}
-    \caption{\label{tab:wyniki_zadanie_pierwszestatystyka}Odchylenie standardowe, średnia, mediana, 25-ty i 75-ty percentyl dla zadania pierwszego w badanych grupach}
+    \caption{\label{tab:wyniki_zadanie_pierwszestatystyka}
+    Odchylenie standardowe,\
+        średnia, mediana, 25-ty i 75-ty percentyl dla czasu wykonania zadania \
+        kontrolnego w badanych grupach}
 \end{table}
 
 Przy założeniu, że \(p < 0.05\) jest wymagane do odrzucenia hipotezy zerowej
@@ -177,8 +183,15 @@ W związku z tym, nie ma podstaw do odrzucenia eksperymentu z powodu założenia
 programu.
 
 Wartości \(T_{2}^{norm}\) są statystycznie różne dla obu grup, a ich średnia
-różni się o \(73\%\).
+różni się o \(74\%\).
+
 W związku z tym eksperyment dostarczył wyników, które pozwalają na odrzucenie
-hipotezy zerowej \(H_{0}\) i przyjęcie hipotezy \(H_{1}\), która stwierdza,
-że program o strukturze charakteryzującej się wyższym stopniem sprzężenia
-wymaga statystycznie więcej czasu na wprowadzenie w nim zmian.
+hipotezy zerowej \(H_{0}\) i przyjęcie hipotezy \(H_{1}\), która głosi występowanie
+statystycznie istotnej różnicy czasu wprowadzania zmian pomiędzy tożsamymi
+programami o różnym stopniu sprzężenia.
+Dodatkowo uzyskane dane pozwalają stwierdzić, że czas ten jest wyższy dla programów
+o wyższym stopniu sprzężenia.
+
+Z powyższych informacji można wyciągnąć wnioski co do zaprojektowania eksperymentu,
+użytecznych heurystyk dla praktyków inżynierii oprogramowania, a także dalszych badań
+w tym wąskim obszarze wpływu struktury programu obiektowego na koszty jego utrzymania.
