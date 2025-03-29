@@ -126,9 +126,59 @@ Dla potwierdzenia poprawności wprowadzonych danych można porównać wartości 
 grup \texttt{group normalized} z wydruku z danymi z Tabeli~\ref{tab:czas_norm}.
 Wynikiem testu t Welcha jest wartość \(t = -3,23\) z \(p = 0,0148\).
 
+Taka wartość \(t\) wskazuje, że wynik jest około 3,23-krotnie większy niż standardowy
+błąd różnicy, co wskazuje na znaczną i statystycznie istotną różnicę pomiędzy
+grupami.
+Jednocześnie określa, że grupa rozwiązująca zadanie oparte o kod źródłowy o
+niższym stopniu sprzężenia szybciej rozwiązała zadanie drugie.
+
+\begin{figure}[h]
+    \centering \includegraphics[width=0.7\linewidth]{diagramy/normalized_time_comparison_first}
+    \caption{Wykres pudełkowy czasu \(T_{1}\) dla obu grup}
+    \label{fig:results_first_status}
+\end{figure}
+
+Dodatkowo warto zbadać różnice w grupach pomiędzy czasem wykonywania zadania
+kontrolnego --- określonego czasem \(T_{1}\).
+Jeżeli różnica czasów jest statystycznie istotna w grupach, oznaczałoby to, że
+stopień sprzężenia pomiędzy klasami ma wpływ na zadanie z pozoru niedotyczące
+obszaru i należy odrzucić cały eksperyment ze względu na brak potwierdzenia
+podstawowego założenia.
+Wykres~\ref{fig:results_first_status} przedstawia różnice czasu w obu grupach.
+Test t Welcha w tym przypadku daje wartości \(t = 0,15\) i \(p = 0.87\) co
+wskazuje, że różnice są statystycznie nieistotne, zatem czas wykonania zadania
+kontrolnego nie różni się statystycznie pomiędzy grupami eksperymentu.
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{l|l|l|l|l|l}
+        Grupa & odchylenie standardowe & średnia & mediana & 25 percentyl & 75 percentyl \\ \hline \hline
+        1 & 681.32 & 1499.6 & 1720.0 & 1106.0 & 2027.0 \\
+        2 & 669.07 & 1418.0 & 1615.0 & 1012.5 & 2020.5 \\
+    \end{tabular}
+    \caption{\label{tab:wyniki_zadanie_pierwszestatystyka}Odchylenie standardowe, średnia, mediana, 25-ty i 75-ty percentyl dla zadania pierwszego w badanych grupach}
+\end{table}
+
 Przy założeniu, że \(p < 0.05\) jest wymagane do odrzucenia hipotezy zerowej
 \(H_{0}\), w świetle przeprowadzonego testu należy ją odrzucić, tym samym
 dane uzyskane eksperymentalnie świadczą o statystycznie istotnej zależności
 pomiędzy stopniem sprzężenia klasy i czasem wprowadzenia zmian w jej kodzie.
-Warto zauważyć, że zależność nie opisuje szczegółów zależności, jedynie
-stwierdza jej istnienie.
+
+\section{Podsumowanie}
+
+W toku eksperymentu pozyskano 10 próbek, z czego jedną należało odrzucić
+ze względu na brak spełnienia założenia o zapoznaniu się z kodem źródłowym
+podczas wykonywania zadania kontrolnego.
+
+Uzyskane wyniki potwierdzają założenie, że czas wykonania zadania kontrolnego
+w obu grupach nie różni się.
+W związku z tym, nie ma podstaw do odrzucenia eksperymentu z powodu założenia,
+że zadanie kontrolne jest wykonywane w obszarze wspólnym dla obu wariantów
+programu.
+
+Wartości \(T_{2}^{norm}\) są statystycznie różne dla obu grup, a ich średnia
+różni się o \(73\%\).
+W związku z tym eksperyment dostarczył wyników, które pozwalają na odrzucenie
+hipotezy zerowej \(H_{0}\) i przyjęcie hipotezy \(H_{1}\), która stwierdza,
+że program o strukturze charakteryzującej się wyższym stopniem sprzężenia
+wymaga statystycznie więcej czasu na wprowadzenie w nim zmian.
