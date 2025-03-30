@@ -1,11 +1,223 @@
+\section{Kontekst i cel pracy}
+
 % Oprogramowanie wymaga zmian
 % Zmiany są coraz to bardziej kosztowne
 % Optymalizacja kosztów jest istotna
-Koszt wytworzenia oprogramowania nie stanowi jedynego
 
+Modyfikacja istniejącego kodu źródłowego jest zjawiskiem powszechnym.
+Powody takiego stanu rzeczy można podzielić na trzy najistotniejsze elementy.
+
+Pierwszym powodem jest istnienie zwinnego procesów wytwórczych oprogramowania, z
+których można wyróżnić metodologię \textit{Scrum} jako najbardziej powszechną
+w 2024 roku: 78\% przedsiębiorstw zajmujących się pośrednio lub bezpośrednio
+tworzeniem oprogramowania używa właśnie jej~\cite{pwc_agile_report}.
+Zakłada ona, że oprogramowanie podlega zmianom ze sprintu (cyklu) na sprint,
+a najważniejszym celem jest dostarczanie za każdym razem działającego
+oprogramowania.
+W związku z tym paradygmat, który zakłada wyłącznie tworzenie nowego kodu
+źródłowego do z góry zaprojektowanego systemu, uległ dezaktualizacji.
+Przy wprowadzaniu zmian programiści poświęcają więcej czasu na czytanie
+i zrozumienie zastanego kodu niż na tworzenie nowego, głównie
+ze względu na to, że wstawienie nowej, często nieprzewidzianej wcześniej
+funkcjonalności wymaga dostosowania do niej istniejącego kodu źródłowego.
+
+% dehaghani2013factors - 90% kosztów oprogramowania w całym cyklu życia to
+% jego utrzymanie (modyfikacja w celu aktualizacji do zmieniających się
+% wymagań i otoczenia w kótrym program funkcjonuje).
+
+Drugim powodem jest czas życia oprogramowania po wdrożeniu i dynamicznie
+zmieniające się środowisko.
+Z badań~\cite{dehaghani2013factors} wynika, że 90\% procent kosztów oprogramowania
+należy skategoryzować jako jego utrzymanie, to jest modyfikację funkcjonalności
+w obliczu zmieniającego się środowiska, które wymaga nowych integracji z innymi
+systemami, zmian otoczenia prawnego, ewoluujących (lub zmienianych za pomocą
+szybkiej rewolucji) struktur przedsiębiorstw, i tak dalej.
+
+Trzecim, nie mniej istotnym, powodem powszechności zmian wymagań istniejącego
+kodu źródłowego jest rachunek uzyskanej wartości wedle poniesionych kosztów.
+Utworzenie nowej funkcjonalności jest często bardziej opłacalne na fundamencie
+istniejącego już, wdrożonego i znanego użytkownikom oprogramowania niż
+wytworzenie kompletnie nowego programu, nawet jeżeli miałoby realizować ono
+wyłącznie nową funkcję.
+
+W obliczu powszechności modyfikacji istniejącego kodu źródłowego nasuwa się
+pytanie: czy koszty wprowadzania zmian można optymalizować poprzez odpowiednie
+tworzenie oprogramowania w pierwszej kolejności?
+Innymi słowy, czy struktura istniejącego programu może mieć wpływ na czas,
+który programiści muszą poświęcić na zmianę programu, a tym samym przyspieszyć
+wdrożenia modyfikacji?
+
+Biorąc pod uwagę powszechność oprogramowania w każdej z dziedzin ludzkiego
+życia, globalną dostępność i relatywnie niski koszt wynikający z wolumenu
+danych możliwych do przetworzenia wobec używania pracy ludzi jako alternatywy,
+odpowiedź na to pytanie umożliwiałaby organizacjom (nie tylko
+przedsiębiorstwom czysto komercyjnym, ale również administracji państwowej,
+ośrodkom badawczym i innym) potencjalne wprowadzenie oszczędności, często
+wiążące się również z osiągnięciem konkurencyjnej przewagi.
+
+W związku z powyższym, celem niniejszej pracy jest zbadanie zależności pomiędzy
+stopniem sprzężenia klas w programie napisanym w języku \texttt{Java}
+a czasem wymaganym do wprowadzenia w nim zmiany.
+Czas ten przekłada się bezpośrednio na koszt, a to jest kluczowym
+aspektem omawianym powyżej.
+
+\section{Struktura pracy}
+
+Złożone, trudne do rozwiązania problemy należy dzielić na mniejsze, które
+można relatywnie łatwo rozwiązać.
+Tak postąpiono z niniejszą pracą: pytanie badawcze podzielono na etapy, a każdy
+z nich stanowi oddzielny rozdział, odpowiednio:
+
+\begin{itemize}
+    \item Wstęp --- określa cel pracy, intuicję praktyków, a także przedstawia dotychczasowe badania poczynione w
+    obszarze wpływu sprzężenia na koszty utrzymania oprogramowania.
+    \item Rozdział 1.\@ --- wprowadza pojęcie sprzężenia i dostępnych metryk, przedstawia ich zastosowanie.
+    \item Rozdział 2.\@ --- opracowuje pojęcie tożsamych programów i wskazuje metody modyfikacji sprzężenia
+    zachowujące tożsamość programu
+    \item Rozdział 3.\@ --- wybiera, wyjaśnia i tworzy projekt metody badawczej.
+    \item Rozdział 4.\@ --- przedstawia uzyskane wyniki w toku eksperymentu i poddaje je analizie statystycznej.
+    \item Rozdział 5.\@ --- wyciąga wnioski powstałe w wyniku niniejszej pracy.
+\end{itemize}
+
+Poniżej rozdziału 5.\@ praca zawiera również bibliografię, wykaz skrótów i symboli,
+spisy rysunków, tabel i załączników --- zgodnie z obowiązującymi wymaganiami wobec
+prac magisterskich Politechniki Warszawskiej.
+
+\section{Pogląd praktyków na oprogramowanie łatwe w utrzymaniu}
+\label{sub:practices}
 % Literatura praktyków posiada zasadę "niskie sprzężenie, wysoka spójność"
 % Czy zatem sprzężenie klas ma wpływ na koszt zmiany oprogramowania?
 % Ktoś to musiał już zbadać, prawda?
 
+Postawione pytania dotyczące kosztów utrzymania oprogramowania nie są niczym nowym.
+Praktycy zauważyli ten problem już w latach 80.\@ ubiegłego wieku, wskazując
+szereg cech programu łatwego do zrozumienia.
+Poniższe elementy są syntezą zaczerpniętą~z późniejszych publikacji mających
+zastosowanie do języka Java~\cite{martin2009clean, fowler2009, feathers2004working}.
+
+Najoczywistszą z nich jest odpowiedniość nazw stosowanych w kodzie źródłowym.
+Jeżeli program stosuje nazwy zmiennych, klas i metod odpowiednio opisujące
+rozwiązywany problem, zrozumienie jego staje się znacznie prostsze, niż gdyby
+występowały jedynie nic nie znaczące symbole \texttt{a}, \texttt{b} i \texttt{i}.
+
+Nieco mniej jednoznaczne jest stosowanie odpowiedniej formy dokumentacji.
+Tu praktycy wskazują różne metody prezentacji i utrzymywania --- jednocześnie
+wskazując, że nadmiar dokumentacji zaciemnia obraz i jest wręcz kontrproduktywny.
+Do programistów należy ocena, ile i w jaki sposób tworzona dokumentacja będzie
+optymalna dla osób w przyszłości próbujących zrozumieć informacje w niej zawarte.
+
+Najciekawszym (wedle autora tej pracy) i będącym jednocześnie głównym obszarem
+zainteresowań niniejszej pracy magisterskiej jest wykorzystanie optymalnej
+struktury programu.
+Przytoczeni praktycy twierdzą, że utworzenie programu o odpowiedniej strukturze
+będzie rzutowało na zrozumienie jego przeznaczenia i sposobu, w jaki modeluje i
+obsługuje dziedzinę zadanej funkcjonalności.
+We wszystkich wymienionych przypadkach pada sugestia, że programista powinien
+utrzymywać moduły (niezależnie, czy są to klasy w przypadku programów obiektowych,
+czy procedury w ich strukturalnych odpowiednikach) o wysokiej spójności i niskim
+sprzężeniu.
+
+Niniejsza praca ma za zadanie zdefiniować drugi składnik polecenia --- sprzężenie ---
+a także zaproponować i przeprowadzić badanie empiryczne, sprawdzając doświadczalnie
+zalecenia praktyków.
+
 % Nie? To ja to zbadam.
 % Zawartość pracy tak bardzo ogólnie
+
+\section{Dotychczasowe badania}
+
+W obszarze badań nad wpływem stopniem sprzężenia na czas wprowadzania zmian nie
+opublikowano zbyt wiele badań spełniających kryteria publikacji naukowej.
+Nie odnaleziono też badań eksperymentalnie potwierdzających wpływ sprzężenia
+na czas wprowadzania zmian w metodzie zaproponowanej w rozdziale~\ref{cha:metoda}.
+Poniżej przytoczone są publikacje podobnych eksperymentów,
+które w bezpośredni lub pośredni sposób wpłynęły na zaprojektowanie badania
+przeprowadzonego w niniejszej pracy.
+
+W najbardziej odległym, ale wartym wspomnienia, od tej pracy obszarze badawczym
+leżą badania polegające na analizie zmian wprowadzanych w projektach otwartego
+źródła, stwierdzające o powszechności refaktoryzacji w celu redukcji sprzężenia
+pomiędzy klasami~\cite{du2004refactoring}.
+Tego typu badania dowodzą, że programiści są zainteresowani zmniejszaniem siły
+sprzężenia, ale nie wskazują, czy wpływa to na poniesione koszty utrzymania
+oprogramowania.
+Pośrednio potwierdzają one przekonania praktyków wspomniane w
+podrozdziale~\ref{sub:practices}.
+
+% arisholm2004evaluating - opisuje badanie, w którym sprawdzają strukturę delegowaną wersus scentralizowaną
+% i wniosek jest taki, że styl najbardziej zależy od znajomości stylu, bardziej niż od jego samego.
+% W badaniu studenci i młodzi programiści lepiej poradzili sobie z wprowadzaniem zmian w stylu scenatralizowanym,
+% a zaawansowani w delegującym stylu.
+W 2004 roku zostało opublikowane badanie, w którym autorzy przeprowadzają
+eksperyment z udziałem studentów, młodszych i starszych programistów.
+W ramach eksperymentu wprowadzają oni zmiany do istniejących systemów, które
+zostały utworzone w dwóch wariantach: struktury scentralizowanej, która to
+jest oparta o jeden moduł wykonujący i moduły stanowiące struktury danych, i
+delegowaną, w której każdy moduł ma oddelegowaną odpowiedzialność, przez co
+struktura programu jest bardziej deklaratywna.
+W ramach eksperymentu mierzono, między innymi, czas wprowadzania zmian.
+Wnioskiem z badania jest, że sam styl nie ma większego znaczenia --- młodzi
+programiści i studenci lepiej radzili sobie w wariancie scentralizowanym, gdyż
+był to sposób tworzenia oprogramowania im bardziej znany, a starsi programiści
+szybciej wprowadzali bardziej poprawne zmiany w kodzie o delegowanej
+strukturze~\cite{arisholm2004evaluating}.
+
+% deligiannis2004assessing - kod w stylu resposibility-driven i control-oriented (mainframe) napisany w Java,
+% dwie grupy studentów (43 w sumie) po trzy zadania i oceniono wzgfledem zrozumienia, effortu i czasu wykonania.
+% Nie wykazano statystycznej różnicy pomiędzy czasem wykonania dla obu stylów, wskazano różnice w rozszerzalności
+% na korzyść programu w stylu RD
+W tym samym roku inne badanie na 43 studentach inżynierii oprogramowania
+dowiodło w toku eksperymentu, że kod źródłowy podzielony na klasy wedle
+odpowiedzialności wykazuje statystycznie istotną różnicę w łatwości
+rozszerzania niż jego alternatywa oparta o delegację kontroli w stylu
+\textit{mainframe}.
+Programy zostały napisane w języku \texttt{Java}, a studenci zostali
+podzieleni na dwie grupy przypisane do wariantów programu i mieli do
+wykonania 3 zadania modyfikacji.
+Czas wykonania był jednym z metryk eksperymentu, wraz z oceną zrozumiałości
+i kosztu wdrożenia~\cite{deligiannis2004assessing}.
+
+Zakrojonym na szeroką skalę eksperymencie w 2011 roku wzięło udział
+90 certyfikowanych programistów Java.
+Badanie polegało na wykonywaniu zmian w kodzie źródłowym jednego z czterech
+wariantów programu o zmodyfikowanych współczynnikach sprzężenia
+(\acrshort{CBO}) i spójności (\acrshort{LCOM}): niskim sprzężeniu i niskiej
+spójności, niskim sprzężeniu i wysokiej spójności, wysokim sprzężeniu i niskiej
+spójności, i wysokim sprzężeniu i wysokiej spójności.
+Sprzężenie w wariantach programów zostały przekształcone poprzez zmianę ilości
+wywołań metod obcych klas.
+Następnie wszystkie warianty poddano ocenie dwóch niezależnych ekspertów pod
+kątem weryfikacji, czy programy realizują te same czynności.
+Eksperyment potwierdził istotną różnicę w kosztach programu o wysokiej spójności
+i niskim sprzężeniu, jednocześnie potwierdzając zależność czasu wprowadzania
+zmian od sprzężenia, gdzie różnił się on o 122\% w wariancie o wysokim
+sprzężeniu i wysokiej spójności do wariantu o niskim sprzężeniu i wysokiej
+spójności~\cite{ramasubbu2011structural}.
+Badanie to jest najbliższe eksperymentowi przeprowadzonemu w niniejszej pracy.
+
+% ramasubbu2011structural - badanie spójności (LCOM) i sprzężenia (CBO) klas eksperyment przerprowadzony
+% na 90 certyfikowanych programistach Java
+% Zadanie wykonywane w parach i indywidualnie
+% Tożsamość programów została przeprowadzaona przez dwóch nielzależnych ekspertów.
+% Sprzężenie zostało zmodyfikowane za pomocą wywołań metod (brak szczegółów tych modyfikacji)
+% Badanie potwierdza hipotezę o mniejszym czasie wprowadzania zmian dla programów o niskim sprzężeniu i wysokiej spójności
+% jednocześnie stwierdzając, że nie ma znaczenia praca w parach czy indywidualnie, 122% większy effort jeżeli
+% jest wysoka spójność i wysokie sprzężenie w porównaniu do wysokiej spókności i niskiego sprzężenia.
+
+% bavota2013empirical - badanie postrzegania sprzeżenia programu, programiści utożsamiają sprzężenie z zależnością
+% znaczeniową pomiędzy klasami w programie obiektowym bardziej niż z wywołaniami pomiędzy programami
+
+
+\section{Podsumowanie}
+
+We wstępie przedstawiono powody, dla których cel niniejszej pracy ma kluczowe
+znaczenie dla wszystkich zajmujących się tworzeniem i utrzymywaniem
+oprogramowania.
+Przedstawiono strukturę dokumentu, dzieląc pracę na logicznie następujące
+etapy badania.
+Przytoczono dotychczasową opinię programistów-praktyków, wskazując pewność
+stwierdzenia, że aby kod był tani w utrzymaniu, należy utrzymywać klasy
+w możliwie najniższym sprzężeniu między nimi i najwyższej spójności w ich wnętrzu.
+Przedstawiono publikacje dotyczące badań empirycznych przeprowadzonych w
+obszarze sprzężenia i jakości kodu, wskazano interesujące wnioski z nich
+płynące, które zostaną wykorzystane w dalszych rozdziałach.

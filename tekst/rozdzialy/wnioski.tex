@@ -1,0 +1,50 @@
+Niniejszy rozdział poświęcony jest przede wszystkim wnioskom wyciągniętym z
+danych pozyskanych z przeprowadzonego eksperymentu, ale nie ogranicza się
+wyłącznie do nich.
+Omówione zostały również wnioski wyciągnięte z przeprowadzania samego
+eksperymentu.
+Idea przyświecająca tej pracy opiera się nie tylko na zbadaniu postawionej
+hipotezy, ale również na przyjrzeniu się aspektowi możliwości replikacji
+eksperymentu w przyszłości.
+Ten aspekt również został omówiony poniżej.
+
+\section{Potwierdzona hipoteza badawcza a praktyka}
+
+Wyniki przedstawione w rozdziale~\ref{cha:wyniki} potwierdzają postawioną
+przez praktyków tezę --- a także hipotezę \(H_{1}\) autora tej pracy ---
+w związku z czym istnieje empiryczne potwierdzenie zależności czasu
+wykonywania zmian, a przez to i kosztów poniesionych, ze stopniem sprzężenia
+klas między sobą.
+Eksperyment udowadnia, że klasy, które mają sztucznie zawyżony współczynnik
+\acrshort{MPC} zmodyfikowany poprzez odwróconą refaktoryzację, są trudniejsze
+dla programistów do zrozumienia, a tym samym wprowadzane w nich zmiany
+obarczone są dodatkowym kosztem.
+
+Sprzężenia opisane przez metrykę \acrshort{MPC} i \acrshort{CBO}
+przedstawione w eksperymencie są jednym z jego rodzajów, bardziej
+złożone --- takie jak sprzężenie semantyczne --- wymaga dodatkowych badań.
+
+Odpowiedź uzyskana w toku niniejszej pracy, choć eksperymentalnie potwierdzona,
+dla praktyków może być jedynie słabą heurystyką, ogólnie potwierdzającą zasadę
+,,utrzymywania możliwie najniższego sprzężenia'' podczas implementacji
+programu obiektowego.
+W praktyce może to oznaczać, że organizacje utrzymujące oprogramowanie
+powinno tworzyć strukturę oprogramowania o takiej cesze.
+Jednak nie może ona być rozwiązaniem wszystkich problemów z kosztowną
+modyfikacją oprogramowania: programy o wielkości milionów linii kodu
+mogą wymagać zbyt dużych nakładów pracy, by organizacja uznała inwestycję
+w formie refaktoryzacji całego programu za biznesowo uzasadnioną.
+Wszakże istnieją obszary w programach, które nie zmieniają się po
+pierwotnym ich wytworzeniu, zatem inwestycja mogłaby nigdy się nie zwrócić.
+
+Z tego powodu pozostaje otwarte pytanie: jeżeli zakładamy, że istnieje
+bazowy (minimalny możliwy) stopień sprzężenia klasy, to jak stwierdzić,
+że jest on minimalny?
+Obecnie autor pracy nie znalazł odpowiedzi na to pytanie --- prawdopodobnie
+jej udzielenie wymaga przeprowadzenia dalszych badań pod tym kątem,
+a nawet wprowadzenia teorii minimalnej semantyki implementowanego problemu.
+
+Nie wszystkie czynności zaplanowane w tej pracy poszły zgodnie z planem:
+niewielka ilość badanych mogła dostarczyć mniej jasnych wyników, a czas
+przeprowadzania eksperymentu został niekrytycznie przekroczony w 6 na 10
+przypadków.
