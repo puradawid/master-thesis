@@ -11,31 +11,37 @@ Ten aspekt również został omówiony poniżej.
 \section{Potwierdzona hipoteza badawcza a praktyka}
 
 Wyniki przedstawione w rozdziale~\ref{cha:wyniki} potwierdzają postawioną
-przez praktyków tezę --- a także hipotezę \(H_{1}\) autora tej pracy ---
+przez praktyków tezę --- a także hipotezę \(H_{1}\) tej pracy ---
 w związku z czym istnieje empiryczne potwierdzenie zależności czasu
 wykonywania zmian, a przez to i kosztów poniesionych, ze stopniem sprzężenia
 klas między sobą.
-Eksperyment udowadnia, że klasy, które mają sztucznie zawyżony współczynnik
-\acrshort{MPC} zmodyfikowany poprzez odwróconą refaktoryzację, są trudniejsze
-dla programistów do zrozumienia, a tym samym wprowadzane w nich zmiany
-obarczone są dodatkowym kosztem.
+Wynik eksperymentu pozwala sądzić, że klasy, które mają sztucznie zawyżony
+współczynnik \acrshort{MPC} zmodyfikowany poprzez odwróconą refaktoryzację,
+są trudniejsze dla programistów do zrozumienia, a tym samym wprowadzane
+w nich zmiany obciążone są dodatkowym kosztem.
 
 Sprzężenia opisane przez metrykę \acrshort{MPC} i \acrshort{CBO}
 przedstawione w eksperymencie są jednym z jego rodzajów, bardziej
-złożone --- takie jak sprzężenie semantyczne --- wymaga dodatkowych badań.
+złożone --- takie jak sprzężenie semantyczne --- wymagają dodatkowych badań.
 
 Odpowiedź uzyskana w toku niniejszej pracy, choć eksperymentalnie potwierdzona,
 dla praktyków może być jedynie słabą heurystyką, ogólnie potwierdzającą zasadę
 ,,utrzymywania możliwie najniższego sprzężenia'' podczas implementacji
 programu obiektowego.
 W praktyce może to oznaczać, że organizacje utrzymujące oprogramowanie
-powinno tworzyć strukturę oprogramowania o takiej cesze.
-Jednak nie może ona być rozwiązaniem wszystkich problemów z kosztowną
-modyfikacją oprogramowania: programy o wielkości milionów linii kodu
-mogą wymagać zbyt dużych nakładów pracy, by organizacja uznała inwestycję
-w formie refaktoryzacji całego programu za biznesowo uzasadnioną.
+powinny tworzyć oprogramowanie o klasach posiadających najmniejsze możliwe
+sprzężenie.
+Jednak nie może ona być rozwiązaniem wszystkich problemów związanych
+z kosztowną modyfikacją oprogramowania: programy o wielkości milionów
+linii kodu mogą wymagać zbyt dużych nakładów pracy, by organizacja
+uznała inwestycję w formie refaktoryzacji całego programu za
+biznesowo uzasadnioną.
 Wszakże istnieją obszary w programach, które nie zmieniają się po
 pierwotnym ich wytworzeniu, zatem inwestycja mogłaby nigdy się nie zwrócić.
+Wobec tego, organizacje w celu optymalizacji kosztów powinny tworzyć
+plany refaktoryzacji poszczególnych obszarów oprogramowania w przyszłości
+poddawanych zmianom, jednak takie przewidywanie samo w sobie może okazać
+się kosztownym przedsięwzięciem.
 
 Z tego powodu pozostaje otwarte pytanie: jeżeli zakładamy, że istnieje
 bazowy (minimalny możliwy) stopień sprzężenia klasy, to jak stwierdzić,
@@ -44,7 +50,16 @@ Obecnie autor pracy nie znalazł odpowiedzi na to pytanie --- prawdopodobnie
 jej udzielenie wymaga przeprowadzenia dalszych badań pod tym kątem,
 a nawet wprowadzenia teorii minimalnej semantyki implementowanego problemu.
 
+\section{Przeprowadzenie eksperymentu}
+
 Nie wszystkie czynności zaplanowane w tej pracy poszły zgodnie z planem:
 niewielka ilość badanych mogła dostarczyć mniej jasnych wyników, a czas
 przeprowadzania eksperymentu został niekrytycznie przekroczony w 6 na 10
 przypadków.
+
+Dobór programistów był przypadkowy (osoby zgłaszające się do eksperymentu),
+a podział na grupy nie uwzględniał
+
+\section{Dalsze badania}
+
+\section{Podsumowanie}
