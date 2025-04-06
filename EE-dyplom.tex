@@ -54,30 +54,34 @@
     Wśród praktyków programowania obiektowego powszechnym przekonaniem jest
     konieczność tworzenia klas o niskim sprzężeniu i wysokiej spójności.
     Pozytywnie wpływa to na czytelność, przyspieszając poprawne zrozumienie
-    zastanego kodu źródłowego, a w konsekwencji optymalizując koszta
+    zastanego kodu źródłowego, a w konsekwencji optymalizując koszty
     poniesione podczas dostosowywania programu do zmieniających się wymagań.
 
-    To z pozoru logiczne założenie nie zostało jednak empirycznie
-    potwierdzone.
-    Niewielka ilość prac stwierdza istnienie tej zależności, powołując się
-    głównie na fakt częstego używania refaktoryzacji przez programistów w
-    projektach otwartego źródła.
-
-    Celem niniejszej pracy było empiryczne potwierdzenie zależności czasu
-    potrzebnego na wprowadzenie zmian w kodzie źródłowym od stopnia
+    Celem niniejszej pracy było empiryczne zbadanie występowania zależności
+    czasu potrzebnego na wprowadzenie zmian w kodzie źródłowym od stopnia
     sprzężenia jego klas.
-    W pracy przeprowadzono eksperyment, w którym programiści (\(n = 10\))
-    Java wykonywali dwie z góry określone zmiany w istniejącym kodzie
-    źródłowym.
-    Badani zostali podzieleni na dwie grupy, w których programy różniły
-    się stopniem sprzężenia w obszarze poddawanemu przez nich zmianom.
+    Praca przeprowadza przegląd dostępnych metryk sprzężenia: Coupling
+    Between Objects, Message Passing Coupling i Response For Class, omawiając
+    ich zastosowanie pod kątem przeprowadzonego eksperymentu.
 
-    Wyniki eksperymentu sugerują różnice w średnim znormalizowanym czasie
-    wykonania pomiędzy programami, jednakże wyniki te nie są statystycznie
-    istotne: \(p = 0.25\), co sugeruje potrzebę większej grupy badawczej
-    i zastosowanie mniej kosztownych technik przeprowadzenia eksperymentu,
-    taką jak automatyzowane środowisko progrmaistyczne używane do
-    przeprowadzania zadań rekrutacyjnych w firmach technologicznych.
+    W celu modyfikacji sprzężenia przeprowadzono syntezę pojęcia programów
+    tożsamych i zaproponowano metodę odwróconej refaktoryzacji.
+
+    Następnie przeprowadzono eksperyment, w którym programiści (\(n = 10\))
+    Java wprowadzali zmiany w istniejącym kodzie źródłowym w ramach dwóch
+    zadań określonych za pomocą testów jednostkowych.
+    Modyfikacja kodu źródłowego dla jednego z wariantów programu polegała
+    na zwiększeniu współczynnika \acrshort{MPC} poprzez zastosowanie
+    operacji odwróconej refaktoryzacji --- usunięcie delegata.
+
+    Wyniki eksperymentu potwierdzają różnice w średnim znormalizowanym
+    czasie wprowadzania zmian pomiędzy wariantami programu.
+    Otrzymane średnie różnią się o \(74\%\), a test t Welcha
+    \(t = -3,23\) i \(p = 0,0148\) wskazuje na statystyczną istotność
+    różnicy pomiędzy grupami eksperymentu.
+
+    Praca omawia również możliwe usprawnienia zastosowanej metody
+    badawczej oraz wskazuje kierunki dalszych badań w tym obszarze.
 
 } % koniec streszczenia
 
@@ -86,8 +90,35 @@ programowanie obiektowe, sprzężenie, empirycza inżynieria oprogramowania
 }
 
 \thesisabstract{
-Here it will be the paper's abstract.
-It will include research statement, method and results.
+    Among object-oriented programming practitioners, there is a common belief
+    in the necessity of creating classes with low coupling and high cohesion.
+    This positively affects readability, facilitating faster and correct
+    comprehension of the existing source code, consequently optimizing the
+    costs associated with adapting software to changing requirements.
+
+    The aim of this thesis was to empirically investigate the relationship
+    between class coupling and the time required to introduce changes to source
+    code. The thesis reviews available coupling metrics: Coupling Between
+    Objects, Message Passing Coupling, and Response For Class, discussing their
+    applicability to the conducted experiment.
+
+    To manipulate coupling, the concept of equivalent programs was synthesized,
+    and a method of reverse refactoring was proposed.
+    Subsequently, an experiment was conducted involving Java programmers
+    \(n = 10\), who introduced changes to existing source code by performing
+    two tasks defined using unit tests. Modification of the source code for one
+    of the program variants involved increasing the Message Passing Coupling
+    through the use of reverse refactoring—removal of a delegate.
+
+    The experiment results confirm differences in the average normalized time
+    required to introduce changes between the program variants. The observed
+    averages differ by \(74\%\), and the Welch’s t-test \(t = -3,23\),
+    \(p = 0,0148\)  indicates statistical significance of the difference
+    between the experimental groups.
+
+    The thesis also discusses possible improvements to the applied research
+    method and outlines directions for further research in this area.
+
 } % end of abstract
 
 \thesiskeywords{

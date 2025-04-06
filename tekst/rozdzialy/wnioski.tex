@@ -52,14 +52,101 @@ a nawet wprowadzenia teorii minimalnej semantyki implementowanego problemu.
 
 \section{Przeprowadzenie eksperymentu}
 
-Nie wszystkie czynności zaplanowane w tej pracy poszły zgodnie z planem:
-niewielka ilość badanych mogła dostarczyć mniej jasnych wyników, a czas
-przeprowadzania eksperymentu został niekrytycznie przekroczony w 6 na 10
-przypadków.
+Nie wszystkie czynności zaplanowane w tej pracy poszły zgodnie z założonym
+przez autora pracy planem: niewielka ilość badanych mogła dostarczyć mniej
+jasnych wyników, a czas przeprowadzania eksperymentu został niekrytycznie
+przekroczony w 6 na 10 przypadków.
 
 Dobór programistów był przypadkowy (osoby zgłaszające się do eksperymentu),
-a podział na grupy nie uwzględniał
+a podział na grupy nie uwzględniał przede wszystkim lat doświadczenia.
+Replikacje eksperymentu powinny utrzymywać równy podział pod względem
+lat doświadczenia w programowaniu w danym języku, choć wyniki nie sugerują
+jednoznacznie, że programiści z większym doświadczeniem rozwiązują zadania
+zdecydowanie szybciej.
+
+Prowadzący eksperyment wyjaśniał wstępnie działanie programu --- ten etap
+nie był przeprowadzony w formie skryptu, a jedynie punktów do wyjaśnienia,
+które zostawały w swobodnej formule wyjaśniane (więcej o przygotowaniu
+badanego do zadania działania programu w rozdziale~\ref{cha:metoda}).
+Ten sposób był jednolity, niemniej posiada dwie potencjalnie wpływające
+na wynik badania wady.
+
+Pierwszą z nich jest zmienność tworzonych swobodnie zdań i ich zmienna
+zrozumiałość.
+Nietrudno wyobrazić sobie przypadek, gdzie prowadzący traci ciągłość
+wypowiedzi w wyniku nieprzewidywanego zdarzenia w jego otoczeniu, pytania
+przerywającego ze strony programisty lub rozkojarzenia.
+Takie zmiany mogą zaburzyć odbiór informacji, przez co odbiorca może ją
+kompletnie zignorować, lub, co gorsza, zniekształcić, wprowadzając element
+skutkujący niepoprawnym odwzorowaniem czasu wykonania.
+
+Drugą wadą wyjaśniania kodu źródłowego swobodną wypowiedzią jest problem
+skalowalności eksperymentu.
+W przypadku tej pracy prowadzący badanie był wyłącznie jeden --- niemniej
+uzasadnione jest wprowadzenie większej ilości badaczy, by zwiększyć ilość
+przeprowadzonych eksperymentów.
+W takim przypadku nie można zakładać jednolitości wyjaśnień --- prowadzący
+mogą przedstawiać różne umiejętności werbalne, a także różne doświadczenie z
+kodem źródłowym.
+
+W związku z powyższym wstęp do eksperymentu powinien zostać zmodyfikowany,
+jeżeli badanie miałoby zostać zreplikowane w znacznie większej skali.
+Istotnie dobrym rozwiązaniem może być metoda małych postępów, gdzie
+badany wykonuje więcej niż jedno zadanie kontrolne w różnych obszarach kodu
+źródłowego, sam zapoznając się ze strukturą, sposobem rozwiązywania danego
+problemu i zależnościami pomiędzy modułami występującymi w programie.
+W takim wypadku badany nie musiałby otrzymywać żadnych informacji o programie
+podczas pierwszego etapu, a sam eksperyment dostarczyłby więcej danych,
+ale czas trwania badania musiałby zostać znacznie wydłużony.
+
+Do przeprowadzenia eksperymentu w większej skali pomocna może okazać się
+metoda stosowana w przeprowadzaniu technicznych rozmów kwalifikacynych
+dla programistów --- platformy typu \textit{technical screening}, oferujące
+zdalne zintegrowane środowisko programistyczne, a do tego nagrywanie sesji
+i wsparcie do uruchamiania testów jednostkowych.
+Do takich platform należy \textit{devskiller} lub \textit{LeetCode}.
 
 \section{Dalsze badania}
 
+Poza wspomnianymi usprawnieniami do przeprowadzenia samego eksperymentu
+uzyskany wynik sugeruje, że koszt utrzymania oprogramowania jest związany z tym,
+jak bardzo struktura programu jest adekwatna do rozwiązywanego problemu.
+Nasuwa się pytanie o charakter tej zależności.
+Czy można ją opisać, a najlepiej --- przewidzieć?
+Aby odpowiedzieć na te i inne pytania w odniesieniu do kosztów ponoszonych
+wyłącznie na zrozumienie nieodpowiednio sprzężonych ze sobą modułów, należy
+przeprowadzić dalsze badania.
+
+Przede wszystkim, aby głębiej przebadać zależności między współczynnikiem
+\acrshort{MPC} a czasem wprowadzenia zmian, należy przeprowadzić eksperyment,
+który zbada znacznie większą ilość wariantów programu tak, by określić wpływ
+MCP na koszt poniesiony przy zmianie.
+Do tego celu można utworzyć program automatycznie generujący warianty o różnym
+stopniu sprzężenia na podstawie programu wejściowego.
+Do analizy pozyskanych danych można zastosować model regresji wielomianowej.
+
+Niewątpliwie kolejnym istotnym aspektem jest zbadanie możliwości przewidywania
+wysokich kosztów.
+Można zaprojektować metodę wskazującą obszary w kodzie źródłowym o wysokim
+sprzężeniu warte refaktoryzacji.
+Informacje o ich istotności dla utrzymania można pozyskać z historii zmian
+systemów kontroli wersji.
+Taka metoda wskazywałaby potencjalne miejsca na wprowadzenie oszczędności,
+zakładając, że moduły ulegające częstym zmianom w przeszłości będą podlegały
+również zmianom w przyszłości.
+
 \section{Podsumowanie}
+
+W niniejszym rozdziale przedstawiono krytykę wobec przeprowadzonego eksperymentu,
+w szczególności czasu trwania, doboru badanych, a także powtarzalności wyjaśnienia
+struktury kodu.
+Wspomniane problemy nie wpłynęły znacząco na jakość uzyskanych wyników, ale
+mogą stać się problemem w przypadku przeprowadzania eksperymentu w większej skali.
+Do każdego z nich zaproponowano rozwiązania poprawiające jakość wyników uzyskanych
+z badania --- a także sposoby na automatyzację i zmniejszenie kosztów prowadzenia
+samego eksperymentu.
+
+Autor pracy zasugerował kolejne obszary badań w dziedzinie wpływu sprzężenia
+na koszty utrzymania: wskazując przede wszystkim potrzebę dalszych badań
+charakteru tego wpływu, a także zaprojektowanie metody wykrywania miejsc w
+kodzie źródłowym programu, które mogą być warte refaktoryzacji.
